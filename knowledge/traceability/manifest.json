@@ -1,10 +1,10 @@
 {
   "$comment": "Traceability knowledge graph: REQ <-> US <-> tests, plus screens (US <-> SCR -> states/components), decisions (US -> ADR) and lessons-learned edges. Edited in the same PR as the artifacts it links; validated by tools/aidlc-check.mjs; traceability-matrix.md is generated from it (never hand-edited).",
   "requirements": {
-    "REQ-001": { "stories": [], "screens": [] },
-    "REQ-002": { "stories": [], "screens": [] },
-    "REQ-003": { "stories": [], "screens": [] },
-    "REQ-004": { "stories": [], "screens": [] },
+    "REQ-001": { "stories": [], "screens": ["SCR-001"] },
+    "REQ-002": { "stories": [], "screens": ["SCR-001"] },
+    "REQ-003": { "stories": [], "screens": ["SCR-001"] },
+    "REQ-004": { "stories": [], "screens": ["SCR-001"] },
     "REQ-005": { "stories": [], "screens": [] },
     "REQ-006": { "stories": [], "screens": [] },
     "REQ-007": { "stories": [], "screens": [] },
@@ -32,10 +32,18 @@
     "NFR-001": { "stories": [], "screens": [] },
     "NFR-002": { "stories": [], "screens": [] },
     "NFR-003": { "stories": [], "screens": [] },
-    "NFR-004": { "stories": [], "screens": [] },
+    "NFR-004": { "stories": [], "screens": ["SCR-001"] },
     "NFR-005": { "stories": [], "screens": [] }
   },
   "stories": {},
-  "screens": {},
+  "screens": {
+    "SCR-001": {
+      "artifact": "inception/design/screens/SCR-001-login.md",
+      "requirements": ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "NFR-004"],
+      "stories": [],
+      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05"],
+      "components": ["text-input", "button", "alert"]
+    }
+  },
   "lessons": []
 }

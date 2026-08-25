@@ -1,0 +1,133 @@
+<!-- @dsCard group="Feedback" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Alert</title>
+<style>
+  :root {
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-md: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 420px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    line-height: var(--lh-normal);
+    border-radius: var(--r-md);
+    padding: var(--s-3) var(--s-4);
+    border: 1px solid transparent;
+  }
+  .alert .icon { flex: none; font-size: var(--t-base); line-height: 1; }
+  .alert strong { font-weight: var(--fw-semibold); }
+  .alert.is-error { background: var(--c-danger-bg); color: var(--c-danger); }
+  .alert.is-warning { background: var(--c-warning-bg); color: var(--c-warning); }
+  .alert.is-success { background: var(--c-success-bg); color: var(--c-success); }
+  .alert.is-info { background: var(--c-info-bg); color: var(--c-info); }
+</style>
+</head>
+<body>
+  <h1>Alert</h1>
+
+  <p>Every variant pairs an icon with text — colour alone never carries the meaning.</p>
+
+  <!-- @state SCR-001/ST-04 -->
+  <section class="example">
+    <h2>Error — invalid credentials</h2>
+    <div class="alert is-error" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span>Incorrect email or password.</span>
+    </div>
+  </section>
+
+  <!-- @state SCR-001/ST-05 -->
+  <section class="example">
+    <h2>Error — request failed</h2>
+    <div class="alert is-error" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span>Something went wrong. Please try again.</span>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Warning</h2>
+    <div class="alert is-warning" role="status">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span>This booking request expires soon.</span>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Success</h2>
+    <div class="alert is-success" role="status">
+      <span class="icon" aria-hidden="true">✓</span>
+      <span>Session confirmed.</span>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Info</h2>
+    <div class="alert is-info" role="status">
+      <span class="icon" aria-hidden="true">ℹ</span>
+      <span>You've been signed out.</span>
+    </div>
+  </section>
+</body>
+</html>
