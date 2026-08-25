@@ -1,0 +1,177 @@
+<!-- @dsCard group="Forms" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Text input</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-primary-active: #1e40af;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-md: 6px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-primary-active: #93c5fd;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 360px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .field { display: grid; gap: var(--s-1); }
+  .field label {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text);
+  }
+  .field .control { position: relative; display: flex; align-items: center; }
+  .field input {
+    width: 100%;
+    font-family: var(--f-base);
+    font-size: var(--t-base);
+    line-height: var(--lh-normal);
+    color: var(--c-text);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+  }
+  .field input::placeholder { color: var(--c-text-disabled); }
+  .field input:focus-visible,
+  .field .toggle:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .field .toggle {
+    position: absolute;
+    right: var(--s-2);
+    background: none;
+    border: none;
+    color: var(--c-text-secondary);
+    font-size: var(--t-sm);
+    cursor: pointer;
+    padding: var(--s-1);
+    border-radius: var(--r-md);
+  }
+  .field.is-focus input { border-color: var(--c-primary); outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .field.is-error input { border-color: var(--c-danger); }
+  .field.is-error .error-text {
+    display: flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-sm);
+    color: var(--c-danger);
+  }
+  .field.is-disabled input {
+    background: var(--c-surface-alt);
+    color: var(--c-text-disabled);
+    border-color: var(--c-border);
+  }
+</style>
+</head>
+<body>
+  <h1>Text input</h1>
+
+  <!-- @state SCR-001/ST-01 -->
+  <section class="example">
+    <h2>Default</h2>
+    <div class="field">
+      <label for="email-default">Email</label>
+      <div class="control">
+        <input id="email-default" type="email" placeholder="you@company.com" />
+      </div>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Focused</h2>
+    <div class="field is-focus">
+      <label for="email-focus">Email</label>
+      <div class="control">
+        <input id="email-focus" type="email" value="jane.doe@company.com" />
+      </div>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Password, with show/hide toggle</h2>
+    <div class="field">
+      <label for="pwd-default">Password</label>
+      <div class="control">
+        <input id="pwd-default" type="password" placeholder="••••••••" />
+        <button type="button" class="toggle" aria-label="Show password">Show</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- @state SCR-001/ST-02 -->
+  <section class="example">
+    <h2>Error (required field left blank)</h2>
+    <div class="field is-error">
+      <label for="email-error">Email</label>
+      <div class="control">
+        <input id="email-error" type="email" aria-describedby="email-error-text" />
+      </div>
+      <span id="email-error-text" class="error-text">⚠ Email is required.</span>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Disabled (while submitting)</h2>
+    <div class="field is-disabled">
+      <label for="email-disabled">Email</label>
+      <div class="control">
+        <input id="email-disabled" type="email" value="jane.doe@company.com" disabled />
+      </div>
+    </div>
+  </section>
+</body>
+</html>
