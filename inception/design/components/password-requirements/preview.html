@@ -1,0 +1,202 @@
+<!-- @dsCard group="Forms" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Password requirements</title>
+<style>
+  :root {
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-danger: #dc2626;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-danger: #f87171;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 380px;
+  }
+  h1 { font-size: var(--t-base); }
+  p { font-size: var(--t-sm); line-height: var(--lh-normal); color: var(--c-text-secondary); margin: 0; }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+
+  /* The checklist itself. Sits directly beneath the new-password field. */
+  .pwreq {
+    background: var(--c-surface-alt);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    display: grid;
+    gap: var(--s-2);
+  }
+  .pwreq > .caption {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-text-secondary);
+  }
+  .pwreq ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s-1); }
+  .pwreq li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    line-height: var(--lh-normal);
+  }
+  .pwreq .icon {
+    flex: none;
+    width: 1.15em;
+    text-align: center;
+    font-weight: var(--fw-semibold);
+  }
+  /*
+   * Non-colour signalling (NFR-004 / a11y rule): each row carries an icon AND a
+   * word. The icon distinguishes met from missing in greyscale; the badge text
+   * is what a screen reader reads out. Colour is the third cue, never the only.
+   */
+  .pwreq .badge {
+    margin-left: auto;
+    flex: none;
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    border: 1px solid currentColor;
+  }
+  li.is-met { color: var(--c-success); }
+  li.is-missing { color: var(--c-danger); }
+  /* Untouched: nothing typed yet, so nothing has "failed" — neutral, not red. */
+  li.is-pending { color: var(--c-text-secondary); }
+  li.is-pending .icon { color: var(--c-text-disabled); }
+  .pwreq li .label { color: var(--c-text); }
+
+  .note {
+    font-size: var(--t-xs);
+    line-height: var(--lh-normal);
+    color: var(--c-text-secondary);
+    border-left: 2px solid var(--c-border);
+    padding-left: var(--s-3);
+  }
+</style>
+</head>
+<body>
+  <h1>Password requirements</h1>
+
+  <p>
+    A checklist, not a strength meter: it names the rule that is unmet instead of
+    grading the password. Every row pairs an icon with a word, so it survives
+    greyscale and reads aloud correctly.
+  </p>
+
+  <p class="note">
+    The two rules shown below are a <strong>recommendation, not a decision</strong>
+    — BRD-001 states no password rules at all (SCR-003/OQ-7 is open with the BA).
+    This component renders whatever list is agreed; treat the rows as placeholders
+    and the layout as the deliverable.
+  </p>
+
+  <!-- @state SCR-003/ST-02 -->
+  <section class="example">
+    <h2>Initial — nothing typed yet (rules readable before you start)</h2>
+    <div class="pwreq" role="group" aria-label="Password requirements">
+      <span class="caption">Your password needs</span>
+      <ul role="list" aria-live="polite">
+        <li class="is-pending" role="listitem">
+          <span class="icon" aria-hidden="true">○</span>
+          <span class="label">At least 12 characters</span>
+          <span class="badge">Not yet</span>
+        </li>
+        <li class="is-pending" role="listitem">
+          <span class="icon" aria-hidden="true">○</span>
+          <span class="label">Not a commonly used password</span>
+          <span class="badge">Not yet</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- @state SCR-003/ST-05 -->
+  <section class="example">
+    <h2>Partially met — one rule still missing</h2>
+    <div class="pwreq" role="group" aria-label="Password requirements">
+      <span class="caption">Your password needs</span>
+      <ul role="list" aria-live="polite">
+        <li class="is-met" role="listitem">
+          <span class="icon" aria-hidden="true">✓</span>
+          <span class="label">At least 12 characters</span>
+          <span class="badge">Met</span>
+        </li>
+        <li class="is-missing" role="listitem">
+          <span class="icon" aria-hidden="true">✕</span>
+          <span class="label">Not a commonly used password</span>
+          <span class="badge">Missing</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>All met — submit will be accepted</h2>
+    <div class="pwreq" role="group" aria-label="Password requirements">
+      <span class="caption">Your password needs</span>
+      <ul role="list" aria-live="polite">
+        <li class="is-met" role="listitem">
+          <span class="icon" aria-hidden="true">✓</span>
+          <span class="label">At least 12 characters</span>
+          <span class="badge">Met</span>
+        </li>
+        <li class="is-met" role="listitem">
+          <span class="icon" aria-hidden="true">✓</span>
+          <span class="label">Not a commonly used password</span>
+          <span class="badge">Met</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+</body>
+</html>

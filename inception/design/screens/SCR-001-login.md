@@ -12,7 +12,9 @@
 
 ## Purpose
 
-An employee enters their corporate email and password to reach their dashboard. "Done" is either a successful redirect to the Dashboard (REQ-004), or a clear, generic message telling them why it failed and what to do next. The "Forgot password?" link on this screen is the entry point into REQ-003's reset flow — the request/reset screens themselves are a separate, upcoming screen spec (SCR-002, not yet drafted).
+An employee enters their corporate email and password to reach their dashboard. "Done" is either a successful redirect to the Dashboard (REQ-004), or a clear, generic message telling them why it failed and what to do next. The "Forgot password?" link on this screen is the entry point into REQ-003's reset flow, which is designed as two screens of its own: SCR-002 (request a link) and SCR-003 (set the new password).
+
+This screen is also where that flow **ends**: an employee who completes a reset on SCR-003 is returned here to sign in with the password they just set, and the confirmation of that is ST-06 below.
 
 ## Layout
 
@@ -68,13 +70,20 @@ Single centered card on a plain background — no side branding panel. Chosen so
 - **Shows** a banner above the form: an alert icon + "Something went wrong. Please try again." — distinct wording from ST-04 so the employee knows this isn't about their password
 - **Can do** resubmit once ready; both fields keep what was typed (nothing to protect here, unlike ST-04)
 
+### ST-06 Password changed
+
+- **When** the employee arrives here having just set a new password on SCR-003 (REQ-003's reset flow completing)
+- **Shows** the default form, plus a success banner above the card: a tick icon + "Your password has been changed. Please sign in." The email field is pre-filled with the account whose password was reset, so the employee only has to supply the password they just chose. The banner is dismissible and does not survive a reload — it reports an event, not a condition.
+- **Can do** everything ST-01 allows; this state differs from ST-01 only by the banner and the pre-filled email
+- **Note:** if SCR-003/OQ-9 is answered "end all other sessions", this banner should say so ("You've been signed out on your other devices.") — the employee needs to know why their phone stopped working.
+
 ## Components
 
 | Component    | Preview                                                | Notes                                              |
 | ------------ | ------------------------------------------------------- | --------------------------------------------------- |
 | `text-input` | `inception/design/components/text-input/preview.html`  | default, focused, error, disabled — email + password fields |
 | `button`     | `inception/design/components/button/preview.html`      | default, hover, loading, disabled — the "Log in" submit button |
-| `alert`      | `inception/design/components/alert/preview.html`       | error, info variants — ST-04 / ST-05 banners        |
+| `alert`      | `inception/design/components/alert/preview.html`       | error, info, success variants — ST-04 / ST-05 / ST-06 banners |
 
 Components are declared in `knowledge/traceability/manifest.json` under this screen; `aidlc-check` proves each preview file exists.
 
@@ -93,10 +102,13 @@ Components are declared in `knowledge/traceability/manifest.json` under this scr
 | One combined error banner for bad email *or* bad password (ST-04), never a per-field highlight | REQ-002 requires the error not to reveal which field was wrong; highlighting only the "wrong" field would leak that | Marking only the password field as invalid (common pattern elsewhere, but violates REQ-002 here) |
 | Separate wording + a distinct state (ST-05) for network/server failure vs. bad credentials (ST-04) | The employee's next action differs — retry later vs. re-check what they typed; collapsing them into one message would send someone into "check your password" for an outage that isn't about their password | One generic "something went wrong" message for every failure |
 | Password field includes a show/hide toggle | Reduces mistyped-password failures at near-zero cost; a very common, low-risk pattern | Masked-only password field, no toggle |
+| The reset flow's success confirmation lives here as ST-06, rather than on SCR-003 | Added 2026-08-26 with SCR-002/SCR-003. The designer's decision was that a completed reset returns the employee here to sign in, rather than dropping them into the dashboard, so this screen is the last thing they see and the only place the confirmation can go. Numbering it as a state — rather than folding it into ST-01 like the logout notice — is deliberate: it has its own entry path, its own copy, and a pre-filled email field | Showing the confirmation on SCR-003 before navigating away, where it would be visible for a fraction of a second |
 
 ## Conflicts and open questions
 
-None identified — REQ-001 through REQ-004 and NFR-004 do not conflict on this screen.
+None on the sign-in behaviour itself — REQ-001 through REQ-004 and NFR-004 do not conflict on this screen.
+
+One inconsistency is worth the designer's attention, carried over rather than introduced: the "You've been signed out" notice sits **inside** ST-01 as a conditional, while the equivalent "Your password has been changed" notice is its own numbered ST-06. Both are the same thing — a banner reporting an event that happened on the way here. Normalising them (either both numbered, or both conditionals of ST-01) would be tidier. Left alone here because it is a change to an already-approved state and not worth reopening on its own; worth folding into the next revision of this screen.
 
 ## Designer handoff
 

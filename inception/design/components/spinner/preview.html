@@ -1,0 +1,137 @@
+<!-- @dsCard group="Feedback" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Spinner</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-medium: 500;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-lg: 10px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 380px;
+  }
+  h1 { font-size: var(--t-base); }
+  p { font-size: var(--t-sm); line-height: var(--lh-normal); color: var(--c-text-secondary); margin: 0; }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+
+  /*
+   * Standalone spinner. The button component carries its own copy inline
+   * (on-primary colours, sized to the label); this one is for page- and
+   * card-level waits, where the track is drawn on a surface rather than
+   * on a filled button.
+   */
+  .spinner {
+    box-sizing: border-box;
+    border-radius: 50%;
+    border-style: solid;
+    border-color: var(--c-border);
+    border-top-color: var(--c-primary);
+    animation: spin 0.8s linear infinite;
+  }
+  .spinner.is-sm { width: 1rem; height: 1rem; border-width: 2px; }
+  .spinner.is-md { width: 1.5rem; height: 1.5rem; border-width: 2px; }
+  .spinner.is-lg { width: 2.5rem; height: 2.5rem; border-width: 3px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Respect a reduced-motion preference: keep the indicator, drop the spin. */
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation-duration: 2.4s; }
+  }
+
+  .row { display: flex; align-items: center; gap: var(--s-4); }
+
+  /* The card-level wait, as SCR-003/ST-01 uses it. */
+  .wait-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--s-8) var(--s-4);
+    display: grid;
+    justify-items: center;
+    gap: var(--s-3);
+    text-align: center;
+  }
+  .wait-card .caption { font-size: var(--t-sm); color: var(--c-text-secondary); }
+</style>
+</head>
+<body>
+  <h1>Spinner</h1>
+
+  <p>
+    Indeterminate wait indicator. Always paired with text saying what is being
+    waited on — a bare spinner tells the employee nothing about whether to wait
+    or reload. Announced via <code>role="status"</code>, so the wait is spoken,
+    not just drawn.
+  </p>
+
+  <section class="example">
+    <h2>Sizes</h2>
+    <div class="row">
+      <span class="spinner is-sm" aria-hidden="true"></span>
+      <span class="spinner is-md" aria-hidden="true"></span>
+      <span class="spinner is-lg" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Inline, with label</h2>
+    <div class="row" role="status">
+      <span class="spinner is-sm" aria-hidden="true"></span>
+      <span class="caption">Loading…</span>
+    </div>
+  </section>
+
+  <!-- @state SCR-003/ST-01 -->
+  <section class="example">
+    <h2>Card-level wait — validating a password reset link</h2>
+    <div class="wait-card" role="status" aria-live="polite">
+      <span class="spinner is-lg" aria-hidden="true"></span>
+      <span class="caption">Checking your link…</span>
+    </div>
+  </section>
+</body>
+</html>

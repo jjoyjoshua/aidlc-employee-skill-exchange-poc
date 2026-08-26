@@ -22,6 +22,8 @@
     --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-sm: 0.875rem;
     --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-2xl: 1.5rem;
     --fw-medium: 500;
     --fw-semibold: 600;
     --lh-normal: 1.5;
@@ -81,6 +83,39 @@
   .alert.is-warning { background: var(--c-warning-bg); color: var(--c-warning); }
   .alert.is-success { background: var(--c-success-bg); color: var(--c-success); }
   .alert.is-info { background: var(--c-info-bg); color: var(--c-info); }
+
+  /*
+   * Panel variant. Where the banners above annotate a form, a panel *replaces*
+   * one: the password-reset flow ends up on screens whose whole content is an
+   * explanation and an onward action (SCR-002/ST-04, SCR-003/ST-03, ST-04).
+   * A one-line banner cannot carry a heading, a body and a next step.
+   */
+  .alert.is-panel {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--s-3);
+    padding: var(--s-6) var(--s-4);
+  }
+  .alert.is-panel .icon { font-size: var(--t-2xl); }
+  .alert.is-panel .title {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--c-text);
+  }
+  /*
+   * Body copy stays at full text colour rather than the status colour: a
+   * paragraph tinted amber or green is harder to read, and the status is
+   * already carried by the icon, the heading and the background.
+   */
+  .alert.is-panel .body { color: var(--c-text); }
+  .alert.is-panel .hint {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    border-top: 1px solid currentColor;
+    padding-top: var(--s-3);
+    width: 100%;
+  }
 </style>
 </head>
 <body>
@@ -98,11 +133,27 @@
   </section>
 
   <!-- @state SCR-001/ST-05 -->
+  <!-- @state SCR-002/ST-05 -->
   <section class="example">
-    <h2>Error — request failed</h2>
+    <h2>Error — request failed (login, and request a reset)</h2>
     <div class="alert is-error" role="alert" aria-live="assertive">
       <span class="icon" aria-hidden="true">⚠</span>
       <span>Something went wrong. Please try again.</span>
+    </div>
+  </section>
+
+  <!--
+    The second sentence is load-bearing, not padding. After a failed save the
+    employee has no way of knowing which password is now live, and the
+    reasonable guess is "it probably worked" — which sends them back through
+    the whole reset flow at their next sign-in.
+  -->
+  <!-- @state SCR-003/ST-08 -->
+  <section class="example">
+    <h2>Error — saving a new password failed</h2>
+    <div class="alert is-error" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span>Something went wrong. Your password has <strong>not</strong> been changed. Please try again.</span>
     </div>
   </section>
 
@@ -122,11 +173,100 @@
     </div>
   </section>
 
+  <!-- @state SCR-001/ST-06 -->
+  <section class="example">
+    <h2>Success — password changed, shown on the login screen</h2>
+    <div class="alert is-success" role="status">
+      <span class="icon" aria-hidden="true">✓</span>
+      <span>Your password has been changed. Please sign in.</span>
+    </div>
+  </section>
+
   <section class="example">
     <h2>Info</h2>
     <div class="alert is-info" role="status">
       <span class="icon" aria-hidden="true">ℹ</span>
       <span>You've been signed out.</span>
+    </div>
+  </section>
+
+  <h1>Panels</h1>
+
+  <p>
+    Used where the alert <em>is</em> the screen rather than an annotation on a
+    form — the reset flow's confirmation and its dead-link explanations.
+  </p>
+
+  <!--
+    Shown whether or not the address has an account, by the designer's decision
+    (SCR-002 structural decisions). The address is echoed back in bold because
+    it is the only way an employee who mistyped it can find that out — we repeat
+    what they typed, and say nothing about our records. Expiry wording is
+    unconfirmed: SCR-002/OQ-3.
+  -->
+  <!-- @state SCR-002/ST-04 -->
+  <section class="example">
+    <h2>Panel — reset link requested</h2>
+    <div class="alert is-success is-panel" role="status" aria-live="assertive">
+      <span class="icon" aria-hidden="true">✓</span>
+      <span class="title">Check your email</span>
+      <span class="body">
+        If <strong>jane.doe@company.com</strong> belongs to a portal account,
+        we've sent a link to reset the password. The link expires in 60 minutes
+        and can be used once.
+      </span>
+      <span class="hint">Didn't arrive? Check the address above, then send it again.</span>
+    </div>
+  </section>
+
+  <!-- @state SCR-002/ST-06 -->
+  <section class="example">
+    <h2>Panel — link sent again (polite, not assertive: a repeat)</h2>
+    <div class="alert is-success is-panel" role="status" aria-live="polite">
+      <span class="icon" aria-hidden="true">✓</span>
+      <span class="title">Sent again — check your email</span>
+      <span class="body">
+        We've sent another link to <strong>jane.doe@company.com</strong>. Only
+        the newest link will work.
+      </span>
+      <span class="hint">You can send again in 47 seconds.</span>
+    </div>
+  </section>
+
+  <!--
+    Expired, unrecognised and malformed links share one state on purpose: the
+    employee's next action is identical, and the system may be unable to tell
+    them apart at all (SCR-003/OQ-8). No retry offered — nothing about this
+    link will start working.
+  -->
+  <!-- @state SCR-003/ST-03 -->
+  <section class="example">
+    <h2>Panel — reset link no longer valid</h2>
+    <div class="alert is-warning is-panel" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">This link is no longer valid</span>
+      <span class="body">
+        Password reset links expire 60 minutes after they're sent, and can only
+        be used once. Request a new one to continue.
+      </span>
+    </div>
+  </section>
+
+  <!--
+    Kept separate from ST-03 because this one is actionable, and differently:
+    it may mean someone else is holding the reset link. It is the only point in
+    the flow where the portal can surface that, so it says so out loud.
+  -->
+  <!-- @state SCR-003/ST-04 -->
+  <section class="example">
+    <h2>Panel — reset link already used</h2>
+    <div class="alert is-warning is-panel" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">This link has already been used</span>
+      <span class="body">
+        The password for this account was already changed using this link.
+        <strong>If that wasn't you, contact IT straight away.</strong>
+      </span>
     </div>
   </section>
 </body>

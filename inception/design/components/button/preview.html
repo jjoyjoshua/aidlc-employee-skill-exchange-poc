@@ -87,6 +87,24 @@
     color: var(--c-text-disabled);
     cursor: not-allowed;
   }
+  /*
+   * Secondary variant. Added for the password-reset flow: SCR-003/ST-04 offers
+   * two real choices at once ("Back to sign in" and "Request a new link"), and
+   * two filled buttons side by side tell the employee nothing about which one
+   * is the way out.
+   */
+  .btn-secondary {
+    background: var(--c-surface);
+    color: var(--c-primary);
+    border: 1px solid var(--c-border);
+  }
+  .btn-secondary.is-hover { background: var(--c-surface-alt); }
+  .btn-secondary:disabled,
+  .btn-secondary.is-disabled {
+    background: var(--c-surface);
+    color: var(--c-text-disabled);
+  }
+  .stack { display: grid; gap: var(--s-2); }
   .spinner {
     width: 1em;
     height: 1em;
@@ -120,9 +138,55 @@
     </button>
   </section>
 
+  <!-- @state SCR-002/ST-03 -->
+  <section class="example">
+    <h2>Loading — sending a reset link</h2>
+    <button class="btn is-loading" type="button" disabled aria-busy="true">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Sending…</span>
+    </button>
+  </section>
+
+  <!-- @state SCR-003/ST-07 -->
+  <section class="example">
+    <h2>Loading — saving a new password</h2>
+    <button class="btn is-loading" type="button" disabled aria-busy="true">
+      <span class="spinner" aria-hidden="true"></span>
+      <span>Saving…</span>
+    </button>
+  </section>
+
   <section class="example">
     <h2>Disabled</h2>
     <button class="btn is-disabled" type="button" disabled>Log in</button>
+  </section>
+
+  <section class="example">
+    <h2>Secondary</h2>
+    <button class="btn btn-secondary" type="button">Request a new link</button>
+  </section>
+
+  <!--
+    Two choices, ranked. SCR-003/ST-04: the employee has already used this link,
+    so "Back to sign in" is the likely way out and "Request a new link" is the
+    fallback for someone who has forgotten again.
+  -->
+  <section class="example">
+    <h2>Primary + secondary pair</h2>
+    <div class="stack">
+      <button class="btn" type="button">Back to sign in</button>
+      <button class="btn btn-secondary" type="button">Request a new link</button>
+    </div>
+  </section>
+
+  <!--
+    Resend cooldown (part of SCR-002/ST-06). The countdown is in the label
+    because a disabled button with no reason reads as broken. The cooldown
+    length itself is unresolved — SCR-002/OQ-5, owned by the BA.
+  -->
+  <section class="example">
+    <h2>Secondary, cooling down after a resend</h2>
+    <button class="btn btn-secondary is-disabled" type="button" disabled>Send again in 47s</button>
   </section>
 </body>
 </html>
