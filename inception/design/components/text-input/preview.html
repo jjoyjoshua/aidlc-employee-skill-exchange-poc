@@ -121,12 +121,13 @@
   <h1>Text input</h1>
 
   <!-- @state SCR-001/ST-01 -->
+  <!-- @state SCR-002/ST-01 -->
   <section class="example">
-    <h2>Default</h2>
+    <h2>Default — email (login, and request a reset)</h2>
     <div class="field">
       <label for="email-default">Email</label>
       <div class="control">
-        <input id="email-default" type="email" placeholder="you@company.com" />
+        <input id="email-default" type="email" placeholder="you@company.com" autocomplete="username" />
       </div>
     </div>
   </section>
@@ -164,6 +165,37 @@
     </div>
   </section>
 
+  <!-- @state SCR-002/ST-02 -->
+  <section class="example">
+    <h2>Error (email typed, but not a valid address)</h2>
+    <div class="field is-error">
+      <label for="email-malformed">Email</label>
+      <div class="control">
+        <input id="email-malformed" type="email" value="jane.doe@company" aria-describedby="email-malformed-text" />
+      </div>
+      <span id="email-malformed-text" class="error-text">⚠ Enter a valid email address.</span>
+    </div>
+  </section>
+
+  <!--
+    Confirmation mismatch. The new-password field above it is deliberately left
+    untouched in this state (SCR-003/ST-06): the password itself may be fine,
+    and it is masked — clearing it would force a retype of something the
+    employee cannot see.
+  -->
+  <!-- @state SCR-003/ST-06 -->
+  <section class="example">
+    <h2>Error (confirmation does not match the new password)</h2>
+    <div class="field is-error">
+      <label for="pwd-confirm-error">Confirm new password</label>
+      <div class="control">
+        <input id="pwd-confirm-error" type="password" value="••••••••••••" autocomplete="new-password" aria-describedby="pwd-confirm-error-text" />
+      </div>
+      <span id="pwd-confirm-error-text" class="error-text">⚠ These passwords don't match.</span>
+    </div>
+  </section>
+
+  <!-- @state SCR-002/ST-03 -->
   <section class="example">
     <h2>Disabled (while submitting)</h2>
     <div class="field is-disabled">

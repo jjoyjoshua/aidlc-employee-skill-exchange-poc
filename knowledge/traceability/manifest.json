@@ -3,7 +3,7 @@
   "requirements": {
     "REQ-001": { "stories": [], "screens": ["SCR-001"] },
     "REQ-002": { "stories": [], "screens": ["SCR-001"] },
-    "REQ-003": { "stories": [], "screens": ["SCR-001"] },
+    "REQ-003": { "stories": [], "screens": ["SCR-001", "SCR-002", "SCR-003"] },
     "REQ-004": { "stories": [], "screens": ["SCR-001"] },
     "REQ-005": { "stories": [], "screens": [] },
     "REQ-006": { "stories": [], "screens": [] },
@@ -32,7 +32,7 @@
     "NFR-001": { "stories": [], "screens": [] },
     "NFR-002": { "stories": [], "screens": [] },
     "NFR-003": { "stories": [], "screens": [] },
-    "NFR-004": { "stories": [], "screens": ["SCR-001"] },
+    "NFR-004": { "stories": [], "screens": ["SCR-001", "SCR-002", "SCR-003"] },
     "NFR-005": { "stories": [], "screens": [] }
   },
   "stories": {},
@@ -41,8 +41,37 @@
       "artifact": "inception/design/screens/SCR-001-login.md",
       "requirements": ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "NFR-004"],
       "stories": [],
-      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05"],
+      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-06"],
       "components": ["text-input", "button", "alert"]
+    },
+    "SCR-002": {
+      "artifact": "inception/design/screens/SCR-002-request-password-reset.md",
+      "requirements": ["REQ-003", "NFR-004"],
+      "stories": [],
+      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-06"],
+      "components": ["text-input", "button", "alert"]
+    },
+    "SCR-003": {
+      "artifact": "inception/design/screens/SCR-003-set-new-password.md",
+      "requirements": ["REQ-003", "NFR-004"],
+      "stories": [],
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08"
+      ],
+      "components": [
+        "text-input",
+        "button",
+        "alert",
+        "password-requirements",
+        "spinner"
+      ]
     }
   },
   "lessons": []
