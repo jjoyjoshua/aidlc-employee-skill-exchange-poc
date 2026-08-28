@@ -1,0 +1,482 @@
+<!-- @dsCard group="Navigation" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Search and filter bar</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 640px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- Search box -------------------------------------------------------- */
+  .search {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    padding: var(--s-2) var(--s-3);
+  }
+  .search:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .search input {
+    font: inherit;
+    font-size: var(--t-sm);
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--c-text);
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .search input::placeholder { color: var(--c-text-disabled); }
+  .search .ico { color: var(--c-text-secondary); flex: none; }
+  .search[data-disabled] { background: var(--c-surface-alt); }
+  .search[data-disabled] input { color: var(--c-text-disabled); }
+
+  /* ---- Filter row -------------------------------------------------------- */
+  .filters {
+    display: flex;
+    gap: var(--s-2);
+    align-items: center;
+    margin-top: var(--s-3);
+    overflow-x: auto;
+    padding-bottom: var(--s-1);
+  }
+  .fbtn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    background: var(--c-surface);
+    color: var(--c-text);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    white-space: nowrap;
+    flex: none;
+  }
+  .fbtn:hover { background: var(--c-surface-alt); }
+  .fbtn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .fbtn[disabled] { color: var(--c-text-disabled); background: var(--c-surface-alt); cursor: default; }
+
+  /*
+   * An active filter is marked by a filled dot as well as the colour and border
+   * change. Desaturate this row and the dot is still there (NFR-003).
+   */
+  .fbtn.is-active {
+    border-color: var(--c-info);
+    background: var(--c-info-bg);
+    color: var(--c-info);
+  }
+  .fbtn .dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--r-full);
+    background: currentColor;
+    flex: none;
+  }
+  .clear {
+    font: inherit;
+    font-size: var(--t-sm);
+    background: none;
+    border: 0;
+    color: var(--c-link);
+    text-decoration: underline;
+    cursor: pointer;
+    padding: var(--s-2);
+    flex: none;
+    white-space: nowrap;
+  }
+  .clear:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---- The open menu (SCR-006/ST-07) ------------------------------------- */
+  .menu {
+    margin-top: var(--s-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-md);
+    padding: var(--s-2);
+    max-width: 20rem;
+  }
+  .menu .helper {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    padding: var(--s-2) var(--s-2) var(--s-3);
+    line-height: var(--lh-normal);
+    border-bottom: 1px solid var(--c-border);
+    margin-bottom: var(--s-2);
+  }
+  .menu label {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    padding: var(--s-2);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+  }
+  .menu label:hover { background: var(--c-surface-alt); }
+  .menu label .n {
+    margin-left: auto;
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+  }
+  .menu label.is-empty { color: var(--c-text-disabled); }
+
+  /* ---- Count line -------------------------------------------------------- */
+  .count {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-3);
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .count strong { color: var(--c-text); font-weight: var(--fw-semibold); }
+  .count a { color: var(--c-link); }
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  .frame {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+    background: var(--c-bg);
+  }
+  .frame.narrow { max-width: 20rem; }
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>Search and filter bar</h1>
+
+  <p>
+    The controls above the results on "Find a trainer" (SCR-006): a search box
+    over skill names, and three filters — department, proficiency level, and
+    rating (REQ-012). Everything applies instantly; there is no Apply button,
+    so the count line below is continuous feedback.
+  </p>
+
+  <section class="example">
+    <h2>Idle — nothing searched, nothing filtered</h2>
+    <div class="frame">
+      <div class="search">
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" placeholder="Search a skill…" aria-label="Search a skill" />
+      </div>
+      <div class="filters">
+        <button class="fbtn" type="button" aria-expanded="false">Department <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" aria-expanded="false">Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" aria-expanded="false">Rating <span aria-hidden="true">▾</span></button>
+      </div>
+      <p class="count"><strong>8 colleagues</strong> teaching</p>
+    </div>
+    <p class="note">
+      The placeholder says "a skill", not "a skill or a name" — REQ-012 defines
+      filtering by skill name, and matching people's names would be a capability
+      nobody has asked for. Raised as OQ-S2 on the screen spec rather than
+      quietly added here.
+    </p>
+  </section>
+
+  <!--
+    ST-07. Department and Level are multi-select; Rating is single-select,
+    because "at least 3 and at least 4 stars" is not a thing anyone means.
+  -->
+  <!-- @state SCR-006/ST-07 -->
+  <section class="example">
+    <h2>Department menu open — multi-select</h2>
+    <div class="frame">
+      <div class="filters">
+        <button class="fbtn is-active" type="button" aria-expanded="true">
+          <span class="dot" aria-hidden="true"></span> Department: Finance <span aria-hidden="true">▴</span>
+        </button>
+        <button class="fbtn" type="button" aria-expanded="false">Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" aria-expanded="false">Rating <span aria-hidden="true">▾</span></button>
+      </div>
+      <div class="menu" role="group" aria-label="Filter by department">
+        <label><input type="checkbox" checked /> Finance <span class="n">3</span></label>
+        <label><input type="checkbox" /> Engineering <span class="n">4</span></label>
+        <label><input type="checkbox" /> Operations <span class="n">1</span></label>
+        <label class="is-empty"><input type="checkbox" disabled /> Human Resources <span class="n">0</span></label>
+      </div>
+    </div>
+    <p class="note">
+      Departments come from the fixed list IT maintains (REQ-008) — this menu
+      never invents one. Each option shows how many colleagues it would leave, so
+      a learner can see a dead end before choosing it; an option that would leave
+      none is disabled rather than hidden, because a department disappearing from
+      the list is more confusing than a department that is visibly empty.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Level menu open — and the sentence that says what "level" means here</h2>
+    <div class="frame">
+      <div class="filters">
+        <button class="fbtn" type="button" aria-expanded="false">Department <span aria-hidden="true">▾</span></button>
+        <button class="fbtn is-active" type="button" aria-expanded="true">
+          <span class="dot" aria-hidden="true"></span> Level: Expert <span aria-hidden="true">▴</span>
+        </button>
+        <button class="fbtn" type="button" aria-expanded="false">Rating <span aria-hidden="true">▾</span></button>
+      </div>
+      <div class="menu" role="group" aria-label="Filter by proficiency level">
+        <p class="helper">You haven't searched a skill, so this matches colleagues at this level in <em>any</em> skill they teach.</p>
+        <label><input type="checkbox" /> Beginner <span class="n">2</span></label>
+        <label><input type="checkbox" /> Intermediate <span class="n">5</span></label>
+        <label><input type="checkbox" checked /> Expert <span class="n">4</span></label>
+      </div>
+    </div>
+    <p class="note">
+      The same control answers two different questions depending on whether a
+      skill is searched — "expert in anything" versus "expert in Excel". Saying
+      which reading is in force is the difference between a filter people trust
+      and one they stop using. With a skill searched, the line reads "matches
+      their level in Excel".
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Rating menu open — single-select, and the unrated question</h2>
+    <div class="frame">
+      <div class="filters">
+        <button class="fbtn" type="button" aria-expanded="false">Department <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" aria-expanded="false">Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn is-active" type="button" aria-expanded="true">
+          <span class="dot" aria-hidden="true"></span> Rating: 4★ and up <span aria-hidden="true">▴</span>
+        </button>
+      </div>
+      <div class="menu" role="radiogroup" aria-label="Filter by trainer rating">
+        <label><input type="radio" name="rating" /> Any rating <span class="n">8</span></label>
+        <label><input type="radio" name="rating" /> 3★ and up <span class="n">5</span></label>
+        <label><input type="radio" name="rating" checked /> 4★ and up <span class="n">3</span></label>
+        <label><input type="radio" name="rating" /> 4.5★ and up <span class="n">1</span></label>
+      </div>
+    </div>
+    <p class="note">
+      Thresholds are a working default (OQ-S6, the designer's call at review).
+      What this filter does to colleagues who have no rating yet is <em>not</em> a
+      design choice — it is the open conflict C-1 between REQ-012 and REQ-013,
+      and the BA owns it. The count line below shows the working default.
+    </p>
+  </section>
+
+  <!--
+    ST-08. "3 of 8" rather than "3": the number filtered out is the fact a
+    learner needs in order to decide whether to relax something.
+  -->
+  <!-- @state SCR-006/ST-08 -->
+  <section class="example">
+    <h2>Filters in force</h2>
+    <div class="frame">
+      <div class="search">
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" value="Excel" aria-label="Search a skill" />
+      </div>
+      <div class="filters">
+        <button class="fbtn is-active" type="button" aria-expanded="false">
+          <span class="dot" aria-hidden="true"></span> Department: Finance <span aria-hidden="true">▾</span>
+        </button>
+        <button class="fbtn is-active" type="button" aria-expanded="false">
+          <span class="dot" aria-hidden="true"></span> Level: Expert +1 <span aria-hidden="true">▾</span>
+        </button>
+        <button class="fbtn is-active" type="button" aria-expanded="false">
+          <span class="dot" aria-hidden="true"></span> Rating: 4★ and up <span aria-hidden="true">▾</span>
+        </button>
+        <button class="clear" type="button">Clear all</button>
+      </div>
+      <p class="count" role="status" aria-live="polite">
+        <strong>3 of 8</strong> colleagues &middot; 2 not-yet-rated colleagues hidden by this filter.
+        <a href="#">Show them</a>
+      </p>
+    </div>
+    <p class="note">
+      Each button carries its own value, so the state of the search is readable
+      without opening anything, and "Clear all" appears only once there is
+      something to clear. The count line is the screen's single
+      <code>aria-live</code> region: one announcement per refinement, rather than
+      a screen reader re-reading the result list. The second sentence is the
+      working default for conflict C-1 — the reveal is one click, never a silent
+      exclusion.
+    </p>
+  </section>
+
+  <!--
+    ST-03. Controls stay live and keep what the learner just chose; only the
+    count line changes. Blanking the controls mid-refinement loses their place.
+  -->
+  <!-- @state SCR-006/ST-03 -->
+  <section class="example">
+    <h2>Searching — a refinement is in flight</h2>
+    <div class="frame">
+      <div class="search">
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" value="Excel" aria-label="Search a skill" />
+      </div>
+      <div class="filters">
+        <button class="fbtn is-active" type="button"><span class="dot" aria-hidden="true"></span> Department: Finance <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button">Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button">Rating <span aria-hidden="true">▾</span></button>
+        <button class="clear" type="button">Clear all</button>
+      </div>
+      <p class="count" role="status" aria-live="polite">
+        <span class="spin" aria-hidden="true"></span> Searching&hellip;
+      </p>
+    </div>
+    <p class="note">
+      Every control stays operable — the learner can keep typing or change
+      another filter, and each change supersedes the request in flight. Input is
+      debounced, so one refinement is one request rather than one per character
+      (NFR-003). The results below dim; they are never cleared.
+    </p>
+  </section>
+
+  <!--
+    ST-02. Disabled, not hidden: the frame is stable from first paint, and
+    nothing typed can be lost when real data replaces the skeleton.
+  -->
+  <!-- @state SCR-006/ST-02 -->
+  <section class="example">
+    <h2>First load — controls present but inert</h2>
+    <div class="frame">
+      <div class="search" data-disabled>
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" placeholder="Search a skill…" aria-label="Search a skill" disabled />
+      </div>
+      <div class="filters">
+        <button class="fbtn" type="button" disabled>Department <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" disabled>Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button" disabled>Rating <span aria-hidden="true">▾</span></button>
+      </div>
+    </div>
+    <p class="note">
+      No count line — the number is not known yet, and a "0 colleagues" that
+      turns into "8 colleagues" a moment later is a lie the page tells itself.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>At phone width — the same row, scrolling sideways</h2>
+    <div class="frame narrow">
+      <div class="search">
+        <span class="ico" aria-hidden="true">🔍</span>
+        <input type="search" placeholder="Search a skill…" aria-label="Search a skill" />
+      </div>
+      <div class="filters">
+        <button class="fbtn is-active" type="button"><span class="dot" aria-hidden="true"></span> Department: Finance <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button">Level <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button">Rating <span aria-hidden="true">▾</span></button>
+      </div>
+      <p class="count"><strong>3 of 8</strong> colleagues</p>
+    </div>
+    <p class="note">
+      One design at every width (NFR-004): the row scrolls horizontally rather
+      than wrapping into a stack that would push the results off the first
+      screen. Menus open as anchored sheets from the bottom on a phone, with the
+      same options in the same order.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>The desaturation check</h2>
+    <div class="frame mono">
+      <div class="filters">
+        <button class="fbtn is-active" type="button"><span class="dot" aria-hidden="true"></span> Department: Finance <span aria-hidden="true">▾</span></button>
+        <button class="fbtn" type="button">Level <span aria-hidden="true">▾</span></button>
+      </div>
+    </div>
+    <p class="note">
+      Colour removed. An active filter is still identifiable, by its filled dot
+      and by carrying a value in its label — the colour is reinforcement, never
+      the signal (NFR-003).
+    </p>
+  </section>
+</body>
+</html>

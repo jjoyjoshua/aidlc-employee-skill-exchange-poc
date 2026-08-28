@@ -20,6 +20,7 @@
     --c-info-bg: #f0f9ff;
     --focus-ring: #2563eb;
     --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
     --t-sm: 0.875rem;
     --t-base: 1rem;
     --t-lg: 1.125rem;
@@ -66,6 +67,12 @@
     font-weight: var(--fw-medium);
     color: var(--c-text-secondary);
     margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
   }
   .alert {
     display: flex;
@@ -268,6 +275,30 @@
         <strong>If that wasn't you, contact IT straight away.</strong>
       </span>
     </div>
+  </section>
+
+  <!--
+    SCR-006/ST-06. The trainer list is one request, so exactly one thing can
+    fail. The app-header stays live above this panel, so the learner is never
+    trapped — they can navigate away or log out without a reload.
+  -->
+  <!-- @state SCR-006/ST-06 -->
+  <section class="example">
+    <h2>Panel — the trainer list couldn't load</h2>
+    <div class="alert is-error is-panel" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">We couldn't load the list of trainers</span>
+      <span class="body">
+        This is usually a connection problem, not a problem with your account.
+        <a href="#">Try again</a>
+      </span>
+    </div>
+    <p class="note">
+      Retry is offered because retrying can genuinely work here — the opposite of
+      the expired-link panel above, where nothing about the link will start
+      working. Saying "usually a connection problem" heads off the reasonable
+      guess that the portal has locked them out.
+    </p>
   </section>
 </body>
 </html>

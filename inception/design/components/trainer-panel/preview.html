@@ -1,0 +1,589 @@
+<!-- @dsCard group="Overlays" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Trainer panel</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-xl: 1.25rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 760px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The staging frame: results behind, panel over them ---------------- */
+  .stage {
+    position: relative;
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    background: var(--c-bg);
+    min-height: 21rem;
+  }
+  .behind {
+    flex: 1 1 auto;
+    padding: var(--s-4);
+    display: grid;
+    gap: var(--s-2);
+    align-content: start;
+    opacity: 0.35;
+  }
+  .behind .ghost {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    background: var(--c-surface);
+    padding: var(--s-3);
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+  }
+
+  /* ---- The panel --------------------------------------------------------- */
+  .panel {
+    flex: 0 0 20rem;
+    background: var(--c-surface);
+    border-left: 1px solid var(--c-border);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+  }
+  .panel .head {
+    padding: var(--s-4);
+    border-bottom: 1px solid var(--c-border);
+    display: flex;
+    gap: var(--s-3);
+    align-items: flex-start;
+  }
+  .panel .avatar {
+    flex: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--r-full);
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+    display: grid;
+    place-items: center;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .panel .who { flex: 1 1 auto; min-width: 0; }
+  .panel .name {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .panel .role {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+  }
+  .panel .rating {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    margin-top: var(--s-2);
+  }
+  .panel .rating .stars { color: var(--c-warning); letter-spacing: 0.05em; }
+  .panel .rating .avg { font-weight: var(--fw-semibold); }
+  .panel .rating .count { font-size: var(--t-xs); color: var(--c-text-secondary); }
+  .panel .rating.is-unrated .stars { color: var(--c-text-disabled); }
+  .panel .rating.is-unrated .avg { font-weight: var(--fw-regular); color: var(--c-text-secondary); }
+
+  .iconbtn {
+    font: inherit;
+    flex: none;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: var(--r-sm);
+    color: var(--c-text-secondary);
+    cursor: pointer;
+    padding: var(--s-1) var(--s-2);
+    font-size: var(--t-base);
+    line-height: 1;
+  }
+  .iconbtn:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  .iconbtn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .panel .body {
+    padding: var(--s-4);
+    display: grid;
+    gap: var(--s-4);
+    overflow-y: auto;
+  }
+  .sect h3 {
+    font-size: var(--t-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: var(--fw-semibold);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface-alt);
+    border-radius: var(--r-full);
+    padding: var(--s-1) var(--s-3);
+  }
+  .chip .lvl { color: var(--c-text-secondary); font-weight: var(--fw-regular); }
+
+  .slot {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .slot + .slot { margin-top: var(--s-2); }
+  .slot .when { flex: 1 1 8rem; min-width: 0; }
+  .slot .day { font-size: var(--t-sm); font-weight: var(--fw-semibold); line-height: var(--lh-tight); }
+  .slot .dur { font-size: var(--t-xs); color: var(--c-text-secondary); margin-top: var(--s-1); }
+  .slot.is-taken { background: var(--c-surface-alt); }
+  .slot.is-taken .day { color: var(--c-text-disabled); text-decoration: line-through; }
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    border: 1px solid currentColor;
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.4rem;
+    flex: none;
+    color: var(--c-text-secondary);
+  }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    flex: none;
+  }
+  .btn.is-quiet {
+    background: var(--c-surface);
+    color: var(--c-text);
+    border-color: var(--c-border);
+  }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .nothing {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    background: var(--c-surface-alt);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+    line-height: var(--lh-normal);
+  }
+
+  .sect-error {
+    border: 1px solid var(--c-danger);
+    background: var(--c-danger-bg);
+    color: var(--c-danger);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    font-size: var(--t-sm);
+    display: grid;
+    gap: var(--s-3);
+    justify-items: start;
+  }
+
+  /* ---- Skeleton (SCR-006/ST-10) ------------------------------------------ */
+  .sk {
+    background: var(--c-surface-alt);
+    border-radius: var(--r-sm);
+    height: 3rem;
+  }
+  .sk + .sk { margin-top: var(--s-2); }
+
+  /* ---- Phone sheet (SCR-006/ST-19) --------------------------------------- */
+  .phone {
+    width: 20rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--c-surface);
+  }
+  .phone .panel { flex: 1 1 auto; border-left: 0; box-shadow: none; max-height: 24rem; }
+</style>
+</head>
+<body>
+  <h1>Trainer panel</h1>
+
+  <p>
+    Opened from a result card on SCR-006 and slid in over the results, which stay
+    visible and inert behind it. It carries who the colleague is, their rating
+    (REQ-025), what they teach, and the times they have published (REQ-014) —
+    and it is where the learner asks for one (REQ-015). The individual slot
+    states live in the <code>slot-row</code> preview; this file is the frame
+    around them.
+  </p>
+
+  <!--
+    ST-10. The panel opens already populated from the card that was clicked —
+    only the slots are unknown. Showing an empty panel would briefly hide
+    information the learner is looking at right now.
+  -->
+  <!-- @state SCR-006/ST-10 -->
+  <section class="example">
+    <h2>Opening — identity known, times still loading</h2>
+    <div class="stage">
+      <div class="behind" aria-hidden="true">
+        <div class="ghost">Priya M. &middot; Finance</div>
+        <div class="ghost">Arun K. &middot; Engineering</div>
+        <div class="ghost">Dev S. &middot; Operations</div>
+      </div>
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Priya M.">
+        <div class="head">
+          <span class="avatar" aria-hidden="true">PM</span>
+          <span class="who">
+            <span class="name">Priya M.</span>
+            <span class="role">Finance &middot; Financial Analyst</span>
+            <span class="rating">
+              <span class="stars" aria-hidden="true">★★★★☆</span>
+              <span class="avg">4.6</span>
+              <span class="count">&middot; 12 ratings</span>
+            </span>
+          </span>
+          <button class="iconbtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="body">
+          <div class="sect">
+            <h3>Teaches</h3>
+            <div class="chips">
+              <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+              <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+            </div>
+          </div>
+          <div class="sect" aria-busy="true">
+            <h3>Available times</h3>
+            <div class="sk" aria-hidden="true"></div>
+            <div class="sk" aria-hidden="true"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Name, department, rating and skills are already on screen — they came from
+      the card. Only "Available times" is unknown, so only it shows a skeleton.
+      Focus moves to the panel heading on open and is trapped until close;
+      Escape, the ✕ and the scrim all close it, returning focus to the exact card
+      that opened it.
+    </p>
+  </section>
+
+  <!--
+    ST-11. The whole reason the panel exists: identity, rating and the times,
+    with the request completed here rather than on another screen.
+  -->
+  <!-- @state SCR-006/ST-11 -->
+  <section class="example">
+    <h2>Loaded — times published</h2>
+    <div class="stage">
+      <div class="behind" aria-hidden="true">
+        <div class="ghost">Priya M. &middot; Finance</div>
+        <div class="ghost">Arun K. &middot; Engineering</div>
+        <div class="ghost">Dev S. &middot; Operations</div>
+      </div>
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Priya M.">
+        <div class="head">
+          <span class="avatar" aria-hidden="true">PM</span>
+          <span class="who">
+            <span class="name">Priya M.</span>
+            <span class="role">Finance &middot; Financial Analyst</span>
+            <span class="rating">
+              <span class="stars" aria-hidden="true">★★★★☆</span>
+              <span class="avg">4.6</span>
+              <span class="count">&middot; 12 ratings</span>
+            </span>
+          </span>
+          <button class="iconbtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="body">
+          <div class="sect">
+            <h3>Teaches</h3>
+            <div class="chips">
+              <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+              <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+            </div>
+          </div>
+          <div class="sect">
+            <h3>Available times</h3>
+            <div class="slot">
+              <span class="when"><span class="day">Thu 3 Sep &middot; 14:00</span><span class="dur">45 minutes</span></span>
+              <button class="btn" type="button">Request</button>
+            </div>
+            <div class="slot">
+              <span class="when"><span class="day">Fri 4 Sep &middot; 11:00</span><span class="dur">60 minutes</span></span>
+              <button class="btn" type="button">Request</button>
+            </div>
+            <div class="slot is-taken">
+              <span class="when"><span class="day">Mon 7 Sep &middot; 09:00</span><span class="dur">45 minutes</span></span>
+              <span class="status"><span aria-hidden="true">🔒</span> Already booked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The results behind stay on screen, so closing the panel returns the learner
+      to exactly the list and filters they had. That is the whole argument for a
+      panel over a separate trainer page: comparing two colleagues costs no
+      navigation and loses no search state.
+    </p>
+  </section>
+
+  <!--
+    ST-12. A dead end, deliberately. No "notify me" action, because no
+    requirement defines a second request path and inventing one would be
+    inventing a business rule (raised as OQ-S4 instead).
+  -->
+  <!-- @state SCR-006/ST-12 -->
+  <section class="example">
+    <h2>No times published</h2>
+    <div class="stage">
+      <div class="behind" aria-hidden="true">
+        <div class="ghost">Priya M. &middot; Finance</div>
+        <div class="ghost">Arun K. &middot; Engineering</div>
+      </div>
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Arun K.">
+        <div class="head">
+          <span class="avatar" aria-hidden="true">AK</span>
+          <span class="who">
+            <span class="name">Arun K.</span>
+            <span class="role">Engineering &middot; Senior Developer</span>
+            <span class="rating is-unrated">
+              <span class="stars" aria-hidden="true">☆</span>
+              <span class="avg">Not rated yet</span>
+            </span>
+          </span>
+          <button class="iconbtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="body">
+          <div class="sect">
+            <h3>Teaches</h3>
+            <div class="chips">
+              <span class="chip">Python <span class="lvl">&middot; Expert</span></span>
+            </div>
+          </div>
+          <div class="sect">
+            <h3>Available times</h3>
+            <p class="nothing">Arun hasn't published any times yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Identity, skills and rating stay fully visible — the learner still learns
+      that the right person exists, which is worth something even today. There is
+      no "register interest" button because nothing in the BRD defines one; that
+      is OQ-S4 for the BA rather than a gap I fill in quietly.
+    </p>
+  </section>
+
+  <!--
+    ST-18. The failure is scoped to the section that failed. The panel is not
+    dismissed and the results behind it are untouched.
+  -->
+  <!-- @state SCR-006/ST-18 -->
+  <section class="example">
+    <h2>Times couldn't load</h2>
+    <div class="stage">
+      <div class="behind" aria-hidden="true">
+        <div class="ghost">Priya M. &middot; Finance</div>
+        <div class="ghost">Arun K. &middot; Engineering</div>
+      </div>
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Priya M.">
+        <div class="head">
+          <span class="avatar" aria-hidden="true">PM</span>
+          <span class="who">
+            <span class="name">Priya M.</span>
+            <span class="role">Finance &middot; Financial Analyst</span>
+            <span class="rating">
+              <span class="stars" aria-hidden="true">★★★★☆</span>
+              <span class="avg">4.6</span>
+              <span class="count">&middot; 12 ratings</span>
+            </span>
+          </span>
+          <button class="iconbtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="body">
+          <div class="sect">
+            <h3>Teaches</h3>
+            <div class="chips">
+              <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+              <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+            </div>
+          </div>
+          <div class="sect">
+            <h3>Available times</h3>
+            <div class="sect-error" role="alert">
+              <span><span aria-hidden="true">⚠</span> We couldn't load Priya's available times.</span>
+              <button class="btn is-quiet" type="button">Try again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Only the section that failed shows the failure. Closing the panel here
+      costs the learner nothing — their search is still behind it — so there is
+      no need for a panel-wide error or a forced dismissal.
+    </p>
+  </section>
+
+  <!--
+    ST-19. The same panel at phone width: a full-height sheet, same content,
+    same actions, one extra affordance (the back arrow).
+  -->
+  <!-- @state SCR-006/ST-19 -->
+  <section class="example">
+    <h2>At phone width — a full-height sheet</h2>
+    <div class="phone">
+      <div class="panel" role="dialog" aria-modal="true" aria-label="Priya M.">
+        <div class="head">
+          <button class="iconbtn" type="button" aria-label="Back to results">←</button>
+          <span class="avatar" aria-hidden="true">PM</span>
+          <span class="who">
+            <span class="name">Priya M.</span>
+            <span class="role">Finance &middot; Financial Analyst</span>
+            <span class="rating">
+              <span class="stars" aria-hidden="true">★★★★☆</span>
+              <span class="avg">4.6</span>
+              <span class="count">&middot; 12 ratings</span>
+            </span>
+          </span>
+          <button class="iconbtn" type="button" aria-label="Close">✕</button>
+        </div>
+        <div class="body">
+          <div class="sect">
+            <h3>Teaches</h3>
+            <div class="chips">
+              <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+              <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+            </div>
+          </div>
+          <div class="sect">
+            <h3>Available times</h3>
+            <div class="slot">
+              <span class="when"><span class="day">Thu 3 Sep &middot; 14:00</span><span class="dur">45 minutes</span></span>
+              <button class="btn" type="button">Request</button>
+            </div>
+            <div class="slot">
+              <span class="when"><span class="day">Fri 4 Sep &middot; 11:00</span><span class="dur">60 minutes</span></span>
+              <button class="btn" type="button">Request</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The sheet covers the results entirely, so a back arrow joins the ✕ and the
+      browser's Back gesture closes the sheet rather than leaving the screen. The
+      header stays pinned while the slot list scrolls, so the learner never loses
+      track of whose calendar they are looking at. Content and actions are
+      identical to the desktop panel — only the frame changes (NFR-004).
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Under reduced motion</h2>
+    <p class="note">
+      The slide-in and the dimming of the results behind are transitions. With
+      <code>prefers-reduced-motion</code> set, the panel appears in place and the
+      dim is applied instantly — the end state is identical, so nothing about the
+      design depends on the animation having been seen.
+    </p>
+  </section>
+</body>
+</html>

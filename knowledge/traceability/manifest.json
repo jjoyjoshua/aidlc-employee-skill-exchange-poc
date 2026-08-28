@@ -1,62 +1,235 @@
 {
   "$comment": "Traceability knowledge graph: REQ <-> US <-> tests, plus screens (US <-> SCR -> states/components), decisions (US -> ADR) and lessons-learned edges. Edited in the same PR as the artifacts it links; validated by tools/aidlc-check.mjs; traceability-matrix.md is generated from it (never hand-edited).",
   "requirements": {
-    "REQ-001": { "stories": [], "screens": ["SCR-001"] },
-    "REQ-002": { "stories": [], "screens": ["SCR-001"] },
-    "REQ-003": { "stories": [], "screens": ["SCR-001", "SCR-002", "SCR-003"] },
-    "REQ-004": { "stories": [], "screens": ["SCR-001", "SCR-004"] },
-    "REQ-005": { "stories": [], "screens": ["SCR-004"] },
-    "REQ-006": { "stories": [], "screens": ["SCR-004"] },
-    "REQ-007": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-008": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-009": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-010": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-011": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-012": { "stories": [], "screens": [] },
-    "REQ-013": { "stories": [], "screens": ["SCR-005"] },
-    "REQ-014": { "stories": [], "screens": [] },
-    "REQ-015": { "stories": [], "screens": [] },
-    "REQ-016": { "stories": [], "screens": [] },
-    "REQ-017": { "stories": [], "screens": ["SCR-004"] },
-    "REQ-018": { "stories": [], "screens": [] },
-    "REQ-019": { "stories": [], "screens": [] },
-    "REQ-020": { "stories": [], "screens": [] },
-    "REQ-021": { "stories": [], "screens": [] },
-    "REQ-022": { "stories": [], "screens": [] },
-    "REQ-023": { "stories": [], "screens": [] },
-    "REQ-024": { "stories": [], "screens": [] },
-    "REQ-025": { "stories": [], "screens": [] },
-    "REQ-026": { "stories": [], "screens": [] },
-    "REQ-027": { "stories": [], "screens": [] },
-    "REQ-028": { "stories": [], "screens": [] },
-    "NFR-001": { "stories": [], "screens": [] },
-    "NFR-002": { "stories": [], "screens": [] },
-    "NFR-003": { "stories": [], "screens": [] },
+    "REQ-001": {
+      "stories": [],
+      "screens": [
+        "SCR-001"
+      ]
+    },
+    "REQ-002": {
+      "stories": [],
+      "screens": [
+        "SCR-001"
+      ]
+    },
+    "REQ-003": {
+      "stories": [],
+      "screens": [
+        "SCR-001",
+        "SCR-002",
+        "SCR-003"
+      ]
+    },
+    "REQ-004": {
+      "stories": [],
+      "screens": [
+        "SCR-001",
+        "SCR-004"
+      ]
+    },
+    "REQ-005": {
+      "stories": [],
+      "screens": [
+        "SCR-004"
+      ]
+    },
+    "REQ-006": {
+      "stories": [],
+      "screens": [
+        "SCR-004"
+      ]
+    },
+    "REQ-007": {
+      "stories": [],
+      "screens": [
+        "SCR-005"
+      ]
+    },
+    "REQ-008": {
+      "stories": [],
+      "screens": [
+        "SCR-005"
+      ]
+    },
+    "REQ-009": {
+      "stories": [],
+      "screens": [
+        "SCR-005"
+      ]
+    },
+    "REQ-010": {
+      "stories": [],
+      "screens": [
+        "SCR-005"
+      ]
+    },
+    "REQ-011": {
+      "stories": [],
+      "screens": [
+        "SCR-005"
+      ]
+    },
+    "REQ-012": {
+      "stories": [],
+      "screens": [
+        "SCR-006"
+      ]
+    },
+    "REQ-013": {
+      "stories": [],
+      "screens": [
+        "SCR-005",
+        "SCR-006"
+      ]
+    },
+    "REQ-014": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-015": {
+      "stories": [],
+      "screens": [
+        "SCR-006"
+      ]
+    },
+    "REQ-016": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-017": {
+      "stories": [],
+      "screens": [
+        "SCR-004"
+      ]
+    },
+    "REQ-018": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-019": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-020": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-021": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-022": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-023": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-024": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-025": {
+      "stories": [],
+      "screens": [
+        "SCR-006"
+      ]
+    },
+    "REQ-026": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-027": {
+      "stories": [],
+      "screens": []
+    },
+    "REQ-028": {
+      "stories": [],
+      "screens": []
+    },
+    "NFR-001": {
+      "stories": [],
+      "screens": []
+    },
+    "NFR-002": {
+      "stories": [],
+      "screens": []
+    },
+    "NFR-003": {
+      "stories": [],
+      "screens": []
+    },
     "NFR-004": {
       "stories": [],
-      "screens": ["SCR-001", "SCR-002", "SCR-003", "SCR-004", "SCR-005"]
+      "screens": [
+        "SCR-001",
+        "SCR-002",
+        "SCR-003",
+        "SCR-004",
+        "SCR-005",
+        "SCR-006"
+      ]
     },
-    "NFR-005": { "stories": [], "screens": [] }
+    "NFR-005": {
+      "stories": [],
+      "screens": []
+    }
   },
   "stories": {},
   "screens": {
     "SCR-001": {
       "artifact": "inception/design/screens/SCR-001-login.md",
-      "requirements": ["REQ-001", "REQ-002", "REQ-003", "REQ-004", "NFR-004"],
+      "requirements": [
+        "REQ-001",
+        "REQ-002",
+        "REQ-003",
+        "REQ-004",
+        "NFR-004"
+      ],
       "stories": [],
-      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-06"],
-      "components": ["text-input", "button", "alert"]
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06"
+      ],
+      "components": [
+        "text-input",
+        "button",
+        "alert"
+      ]
     },
     "SCR-002": {
       "artifact": "inception/design/screens/SCR-002-request-password-reset.md",
-      "requirements": ["REQ-003", "NFR-004"],
+      "requirements": [
+        "REQ-003",
+        "NFR-004"
+      ],
       "stories": [],
-      "states": ["ST-01", "ST-02", "ST-03", "ST-04", "ST-05", "ST-06"],
-      "components": ["text-input", "button", "alert"]
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06"
+      ],
+      "components": [
+        "text-input",
+        "button",
+        "alert"
+      ]
     },
     "SCR-003": {
       "artifact": "inception/design/screens/SCR-003-set-new-password.md",
-      "requirements": ["REQ-003", "NFR-004"],
+      "requirements": [
+        "REQ-003",
+        "NFR-004"
+      ],
       "stories": [],
       "states": [
         "ST-01",
@@ -78,7 +251,13 @@
     },
     "SCR-004": {
       "artifact": "inception/design/screens/SCR-004-dashboard.md",
-      "requirements": ["REQ-004", "REQ-005", "REQ-006", "REQ-017", "NFR-004"],
+      "requirements": [
+        "REQ-004",
+        "REQ-005",
+        "REQ-006",
+        "REQ-017",
+        "NFR-004"
+      ],
       "stories": [],
       "states": [
         "ST-01",
@@ -151,6 +330,51 @@
         "alert",
         "spinner",
         "empty-state"
+      ]
+    },
+    "SCR-006": {
+      "artifact": "inception/design/screens/SCR-006-find-a-trainer.md",
+      "requirements": [
+        "REQ-012",
+        "REQ-013",
+        "REQ-015",
+        "REQ-025",
+        "NFR-004"
+      ],
+      "stories": [],
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08",
+        "ST-09",
+        "ST-10",
+        "ST-11",
+        "ST-12",
+        "ST-13",
+        "ST-14",
+        "ST-15",
+        "ST-16",
+        "ST-17",
+        "ST-18",
+        "ST-19"
+      ],
+      "components": [
+        "trainer-card",
+        "search-filter-bar",
+        "rating-stars",
+        "trainer-panel",
+        "slot-row",
+        "empty-state",
+        "alert",
+        "app-header",
+        "skill-chip",
+        "button",
+        "spinner"
       ]
     }
   },

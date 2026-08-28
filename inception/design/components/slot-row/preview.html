@@ -1,0 +1,405 @@
+<!-- @dsCard group="Booking" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Time slot row</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 520px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The row ----------------------------------------------------------- */
+  .slot {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .slot + .slot { margin-top: var(--s-2); }
+  .slot .when { flex: 1 1 12rem; min-width: 0; }
+  .slot .day {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .slot .dur {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+  }
+
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex: none;
+  }
+  .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+
+  /*
+   * Every non-available outcome is an icon plus a written word. Desaturate the
+   * panel and "Already booked", "Requested" and "Requesting…" stay distinct.
+   */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    border: 1px solid currentColor;
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.4rem;
+    flex: none;
+  }
+  .status.is-taken { color: var(--c-text-secondary); }
+  .status.is-requested { color: var(--c-warning); }
+
+  .slot.is-taken { background: var(--c-surface-alt); }
+  .slot.is-taken .day {
+    color: var(--c-text-disabled);
+    text-decoration: line-through;
+  }
+  .slot.is-taken .dur { color: var(--c-text-disabled); }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- Sent (SCR-006/ST-15) ---------------------------------------------- */
+  .sent {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-3);
+    border: 1px solid var(--c-success);
+    border-radius: var(--r-md);
+    background: var(--c-success-bg);
+    color: var(--c-success);
+    font-size: var(--t-sm);
+  }
+  .followup {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-2);
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- Failed (SCR-006/ST-16) -------------------------------------------- */
+  .row-error {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    margin-top: var(--s-2);
+    padding-left: var(--s-1);
+  }
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>Time slot row</h1>
+
+  <p>
+    One bookable time inside the trainer panel on SCR-006. The trainer published
+    it (REQ-014); the learner asks for it from here (REQ-015). Every state below
+    is one row's worth of the panel — the panel itself never changes shape while
+    a request is in flight.
+  </p>
+
+  <section class="example">
+    <h2>Available — the default</h2>
+    <div class="slot">
+      <span class="when">
+        <span class="day">Thu 3 Sep &middot; 14:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <button class="btn" type="button">Request</button>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="day">Fri 4 Sep &middot; 11:00</span>
+        <span class="dur">60 minutes</span>
+      </span>
+      <button class="btn" type="button">Request</button>
+    </div>
+    <p class="note">
+      Day, date and clock time, soonest first — never "in 3 days", because a
+      learner is deciding against their own calendar and needs the actual slot.
+      Duration is shown as the trainer published it; whether slot length is fixed
+      or chosen is a REQ-014 question (OQ-S7), not something this row decides.
+    </p>
+  </section>
+
+  <!--
+    ST-13. REQ-021 allows exactly one learner per slot. The row stays listed and
+    says so — a slot that vanishes between reading and clicking is the confusing
+    case, not the honest one.
+  -->
+  <!-- @state SCR-006/ST-13 -->
+  <section class="example">
+    <h2>Already booked by someone else</h2>
+    <div class="slot is-taken">
+      <span class="when">
+        <span class="day">Mon 7 Sep &middot; 09:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <span class="status is-taken"><span aria-hidden="true">🔒</span> Already booked</span>
+    </div>
+    <p class="note">
+      No button at all, so there is nothing to click and be refused (REQ-021).
+      Three signals carry it — the lock, the words, and the strikethrough — none
+      of them colour. The row keeps its place in the list so the learner can see
+      that the trainer's Monday is genuinely gone rather than never offered.
+    </p>
+  </section>
+
+  <!--
+    ST-14. Every Request button in the panel locks, not just this one: these are
+    requests against one person's calendar, and three fired at once is a mess
+    the learner did not intend.
+  -->
+  <!-- @state SCR-006/ST-14 -->
+  <section class="example">
+    <h2>Requesting — the call is in flight</h2>
+    <div class="slot" aria-busy="true">
+      <span class="when">
+        <span class="day">Thu 3 Sep &middot; 14:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <button class="btn" type="button" disabled>
+        <span class="spin" aria-hidden="true"></span> Requesting&hellip;
+      </button>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="day">Fri 4 Sep &middot; 11:00</span>
+        <span class="dur">60 minutes</span>
+      </span>
+      <button class="btn" type="button" disabled>Request</button>
+    </div>
+    <p class="note">
+      The clicked row shows the spinner; the others simply disable. The panel's
+      close control stays live throughout — a learner who walks away still gets
+      the request, and its outcome waits for them on the dashboard.
+    </p>
+  </section>
+
+  <!--
+    ST-15. The confirmation replaces the row in place, and names where the
+    status will live afterwards (REQ-016) — the panel is not where they will
+    come back to check.
+  -->
+  <!-- @state SCR-006/ST-15 -->
+  <section class="example">
+    <h2>Request sent</h2>
+    <div class="sent" role="status" aria-live="polite">
+      <span aria-hidden="true">✓</span>
+      <span>Requested &mdash; Priya has been notified.</span>
+    </div>
+    <p class="followup">
+      Waiting for Priya to approve. You'll see it on your dashboard.
+    </p>
+    <div class="slot" style="margin-top: var(--s-3);">
+      <span class="when">
+        <span class="day">Fri 4 Sep &middot; 11:00</span>
+        <span class="dur">60 minutes</span>
+      </span>
+      <button class="btn" type="button">Request</button>
+    </div>
+    <p class="note">
+      The trainer is notified (REQ-028) and the sentence says so, so nobody
+      wonders whether they also need to send a message. The remaining slots
+      re-enable — asking for a second time with the same colleague is allowed;
+      the trainer decides. Announced politely: the learner caused this and is
+      looking straight at it.
+    </p>
+  </section>
+
+  <!--
+    ST-16. The wording blames the sending, never the request's validity, so it
+    is never mistaken for a refusal from the trainer.
+  -->
+  <!-- @state SCR-006/ST-16 -->
+  <section class="example">
+    <h2>Request failed</h2>
+    <div class="slot">
+      <span class="when">
+        <span class="day">Thu 3 Sep &middot; 14:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <button class="btn" type="button">Request</button>
+    </div>
+    <p class="row-error" role="alert" aria-live="polite">
+      <span aria-hidden="true">⚠</span>
+      Couldn't send that request. Please try again.
+    </p>
+    <p class="note">
+      The button comes back enabled, so the retry is one click, and the error
+      sits under the row it belongs to rather than at the top of the panel.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Failed because someone else took it first</h2>
+    <div class="slot is-taken">
+      <span class="when">
+        <span class="day">Thu 3 Sep &middot; 14:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <span class="status is-taken"><span aria-hidden="true">🔒</span> Already booked</span>
+    </div>
+    <p class="row-error" role="alert" aria-live="polite">
+      <span aria-hidden="true">⚠</span>
+      Someone booked this one just now.
+    </p>
+    <p class="note">
+      A different fact deserves a different sentence. "Please try again" would be
+      advice that cannot work — this slot is gone (REQ-021), so the row becomes
+      the taken form and the message explains why rather than inviting a retry.
+    </p>
+  </section>
+
+  <!--
+    ST-17. The same slot cannot be asked for twice, in this visit or a later
+    one — the row remembers.
+  -->
+  <!-- @state SCR-006/ST-17 -->
+  <section class="example">
+    <h2>Already requested by this learner</h2>
+    <div class="slot">
+      <span class="when">
+        <span class="day">Thu 3 Sep &middot; 14:00</span>
+        <span class="dur">45 minutes</span>
+      </span>
+      <span class="status is-requested"><span aria-hidden="true">⏳</span> Requested</span>
+    </div>
+    <p class="note">
+      Distinct from "Already booked": that one is someone else's, this one is
+      theirs and still undecided. Different icon, different word, and the row is
+      not struck through — the slot has not gone anywhere yet. The status
+      matches the wording used on the dashboard's request rows, so the same fact
+      never has two names.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>The desaturation check</h2>
+    <div class="mono">
+      <div class="slot">
+        <span class="when"><span class="day">Thu 3 Sep &middot; 14:00</span><span class="dur">45 minutes</span></span>
+        <button class="btn" type="button">Request</button>
+      </div>
+      <div class="slot is-taken">
+        <span class="when"><span class="day">Mon 7 Sep &middot; 09:00</span><span class="dur">45 minutes</span></span>
+        <span class="status is-taken"><span aria-hidden="true">🔒</span> Already booked</span>
+      </div>
+      <div class="slot">
+        <span class="when"><span class="day">Tue 8 Sep &middot; 16:00</span><span class="dur">30 minutes</span></span>
+        <span class="status is-requested"><span aria-hidden="true">⏳</span> Requested</span>
+      </div>
+    </div>
+    <p class="note">
+      All colour removed. Available, taken and requested are still tellable
+      apart — by icon, by word, and by whether a button is there at all
+      (NFR-003).
+    </p>
+  </section>
+</body>
+</html>
