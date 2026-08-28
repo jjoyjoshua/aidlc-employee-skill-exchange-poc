@@ -1,0 +1,384 @@
+<!-- @dsCard group="Layout" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Section card</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 620px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+
+  /* ---- The card shell --------------------------------------------------- */
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .card > header {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    padding: var(--s-4);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .card > header h3 {
+    margin: 0;
+    font-size: var(--t-base);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .card > header .count {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    font-weight: var(--fw-regular);
+  }
+  .card > header .view-all {
+    margin-left: auto;
+    font-size: var(--t-sm);
+    color: var(--c-link);
+    text-decoration: none;
+    flex: none;
+  }
+  .card > header .view-all:hover { text-decoration: underline; }
+  .card .body { padding: var(--s-2) var(--s-4) var(--s-4); }
+
+  /* ---- A row inside a card ---------------------------------------------- */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    border-radius: var(--r-md);
+    border: 1px solid var(--c-border);
+    margin-top: var(--s-2);
+  }
+  .row .lines { flex: 1 1 auto; min-width: 0; }
+  .row .title {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .row .meta {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+  }
+  .btn {
+    flex: none;
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+  .btn:hover { background: var(--c-surface-alt); }
+  .btn.is-primary {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+  .btn.is-primary:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .card a:focus-visible,
+  .card button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /*
+   * "Starting soon" (SCR-004/ST-09). Three cues, only one of which is colour:
+   * the row moves to the top, gains a thick left edge, and carries a labelled
+   * clock pill. A viewer who sees no colour still gets the label and the edge.
+   */
+  .row.is-soon {
+    border-left: 4px solid var(--c-warning);
+    background: var(--c-warning-bg);
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.4rem;
+    border: 1px solid currentColor;
+  }
+  .pill.is-soon { color: var(--c-warning); }
+
+  /* ---- Loading skeleton (SCR-004/ST-02) --------------------------------- */
+  /*
+   * Bars sized to the rows they stand in for, so nothing shifts position when
+   * the real content lands. The pulse is a background fade, not a movement,
+   * and it stops entirely under prefers-reduced-motion.
+   */
+  .skeleton {
+    border-radius: var(--r-md);
+    background: var(--c-surface-alt);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  .skeleton.row-ish { height: 3.5rem; margin-top: var(--s-2); }
+  .skeleton.line-sm { height: 0.7rem; width: 60%; }
+  @keyframes pulse { 50% { opacity: 0.55; } }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton { animation: none; opacity: 0.75; }
+  }
+
+  /* ---- Empty section (SCR-004/ST-04) ------------------------------------ */
+  .empty {
+    padding: var(--s-4) var(--s-3) var(--s-3);
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    line-height: var(--lh-normal);
+  }
+  .empty a { color: var(--c-link); }
+
+  /* ---- Whole-dashboard failure (SCR-004/ST-05) -------------------------- */
+  .failure {
+    display: grid;
+    justify-items: center;
+    gap: var(--s-3);
+    text-align: center;
+    padding: var(--s-8) var(--s-4);
+    background: var(--c-danger-bg);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    color: var(--c-danger);
+  }
+  .failure .icon { font-size: var(--t-lg); }
+  .failure .title { font-size: var(--t-base); font-weight: var(--fw-semibold); color: var(--c-text); }
+  .failure .body { font-size: var(--t-sm); color: var(--c-text); }
+</style>
+</head>
+<body>
+  <h1>Section card</h1>
+
+  <p>
+    The container every dashboard section sits in (SCR-004). Its four content
+    states — populated, loading, empty, failed — are what make a section
+    legible at any data volume, including none.
+  </p>
+
+  <section class="example">
+    <h2>Populated — the ordinary case</h2>
+    <section class="card" aria-labelledby="c1">
+      <header>
+        <h3 id="c1">Upcoming sessions</h3>
+        <span class="count">(2)</span>
+        <a class="view-all" href="#">View all (2) &rarr;</a>
+      </header>
+      <div class="body">
+        <div class="row">
+          <div class="lines">
+            <div class="title">Excel Pivot Tables &middot; with Priya M.</div>
+            <div class="meta">Today 14:00 &middot; 45 min</div>
+          </div>
+          <button class="btn" type="button">Join meeting</button>
+        </div>
+        <div class="row">
+          <div class="lines">
+            <div class="title">Python Basics &middot; with Arun K.</div>
+            <div class="meta">Fri 11:00 &middot; 60 min</div>
+          </div>
+          <button class="btn" type="button">Join meeting</button>
+        </div>
+      </div>
+    </section>
+    <p class="note">
+      Capped at five rows; the header link carries the true total so the cap is
+      never mistaken for the whole picture.
+    </p>
+  </section>
+
+  <!--
+    ST-09. The soonest session is promoted to the top and marked. Join is
+    available on every approved session — this state changes prominence, not
+    availability.
+  -->
+  <!-- @state SCR-004/ST-09 -->
+  <section class="example">
+    <h2>A session starting soon</h2>
+    <section class="card" aria-labelledby="c2">
+      <header>
+        <h3 id="c2">Upcoming sessions</h3>
+        <span class="count">(2)</span>
+        <a class="view-all" href="#">View all (2) &rarr;</a>
+      </header>
+      <div class="body">
+        <div class="row is-soon">
+          <div class="lines">
+            <div class="title">Excel Pivot Tables &middot; with Priya M.</div>
+            <div class="meta">
+              <span class="pill is-soon"><span aria-hidden="true">⏰</span> Starting soon</span>
+              in 8 minutes &middot; 45 min
+            </div>
+          </div>
+          <button class="btn is-primary" type="button">Join meeting</button>
+        </div>
+        <div class="row">
+          <div class="lines">
+            <div class="title">Python Basics &middot; with Arun K.</div>
+            <div class="meta">Fri 11:00 &middot; 60 min</div>
+          </div>
+          <button class="btn" type="button">Join meeting</button>
+        </div>
+      </div>
+    </section>
+    <p class="note">
+      Three cues, one of them colour: position, a heavy left edge, and a
+      labelled clock pill. "Join meeting" stays platform-neutral until BRD OQ-2
+      is answered.
+    </p>
+  </section>
+
+  <!-- @state SCR-004/ST-02 -->
+  <section class="example">
+    <h2>Loading</h2>
+    <section class="card" aria-labelledby="c3" aria-busy="true">
+      <header>
+        <h3 id="c3">Upcoming sessions</h3>
+      </header>
+      <div class="body">
+        <div class="skeleton row-ish"></div>
+        <div class="skeleton row-ish"></div>
+      </div>
+    </section>
+    <p class="note">
+      The title is already known, so it renders immediately; only the count and
+      the rows wait. Nothing re-flows when the data lands.
+    </p>
+  </section>
+
+  <!-- @state SCR-004/ST-04 -->
+  <section class="example">
+    <h2>Empty — the section has nothing in it</h2>
+    <section class="card" aria-labelledby="c4">
+      <header>
+        <h3 id="c4">Upcoming sessions</h3>
+      </header>
+      <div class="body">
+        <p class="empty">No sessions booked. <a href="#">Find a trainer</a></p>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="c5" style="margin-top: var(--s-4);">
+      <header>
+        <h3 id="c5">Booking requests</h3>
+      </header>
+      <div class="body">
+        <p class="empty">No requests waiting.</p>
+      </div>
+    </section>
+    <p class="note">
+      The card keeps its place and its title. A section that disappears when
+      empty changes the dashboard's shape between visits, so nobody can learn
+      where anything is.
+    </p>
+  </section>
+
+  <!-- @state SCR-004/ST-05 -->
+  <section class="example">
+    <h2>Could not load the dashboard</h2>
+    <div class="failure" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">We couldn't load your dashboard</span>
+      <span class="body">Something went wrong on our side. Nothing has been lost.</span>
+      <button class="btn is-primary" type="button">Try again</button>
+    </div>
+    <p class="note">
+      One panel replaces the whole stack, because the dashboard loads in one
+      request — there is exactly one thing that can fail. The header above it
+      stays usable, so nobody is trapped on a broken page.
+    </p>
+  </section>
+</body>
+</html>

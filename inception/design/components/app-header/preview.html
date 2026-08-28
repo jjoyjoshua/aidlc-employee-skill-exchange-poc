@@ -1,0 +1,481 @@
+<!-- @dsCard group="Navigation" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — App header</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-danger: #dc2626;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-danger: #f87171;
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 900px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+
+  /* ---- The bar itself -------------------------------------------------- */
+  .appbar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-3) var(--s-4);
+    box-shadow: var(--shadow-sm);
+  }
+  .brand {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--c-text);
+    text-decoration: none;
+    flex: none;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex: 1 1 auto;
+    font-size: var(--t-sm);
+  }
+  .nav a {
+    color: var(--c-text-secondary);
+    text-decoration: none;
+    padding: var(--s-1) 0;
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover { color: var(--c-text); }
+  /*
+   * The current destination is marked twice — weight + an underline — so the
+   * "you are here" cue survives for anyone who cannot separate the two text
+   * colours. Colour alone would be the only signal otherwise.
+   */
+  .nav a.is-current {
+    color: var(--c-text);
+    font-weight: var(--fw-semibold);
+    border-bottom-color: var(--c-primary);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex: none;
+  }
+
+  /* ---- Bell + unread count --------------------------------------------- */
+  .bell {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--r-full);
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--c-text-secondary);
+    font-size: var(--t-base);
+    cursor: pointer;
+  }
+  .bell:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  /*
+   * A numeral, not a bare coloured dot: the count is the information, and a
+   * dot would make colour the only carrier of "you have unread things".
+   */
+  .bell .count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    min-width: 1.05rem;
+    height: 1.05rem;
+    padding: 0 var(--s-1);
+    border-radius: var(--r-full);
+    background: var(--c-danger);
+    color: var(--c-on-primary);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    line-height: 1.05rem;
+    text-align: center;
+  }
+
+  /* ---- Avatar + its menu ------------------------------------------------ */
+  .avatar-wrap { position: relative; }
+  .avatar {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--r-full);
+    padding: var(--s-1);
+    cursor: pointer;
+    color: var(--c-text-secondary);
+    font-size: var(--t-xs);
+  }
+  .avatar:hover { background: var(--c-surface-alt); }
+  .avatar .initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--r-full);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+  }
+  .menu {
+    position: absolute;
+    top: calc(100% + var(--s-2));
+    right: 0;
+    min-width: 12rem;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-md);
+    padding: var(--s-2);
+    display: grid;
+    gap: var(--s-1);
+    z-index: 2;
+  }
+  .menu .who {
+    padding: var(--s-2);
+    border-bottom: 1px solid var(--c-border);
+    margin-bottom: var(--s-1);
+  }
+  .menu .who .name { font-size: var(--t-sm); font-weight: var(--fw-semibold); }
+  .menu .who .mail { font-size: var(--t-xs); color: var(--c-text-secondary); }
+  .menu button,
+  .menu a {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-radius: var(--r-sm);
+    padding: var(--s-2);
+    font: inherit;
+    font-size: var(--t-sm);
+    color: var(--c-text);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .menu button:hover,
+  .menu a:hover { background: var(--c-surface-alt); }
+  .menu button[disabled] { color: var(--c-text-disabled); cursor: default; }
+  .menu button[disabled]:hover { background: transparent; }
+
+  /* ---- Mobile: destinations collapse, bell + avatar stay ---------------- */
+  .phone { max-width: 22rem; }
+  .menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--r-md);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+    font-size: var(--t-base);
+    cursor: pointer;
+  }
+
+  /* ---- Focus ------------------------------------------------------------ */
+  .appbar a:focus-visible,
+  .appbar button:focus-visible,
+  .menu a:focus-visible,
+  .menu button:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+  .is-focused {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* ---- Inline spinner (shared shape with the spinner component) --------- */
+  .spin {
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 2px solid var(--c-border);
+    border-top-color: var(--c-text-secondary);
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .spin { animation-duration: 2.4s; }
+  }
+</style>
+</head>
+<body>
+  <h1>App header</h1>
+
+  <p>
+    The shell every authenticated screen sits inside. Introduced by SCR-004 and
+    inherited by every screen after it. Log out lives here (REQ-005), so this
+    component is the only place the portal can be left from.
+  </p>
+
+  <!-- @state SCR-004/ST-01 -->
+  <section class="example">
+    <h2>Default — signed in, three unread</h2>
+    <div class="appbar">
+      <a class="brand" href="#">SkillEx</a>
+      <nav class="nav" aria-label="Main">
+        <a class="is-current" href="#" aria-current="page">Dashboard</a>
+        <a href="#">Find a trainer</a>
+        <a href="#">My skills</a>
+        <a href="#">History</a>
+      </nav>
+      <div class="actions">
+        <button class="bell" type="button" aria-label="Notifications, 3 unread">
+          <span aria-hidden="true">🔔</span>
+          <span class="count" aria-hidden="true">3</span>
+        </button>
+        <div class="avatar-wrap">
+          <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Your account, Joy Joshua">
+            <span class="initials" aria-hidden="true">JJ</span>
+            <span aria-hidden="true">▾</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The unread count is a numeral inside the badge, and the button's
+      accessible name says "3 unread" — the badge colour is never the only
+      thing carrying that fact.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>No unread notifications</h2>
+    <div class="appbar">
+      <a class="brand" href="#">SkillEx</a>
+      <nav class="nav" aria-label="Main">
+        <a class="is-current" href="#" aria-current="page">Dashboard</a>
+        <a href="#">Find a trainer</a>
+        <a href="#">My skills</a>
+        <a href="#">History</a>
+      </nav>
+      <div class="actions">
+        <button class="bell" type="button" aria-label="Notifications, none unread">
+          <span aria-hidden="true">🔔</span>
+        </button>
+        <div class="avatar-wrap">
+          <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Your account, Joy Joshua">
+            <span class="initials" aria-hidden="true">JJ</span>
+            <span aria-hidden="true">▾</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Avatar menu open — keyboard focus on the first item</h2>
+    <div class="appbar" style="padding-bottom: var(--s-6);">
+      <a class="brand" href="#">SkillEx</a>
+      <nav class="nav" aria-label="Main">
+        <a class="is-current" href="#" aria-current="page">Dashboard</a>
+        <a href="#">Find a trainer</a>
+        <a href="#">My skills</a>
+        <a href="#">History</a>
+      </nav>
+      <div class="actions">
+        <button class="bell" type="button" aria-label="Notifications, 3 unread">
+          <span aria-hidden="true">🔔</span>
+          <span class="count" aria-hidden="true">3</span>
+        </button>
+        <div class="avatar-wrap">
+          <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="true" aria-label="Your account, Joy Joshua">
+            <span class="initials" aria-hidden="true">JJ</span>
+            <span aria-hidden="true">▾</span>
+          </button>
+          <div class="menu" role="menu">
+            <div class="who">
+              <div class="name">Joy Joshua</div>
+              <div class="mail">joy_j@trigent.com</div>
+            </div>
+            <a class="is-focused" href="#" role="menuitem">
+              <span aria-hidden="true">👤</span> Your profile
+            </a>
+            <button type="button" role="menuitem">
+              <span aria-hidden="true">↩</span> Log out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Opens on Enter or Space, focus lands on the first item, arrow keys cycle,
+      Escape closes and returns focus to the avatar.
+    </p>
+  </section>
+
+  <!--
+    ST-10. The menu is held open rather than dismissed: the employee needs to
+    see that the thing they clicked is working. The item is disabled so a
+    second click cannot fire a second sign-out.
+  -->
+  <!-- @state SCR-004/ST-10 -->
+  <section class="example">
+    <h2>Signing out</h2>
+    <div class="appbar" style="padding-bottom: var(--s-6);">
+      <a class="brand" href="#">SkillEx</a>
+      <nav class="nav" aria-label="Main">
+        <a class="is-current" href="#" aria-current="page">Dashboard</a>
+        <a href="#">Find a trainer</a>
+        <a href="#">My skills</a>
+        <a href="#">History</a>
+      </nav>
+      <div class="actions">
+        <button class="bell" type="button" aria-label="Notifications, 3 unread">
+          <span aria-hidden="true">🔔</span>
+          <span class="count" aria-hidden="true">3</span>
+        </button>
+        <div class="avatar-wrap">
+          <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="true" aria-label="Your account, Joy Joshua">
+            <span class="initials" aria-hidden="true">JJ</span>
+            <span aria-hidden="true">▾</span>
+          </button>
+          <div class="menu" role="menu" aria-busy="true">
+            <div class="who">
+              <div class="name">Joy Joshua</div>
+              <div class="mail">joy_j@trigent.com</div>
+            </div>
+            <a href="#" role="menuitem"><span aria-hidden="true">👤</span> Your profile</a>
+            <button type="button" role="menuitem" disabled>
+              <span class="spin" aria-hidden="true"></span> Signing out&hellip;
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="example">
+    <h2>Sign-out failed</h2>
+    <div class="appbar" style="padding-bottom: var(--s-6);">
+      <a class="brand" href="#">SkillEx</a>
+      <nav class="nav" aria-label="Main"><a class="is-current" href="#" aria-current="page">Dashboard</a></nav>
+      <div class="actions">
+        <div class="avatar-wrap">
+          <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="true" aria-label="Your account, Joy Joshua">
+            <span class="initials" aria-hidden="true">JJ</span>
+            <span aria-hidden="true">▾</span>
+          </button>
+          <div class="menu" role="menu">
+            <a href="#" role="menuitem"><span aria-hidden="true">👤</span> Your profile</a>
+            <button type="button" role="menuitem">
+              <span aria-hidden="true">↩</span> Log out
+            </button>
+            <p style="margin: 0; padding: var(--s-2); font-size: var(--t-xs); color: var(--c-danger);" role="alert">
+              <span aria-hidden="true">⚠</span> Couldn't sign out. Please try again.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The employee is never told they are signed out when they are not — the
+      menu item comes back, ready to retry.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Narrow width — destinations collapse, bell and avatar stay</h2>
+    <div class="appbar phone">
+      <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
+      <a class="brand" href="#" style="flex: 1 1 auto;">SkillEx</a>
+      <div class="actions">
+        <button class="bell" type="button" aria-label="Notifications, 3 unread">
+          <span aria-hidden="true">🔔</span>
+          <span class="count" aria-hidden="true">3</span>
+        </button>
+        <button class="avatar" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Your account, Joy Joshua">
+          <span class="initials" aria-hidden="true">JJ</span>
+        </button>
+      </div>
+    </div>
+    <p class="note">
+      NFR-004. Reading notifications and logging out are the two things nobody
+      should have to open a menu to reach, so those two stay on the bar.
+    </p>
+  </section>
+</body>
+</html>
