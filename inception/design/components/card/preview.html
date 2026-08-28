@@ -322,6 +322,7 @@
   </section>
 
   <!-- @state SCR-004/ST-02 -->
+  <!-- @state SCR-007/ST-02 -->
   <section class="example">
     <h2>Loading</h2>
     <section class="card" aria-labelledby="c3" aria-busy="true">
@@ -362,6 +363,28 @@
       The card keeps its place and its title. A section that disappears when
       empty changes the dashboard's shape between visits, so nobody can learn
       where anything is.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-05. Same card, different copy and no action: nothing a trainer
+    can click will make a colleague ask for a time. Offering one would be
+    offering a dead end.
+  -->
+  <!-- @state SCR-007/ST-05 -->
+  <section class="example">
+    <h2>My teaching — no requests waiting</h2>
+    <section class="card" aria-labelledby="c7">
+      <header>
+        <h3 id="c7">Requests waiting for you</h3>
+      </header>
+      <div class="body">
+        <p class="empty">No requests waiting.</p>
+      </div>
+    </section>
+    <p class="note">
+      The count reads 0 rather than being hidden, and the card holds its place
+      so the trainer learns where requests appear before they ever get one.
     </p>
   </section>
 

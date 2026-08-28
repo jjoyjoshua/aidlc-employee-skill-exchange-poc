@@ -1,0 +1,495 @@
+<!-- @dsCard group="Booking" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Availability row</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 560px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- Day grouping ------------------------------------------------------ */
+  .day-head {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) var(--s-1);
+  }
+
+  /* ---- The row ----------------------------------------------------------- */
+  .slot {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .slot + .slot { margin-top: var(--s-2); }
+  .slot .when { flex: 1 1 14rem; min-width: 0; }
+  .slot .time {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .slot .meta {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.25rem;
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex: none;
+  }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex: none;
+  }
+  .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--c-primary);
+  }
+  .btn.secondary:hover { background: var(--c-surface-alt); border-color: var(--c-primary-hover); }
+  .btn.quiet {
+    background: transparent;
+    border-color: var(--c-border);
+    color: var(--c-text-secondary);
+  }
+  .btn.quiet:hover { background: var(--c-surface-alt); border-color: var(--c-text-secondary); }
+  .btn.danger {
+    background: var(--c-danger);
+    border-color: var(--c-danger);
+    color: var(--c-on-primary);
+  }
+  .btn.danger:hover { background: var(--c-danger); border-color: var(--c-danger); }
+
+  /*
+   * Every status is an icon plus a written word — never a colour on its own.
+   * Desaturate the page and "Booked", "2 requests waiting", "Published" and
+   * "Session finished" all stay distinguishable.
+   */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    border: 1px solid currentColor;
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.4rem;
+    flex: none;
+  }
+  .status.is-booked { color: var(--c-success); }
+  .status.is-waiting { color: var(--c-warning); }
+  .status.is-published { color: var(--c-success); }
+  .status.is-finished { color: var(--c-text-secondary); }
+
+  .slot.is-finished { background: var(--c-surface-alt); }
+  .slot.is-finished .time { color: var(--c-text-disabled); }
+  .slot.is-finished .meta { color: var(--c-text-disabled); }
+  .slot.is-new { border-color: var(--c-success); background: var(--c-success-bg); }
+
+  .link {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-primary);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+  }
+  .link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---- Confirm-in-row (SCR-007/ST-21) ------------------------------------ */
+  .confirm {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+    flex: none;
+  }
+  .confirm .ask {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+  }
+
+  .row-error {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    margin-top: var(--s-2);
+    padding-left: var(--s-1);
+  }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>Availability row</h1>
+
+  <p>
+    One time a trainer has published on SCR-007 (REQ-014). The learner's view of
+    the same underlying slot is <code>slot-row</code> on SCR-006 — deliberately a
+    different component, because the trainer's row answers "who wants this and
+    what may I do with it", not "may I ask for this".
+  </p>
+
+  <!--
+    ST-01. The ordinary published time: nobody has asked for it yet, so Remove
+    is available. Times are grouped under a day heading rather than repeating
+    the date on every row.
+  -->
+  <!-- @state SCR-007/ST-01 -->
+  <section class="example">
+    <h2>Published — the default</h2>
+    <p class="day-head">Thu 4 Sep</p>
+    <div class="slot">
+      <span class="when">
+        <span class="time">14:00 &middot; 45 minutes</span>
+        <span class="meta"><span class="chip">Excel</span></span>
+      </span>
+      <span class="actions">
+        <button class="btn quiet" type="button">Remove</button>
+      </span>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="time">16:00 &middot; 45 minutes</span>
+        <span class="meta"><span class="chip">Excel</span></span>
+      </span>
+      <span class="actions">
+        <button class="btn quiet" type="button">Remove</button>
+      </span>
+    </div>
+    <p class="note">
+      Clock time first, then length, then the skill. Never a relative reading —
+      a trainer is publishing against their own calendar and needs the hour.
+      Whether the length is trainer-chosen at all is a REQ-014 question (OQ-T2).
+    </p>
+  </section>
+
+  <!--
+    ST-10. Confirmation lands where the change landed, not in a page banner —
+    consistent with SCR-004/ST-07 and SCR-006/ST-15. Held a few seconds, then
+    the row settles back to ST-01. Announced aria-live="polite".
+  -->
+  <!-- @state SCR-007/ST-10 -->
+  <section class="example">
+    <h2>Just published</h2>
+    <p class="day-head">Fri 5 Sep</p>
+    <div class="slot is-new">
+      <span class="when">
+        <span class="time">11:00 &middot; 60 minutes</span>
+        <span class="meta"><span class="chip">Python</span></span>
+      </span>
+      <span class="actions">
+        <span class="status is-published">✓ Published</span>
+      </span>
+    </div>
+    <p class="note">
+      Focus moves to this row when it appears, so a keyboard user is left where
+      the change happened rather than back at the Add a time button.
+    </p>
+  </section>
+
+  <!--
+    ST-13. Someone has asked for this time. Remove is withdrawn rather than
+    disabled: a disabled control invites a click and then explains itself,
+    where there is a real path — answer the request above.
+  -->
+  <!-- @state SCR-007/ST-13 -->
+  <section class="example">
+    <h2>Requests waiting on it</h2>
+    <p class="day-head">Thu 4 Sep</p>
+    <div class="slot">
+      <span class="when">
+        <span class="time">14:00 &middot; 45 minutes</span>
+        <span class="meta"><span class="chip">Excel</span></span>
+      </span>
+      <span class="actions">
+        <span class="status is-waiting">⏳ 2 requests waiting</span>
+        <button class="link" type="button">See them</button>
+      </span>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="time">16:00 &middot; 45 minutes</span>
+        <span class="meta"><span class="chip">Excel</span></span>
+      </span>
+      <span class="actions">
+        <span class="status is-waiting">⏳ 1 request waiting</span>
+        <button class="link" type="button">See it</button>
+      </span>
+    </div>
+    <p class="note">
+      The count is a written number, not a coloured dot, and "See them" jumps to
+      the Requests section above so the two halves of the screen stay connected.
+    </p>
+  </section>
+
+  <!--
+    ST-14. One learner, ever (REQ-021 / BR-003.1) — there is no design for a
+    second name because the system does not produce one. Join meeting is
+    REQ-019; Cancel session is the trainer's entry point into REQ-020, whose
+    flow is not designed yet (OQ-T5).
+  -->
+  <!-- @state SCR-007/ST-14 -->
+  <section class="example">
+    <h2>Booked</h2>
+    <p class="day-head">Thu 4 Sep</p>
+    <div class="slot">
+      <span class="when">
+        <span class="time">16:00 &middot; 45 minutes</span>
+        <span class="meta">
+          <span class="chip">Excel</span>
+          <span class="status is-booked">✓ Booked &mdash; Arun K.</span>
+        </span>
+      </span>
+      <span class="actions">
+        <button class="btn secondary" type="button">Join meeting</button>
+        <button class="btn quiet" type="button">Cancel session</button>
+      </span>
+    </div>
+    <p class="note">
+      The learner's name is spelled out, not implied by an avatar alone. "Join
+      meeting" is platform-neutral until BRD OQ-2 names one. No Remove: a booked
+      time belongs to two people, and removing it silently is not something
+      REQ-020 permits.
+    </p>
+  </section>
+
+  <!--
+    ST-15. An unbooked time that has passed leaves the list entirely — it needs
+    no action and would grow the list without bound. A booked one stays, in a
+    Finished group, naming the state REQ-022 will act on without inventing that
+    action here.
+  -->
+  <!-- @state SCR-007/ST-15 -->
+  <section class="example">
+    <h2>Finished — a booked time whose start has gone by</h2>
+    <p class="day-head">Finished</p>
+    <div class="slot is-finished">
+      <span class="when">
+        <span class="time">Tue 2 Sep &middot; 10:00 &middot; 45 minutes</span>
+        <span class="meta">
+          <span class="chip">Excel</span>
+          <span class="status is-finished">⏱ Session finished &mdash; awaiting completion</span>
+        </span>
+      </span>
+    </div>
+    <p class="note">
+      A status, not a button. REQ-022 gives the trainer a way to mark a session
+      complete and that flow is undesigned (OQ-T6) — naming the state without
+      inventing its action keeps the screen honest. The full date returns here,
+      since these rows sit outside the day grouping.
+    </p>
+  </section>
+
+  <!--
+    ST-21. Confirm in the row, not in a modal: Remove is only ever offered on a
+    time nobody has requested, so nothing another person depends on is lost.
+  -->
+  <!-- @state SCR-007/ST-21 -->
+  <section class="example">
+    <h2>Removing — confirm, in flight, and failed</h2>
+    <p class="day-head">Fri 5 Sep</p>
+    <div class="slot">
+      <span class="when">
+        <span class="time">11:00 &middot; 60 minutes</span>
+        <span class="meta"><span class="chip">Python</span></span>
+      </span>
+      <span class="confirm">
+        <span class="ask">Remove this time?</span>
+        <button class="btn danger" type="button">Remove</button>
+        <button class="btn quiet" type="button">Keep</button>
+      </span>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="time">13:00 &middot; 30 minutes</span>
+        <span class="meta"><span class="chip">Python</span></span>
+      </span>
+      <span class="confirm">
+        <span class="ask">Remove this time?</span>
+        <button class="btn danger" type="button" disabled>
+          <span class="spin" aria-hidden="true"></span>Removing&hellip;
+        </button>
+        <button class="btn quiet" type="button" disabled>Keep</button>
+      </span>
+    </div>
+    <div>
+      <div class="slot">
+        <span class="when">
+          <span class="time">15:00 &middot; 30 minutes</span>
+          <span class="meta"><span class="chip">Python</span></span>
+        </span>
+        <span class="actions">
+          <button class="btn quiet" type="button">Remove</button>
+        </span>
+      </div>
+      <p class="row-error">⚠ Couldn't remove that time. Please try again.</p>
+    </div>
+    <p class="note">
+      The danger emphasis is not the signal — the word "Remove" and the question
+      above it are. On failure the row is restored intact and the message blames
+      the saving, never the time.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Every status, desaturated — the colour-blind check</h2>
+    <div class="mono">
+      <div class="slot">
+        <span class="when"><span class="time">14:00 &middot; 45 minutes</span></span>
+        <span class="actions"><span class="status is-waiting">⏳ 2 requests waiting</span></span>
+      </div>
+      <div class="slot">
+        <span class="when"><span class="time">16:00 &middot; 45 minutes</span></span>
+        <span class="actions"><span class="status is-booked">✓ Booked &mdash; Arun K.</span></span>
+      </div>
+      <div class="slot">
+        <span class="when"><span class="time">11:00 &middot; 60 minutes</span></span>
+        <span class="actions"><span class="status is-published">✓ Published</span></span>
+      </div>
+      <div class="slot is-finished">
+        <span class="when"><span class="time">10:00 &middot; 45 minutes</span></span>
+        <span class="actions"><span class="status is-finished">⏱ Session finished</span></span>
+      </div>
+    </div>
+    <p class="note">
+      Four different outcomes, no colour: each carries an icon and a word.
+    </p>
+  </section>
+</body>
+</html>
