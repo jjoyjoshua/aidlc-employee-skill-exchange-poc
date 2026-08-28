@@ -1,0 +1,412 @@
+<!-- @dsCard group="Data display" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Trainer result card</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-warning: #d97706;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-warning: #fbbf24;
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 640px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The card ---------------------------------------------------------- */
+  .tcard {
+    display: flex;
+    gap: var(--s-3);
+    padding: var(--s-4);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .tcard + .tcard { margin-top: var(--s-3); }
+  .tcard:hover { border-color: var(--c-primary); }
+  .tcard:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .avatar {
+    flex: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--r-full);
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+    display: grid;
+    place-items: center;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .body { flex: 1 1 auto; min-width: 0; }
+  .name {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .role {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+  }
+
+  .rating {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    margin-top: var(--s-2);
+  }
+  .rating .stars { color: var(--c-warning); letter-spacing: 0.05em; }
+  .rating .avg { font-weight: var(--fw-semibold); }
+  .rating .count { font-size: var(--t-xs); color: var(--c-text-secondary); }
+  .rating.is-unrated .stars { color: var(--c-text-disabled); }
+  .rating.is-unrated .avg { font-weight: var(--fw-regular); color: var(--c-text-secondary); }
+
+  .teaches {
+    margin-top: var(--s-3);
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+  }
+  .teaches .label {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: var(--fw-semibold);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface-alt);
+    border-radius: var(--r-full);
+    padding: var(--s-1) var(--s-3);
+  }
+  .chip .lvl { color: var(--c-text-secondary); font-weight: var(--fw-regular); }
+  .chip.is-match {
+    border-color: var(--c-info);
+    background: var(--c-info-bg);
+    color: var(--c-info);
+  }
+  .chip.is-match .lvl { color: var(--c-info); }
+
+  .acts { margin-top: var(--s-3); }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+  .btn:hover { background: var(--c-surface-alt); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---- Skeleton (SCR-006/ST-02) ------------------------------------------ */
+  .sk {
+    background: var(--c-surface-alt);
+    border-radius: var(--r-sm);
+    height: 0.75rem;
+  }
+  .sk.avatar { border-radius: var(--r-full); height: 2.75rem; }
+  .sk.name { height: 1.1rem; width: 40%; }
+  .sk.role { width: 55%; margin-top: var(--s-2); }
+  .sk.rating { width: 30%; margin-top: var(--s-3); }
+  .sk.chips { width: 70%; height: 1.4rem; border-radius: var(--r-full); margin-top: var(--s-3); }
+
+  /* ---- Dimmed while a refinement loads (SCR-006/ST-03) ------------------- */
+  .dimmed { opacity: 0.45; pointer-events: none; }
+</style>
+</head>
+<body>
+  <h1>Trainer result card</h1>
+
+  <p>
+    One colleague in the "Find a trainer" results (SCR-006). Everything a learner
+    needs to decide whether to open the panel sits on the card: who they are,
+    where they sit, how they have been rated (REQ-025), and what they teach at
+    what level (REQ-010).
+  </p>
+
+  <!--
+    ST-01. The whole card is the link; "View availability" repeats the same
+    target in words, so the action is discoverable rather than merely inferable.
+  -->
+  <!-- @state SCR-006/ST-01 -->
+  <section class="example">
+    <h2>Default — a rated colleague</h2>
+    <a class="tcard" href="#" aria-label="Priya M., Finance, Financial Analyst. Rated 4.6 out of 5, from 12 ratings. Teaches Excel at Expert level and SQL at Intermediate level. View availability.">
+      <span class="avatar" aria-hidden="true">PM</span>
+      <span class="body">
+        <span class="name">Priya M.</span>
+        <span class="role">Finance &middot; Financial Analyst</span>
+        <span class="rating">
+          <span class="stars" aria-hidden="true">★★★★☆</span>
+          <span class="avg">4.6</span>
+          <span class="count">&middot; 12 ratings</span>
+        </span>
+        <span class="teaches">
+          <span class="label">Teaches</span>
+          <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+          <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+        </span>
+        <span class="acts"><span class="btn">View availability</span></span>
+      </span>
+    </a>
+    <p class="note">
+      The card is one link with one accessible name, so a screen-reader user
+      hears the whole colleague as a single item rather than tabbing through five
+      fragments. Proficiency is written out on every chip — never a colour, never
+      a count of dots (NFR-003).
+    </p>
+  </section>
+
+  <!--
+    ST-09. Unrated is the normal state of anyone who has just declared a skill
+    (REQ-013), so this is what most cards look like early on. Nothing about the
+    card is reduced: same actions, same prominence.
+  -->
+  <!-- @state SCR-006/ST-09 -->
+  <section class="example">
+    <h2>A colleague with no ratings yet</h2>
+    <a class="tcard" href="#" aria-label="Arun K., Engineering, Senior Developer. Not rated yet. Teaches Python at Expert level. View availability.">
+      <span class="avatar" aria-hidden="true">AK</span>
+      <span class="body">
+        <span class="name">Arun K.</span>
+        <span class="role">Engineering &middot; Senior Developer</span>
+        <span class="rating is-unrated">
+          <span class="stars" aria-hidden="true">☆</span>
+          <span class="avg">Not rated yet</span>
+        </span>
+        <span class="teaches">
+          <span class="label">Teaches</span>
+          <span class="chip">Python <span class="lvl">&middot; Expert</span></span>
+        </span>
+        <span class="acts"><span class="btn">View availability</span></span>
+      </span>
+    </a>
+    <p class="note">
+      Words in the slot the average occupies, and no other difference — same
+      emphasis, same actions. A new trainer is not a lesser one; REQ-013 exists
+      precisely so they can be booked before anyone has rated them.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>With a skill searched — the matching chip is marked</h2>
+    <a class="tcard" href="#" aria-label="Priya M., Finance, Financial Analyst. Rated 4.6 out of 5, from 12 ratings. Teaches Excel at Expert level, matching your search, and SQL at Intermediate level.">
+      <span class="avatar" aria-hidden="true">PM</span>
+      <span class="body">
+        <span class="name">Priya M.</span>
+        <span class="role">Finance &middot; Financial Analyst</span>
+        <span class="rating">
+          <span class="stars" aria-hidden="true">★★★★☆</span>
+          <span class="avg">4.6</span>
+          <span class="count">&middot; 12 ratings</span>
+        </span>
+        <span class="teaches">
+          <span class="label">Teaches</span>
+          <span class="chip is-match">✓ Excel <span class="lvl">&middot; Expert</span></span>
+          <span class="chip">SQL <span class="lvl">&middot; Intermediate</span></span>
+        </span>
+      </span>
+    </a>
+    <p class="note">
+      When a skill is searched, the chip that matched carries a tick as well as
+      the colour change, and the accessible name says "matching your search". The
+      other skills stay visible — a learner looking for Excel is often glad to
+      discover the same colleague also teaches SQL.
+    </p>
+  </section>
+
+  <!--
+    ST-02. Four of these while the list loads. Sized to the real card, so the
+    page does not jump when the data lands.
+  -->
+  <!-- @state SCR-006/ST-02 -->
+  <section class="example">
+    <h2>First load — skeleton</h2>
+    <div class="tcard" aria-hidden="true">
+      <span class="sk avatar" style="width: 2.75rem;"></span>
+      <span class="body">
+        <span class="sk name" style="display:block;"></span>
+        <span class="sk role" style="display:block;"></span>
+        <span class="sk rating" style="display:block;"></span>
+        <span class="sk chips" style="display:block;"></span>
+      </span>
+    </div>
+    <div class="tcard" aria-hidden="true">
+      <span class="sk avatar" style="width: 2.75rem;"></span>
+      <span class="body">
+        <span class="sk name" style="display:block; width: 32%;"></span>
+        <span class="sk role" style="display:block; width: 48%;"></span>
+        <span class="sk rating" style="display:block;"></span>
+        <span class="sk chips" style="display:block; width: 55%;"></span>
+      </span>
+    </div>
+    <p class="note">
+      The skeleton occupies the height a real card will, so nothing re-flows when
+      the response arrives. The whole block is <code>aria-hidden</code>; the list
+      region carries <code>aria-busy="true"</code> instead, so a screen reader is
+      told "loading" once rather than reading four rows of nothing.
+    </p>
+  </section>
+
+  <!--
+    ST-03. Refining does not clear the list. The previous results stay,
+    dimmed and inert, so the learner keeps the comparison they were making.
+  -->
+  <!-- @state SCR-006/ST-03 -->
+  <section class="example">
+    <h2>Dimmed while a refinement loads</h2>
+    <div class="dimmed" aria-busy="true">
+      <a class="tcard" href="#" tabindex="-1">
+        <span class="avatar" aria-hidden="true">PM</span>
+        <span class="body">
+          <span class="name">Priya M.</span>
+          <span class="role">Finance &middot; Financial Analyst</span>
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★☆</span>
+            <span class="avg">4.6</span>
+            <span class="count">&middot; 12 ratings</span>
+          </span>
+          <span class="teaches">
+            <span class="label">Teaches</span>
+            <span class="chip">Excel <span class="lvl">&middot; Expert</span></span>
+          </span>
+        </span>
+      </a>
+      <a class="tcard" href="#" tabindex="-1">
+        <span class="avatar" aria-hidden="true">AK</span>
+        <span class="body">
+          <span class="name">Arun K.</span>
+          <span class="role">Engineering &middot; Senior Developer</span>
+          <span class="rating is-unrated">
+            <span class="stars" aria-hidden="true">☆</span>
+            <span class="avg">Not rated yet</span>
+          </span>
+        </span>
+      </a>
+    </div>
+    <p class="note">
+      Cards lose their tab stop and their pointer events while dimmed, so a
+      learner cannot open a colleague who is about to be filtered out from under
+      them. The count line above the list carries the "Searching…" indicator —
+      the dim alone is never the only signal.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>A colleague teaching several skills</h2>
+    <a class="tcard" href="#">
+      <span class="avatar" aria-hidden="true">DS</span>
+      <span class="body">
+        <span class="name">Dev S.</span>
+        <span class="role">Operations &middot; Process Lead</span>
+        <span class="rating">
+          <span class="stars" aria-hidden="true">★★★★☆</span>
+          <span class="avg">4.1</span>
+          <span class="count">&middot; 7 ratings</span>
+        </span>
+        <span class="teaches">
+          <span class="label">Teaches</span>
+          <span class="chip">Excel <span class="lvl">&middot; Intermediate</span></span>
+          <span class="chip">Power BI <span class="lvl">&middot; Expert</span></span>
+          <span class="chip">Process Mapping <span class="lvl">&middot; Expert</span></span>
+          <span class="chip">Stakeholder Communication <span class="lvl">&middot; Beginner</span></span>
+        </span>
+      </span>
+    </a>
+    <p class="note">
+      Chips wrap rather than truncate, and the card grows. At POC scale nobody
+      lists enough skills for this to run away; if that changes, capping the
+      chips with "+3 more" is the move, and it belongs in a revision of this
+      preview rather than as an undocumented runtime rule.
+    </p>
+  </section>
+</body>
+</html>

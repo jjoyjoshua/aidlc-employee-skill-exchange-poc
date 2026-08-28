@@ -217,5 +217,69 @@
       both reading order and tab order (NFR-004).
     </p>
   </section>
+
+  <!--
+    SCR-006/ST-04. Nobody in the company has declared a teachable skill yet.
+    The search box and filters are hidden above this panel — filtering an empty
+    set is a control that cannot do anything, and hiding it removes a dead end
+    rather than presenting one.
+  -->
+  <!-- @state SCR-006/ST-04 -->
+  <section class="example">
+    <h2>Find a trainer — nobody teaches anything yet</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">🌱</span>
+      <h3>Nobody has listed a skill to teach yet</h3>
+      <p>
+        This is day one. The moment someone lists a skill they can teach, they
+        show up here — no approval, no waiting. It could be you.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#">Add a skill you can teach</a>
+      </div>
+    </div>
+    <p class="note">
+      One action, not two: there is nothing to search for, so offering a search
+      would be offering a dead end. The copy states BR-001.1 in plain words —
+      listing a skill takes effect immediately (REQ-013) — because the honest
+      reason this page is empty is that nobody has gone first yet, and the fix
+      is one click away.
+    </p>
+  </section>
+
+  <!--
+    SCR-006/ST-05. Different cause, different panel: the search worked, the
+    filters are the reason. Unlike ST-04 the controls stay exactly as the
+    learner left them — resetting someone's filters for them is never a
+    kindness.
+  -->
+  <!-- @state SCR-006/ST-05 -->
+  <section class="example">
+    <h2>Find a trainer — nothing matches the filters</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">🔍</span>
+      <h3>No matches</h3>
+      <p>
+        No one is currently teaching <strong>Excel</strong> in
+        <strong>Finance</strong> at <strong>Expert</strong> level.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#">Clear filters</a>
+        <a class="btn" href="#">Add Excel to what you want to learn</a>
+      </div>
+      <p class="hint">
+        2 not-yet-rated colleagues are hidden by your rating filter.
+        <a href="#">Show them</a>
+      </p>
+    </div>
+    <p class="note">
+      The sentence names the terms actually in force, so the learner can see
+      which one to relax rather than clearing everything and starting again. The
+      second action turns a dead end into a signal — the skill goes onto their
+      learning list, where a future trainer can find it. The hint line is the
+      working default for conflict C-1 (REQ-012 versus REQ-013): unrated
+      colleagues are never silently excluded, and the reveal is one click.
+    </p>
+  </section>
 </body>
 </html>
