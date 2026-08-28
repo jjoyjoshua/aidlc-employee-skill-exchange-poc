@@ -390,29 +390,55 @@
   </section>
 
   <!--
-    ST-15. An unbooked time that has passed leaves the list entirely — it needs
-    no action and would grow the list without bound. A booked one stays, in a
-    Finished group, naming the state REQ-022 will act on without inventing that
-    action here.
+    ST-15. A time whose start has gone by leaves this card, whichever kind it
+    is. An unbooked one is dropped outright — an expired offer needs no action
+    and would grow the list without bound. A booked one moves to Sessions
+    you've taught, where REQ-022 gives it an action and REQ-027 gives it a
+    record; see history-row ST-22. This card holds what is still on offer.
   -->
   <!-- @state SCR-007/ST-15 -->
   <section class="example">
-    <h2>Finished — a booked time whose start has gone by</h2>
-    <p class="day-head">Finished</p>
-    <div class="slot is-finished">
+    <h2>A time whose start has gone by — before, and after</h2>
+    <p class="day-head">Tue 2 Sep &mdash; at 09:55, both still listed</p>
+    <div class="slot">
       <span class="when">
-        <span class="time">Tue 2 Sep &middot; 10:00 &middot; 45 minutes</span>
+        <span class="time">10:00 &middot; 45 minutes</span>
         <span class="meta">
           <span class="chip">Excel</span>
-          <span class="status is-finished">⏱ Session finished &mdash; awaiting completion</span>
+          <span class="status is-booked">✓ Booked &mdash; Arun K.</span>
+        </span>
+      </span>
+      <span class="actions">
+        <button class="btn secondary" type="button">Join meeting</button>
+        <button class="btn quiet" type="button">Cancel session</button>
+      </span>
+    </div>
+    <div class="slot">
+      <span class="when">
+        <span class="time">11:00 &middot; 60 minutes</span>
+        <span class="meta"><span class="chip">Python</span></span>
+      </span>
+      <span class="actions">
+        <button class="btn quiet" type="button">Remove</button>
+      </span>
+    </div>
+
+    <p class="day-head" style="margin-top: var(--s-6)">Tue 2 Sep &mdash; at 12:05, neither is here</p>
+    <div class="slot is-finished">
+      <span class="when">
+        <span class="time">No times left on this day</span>
+        <span class="meta">
+          <span class="status is-finished">⏱ The 11:00 was never asked for and is gone. The 10:00 is now in Sessions you&rsquo;ve taught.</span>
         </span>
       </span>
     </div>
     <p class="note">
-      A status, not a button. REQ-022 gives the trainer a way to mark a session
-      complete and that flow is undesigned (OQ-T6) — naming the state without
-      inventing its action keeps the screen honest. The full date returns here,
-      since these rows sit outside the day grouping.
+      The card&rsquo;s count drops by two and the day heading goes with the last
+      row — the placeholder above is here to show the reader what left, not a
+      state the screen renders. A session that has already happened is not a
+      time on offer, so it is not a row in &ldquo;My available times&rdquo;: its
+      action (REQ-022) and its record (REQ-027) belong together in the third
+      card, which is where the trainer will look for it a month from now.
     </p>
   </section>
 

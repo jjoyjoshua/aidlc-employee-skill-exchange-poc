@@ -390,6 +390,31 @@
   </section>
 
   <!--
+    SCR-007/ST-29. The third section before a trainer has taught anything. Like
+    ST-05 the card holds its place, so a trainer learns where finished sessions
+    will appear before they have one — and unlike ST-05 the copy can say what
+    will put a row here, because a session ending is a thing that happens on
+    its own rather than a thing a colleague has to do.
+  -->
+  <!-- @state SCR-007/ST-29 -->
+  <section class="example">
+    <h2>My teaching — nothing taught yet</h2>
+    <section class="card" aria-labelledby="c7b">
+      <header>
+        <h3 id="c7b">Sessions you&rsquo;ve taught</h3>
+      </header>
+      <div class="body">
+        <p class="empty">No sessions taught yet. Once a session you&rsquo;ve hosted is over, it&rsquo;ll appear here for you to confirm.</p>
+      </div>
+    </section>
+    <p class="note">
+      No action. Nothing the trainer can click creates a session — that takes a
+      published time, a colleague asking for it, and the clock. The sentence
+      names all three outcomes in the order they happen.
+    </p>
+  </section>
+
+  <!--
     SCR-008's three sections, each empty on its own. Different copy in each,
     because "empty" means something different in each: nothing booked, nothing
     asked, nothing finished. Only the middle one carries an action, since

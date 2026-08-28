@@ -132,7 +132,9 @@
     },
     "REQ-022": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-007"
+      ]
     },
     "REQ-023": {
       "stories": [],
@@ -160,7 +162,9 @@
     },
     "REQ-027": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-007"
+      ]
     },
     "REQ-028": {
       "stories": [],
@@ -402,6 +406,8 @@
         "REQ-014",
         "REQ-017",
         "REQ-021",
+        "REQ-022",
+        "REQ-027",
         "NFR-004"
       ],
       "stories": [],
@@ -426,7 +432,15 @@
         "ST-18",
         "ST-19",
         "ST-20",
-        "ST-21"
+        "ST-21",
+        "ST-22",
+        "ST-23",
+        "ST-24",
+        "ST-25",
+        "ST-26",
+        "ST-27",
+        "ST-28",
+        "ST-29"
       ],
       "components": [
         "availability-row",
@@ -438,7 +452,9 @@
         "app-header",
         "skill-chip",
         "button",
-        "spinner"
+        "spinner",
+        "history-row",
+        "rating-stars"
       ]
     },
     "SCR-008": {
