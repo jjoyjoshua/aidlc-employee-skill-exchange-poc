@@ -18,6 +18,8 @@ The first screen an employee sees after signing in (REQ-004), and the place they
 
 This screen also introduces the **application shell**: the top bar carrying the portal identity, the destinations, the notification bell, and Log out (REQ-005). Every authenticated screen designed after this one inherits that shell; it is specified here because this is the first screen to have one.
 
+**The destinations are Find a trainer · My learning · My teaching · My skills** — four, with no separate History (OQ-L10, closed 2026-08-28: each history stays with the sessions that produced it). This sentence and the `app-header` preview are the only two places that list names the shell in; the ASCII sketches on this and every later screen deliberately draw it as `[ main navigation ]`, because six hand-maintained copies of one list is what let three screens go on showing a History destination after it was dropped.
+
 ### Requirements this screen touches but does not fully serve
 
 Recorded so a later audit doesn't read the manifest as "covered":
@@ -37,7 +39,7 @@ Chosen over a two-column dashboard grid because the priority stays unambiguous o
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ SkillEx   Find a trainer  My skills  History   🔔3  (JJ)▾│  ← app-header
+│ SkillEx   [ main navigation ]                  🔔3  (JJ)▾│  ← app-header
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │   Good morning, Joy                                      │
@@ -217,7 +219,7 @@ Each has a working default, so none blocks drawing the frames — but each is so
 | OQ-D3 | How close to a session's start should it be promoted as "Starting soon" (ST-09)?                                                                                                                             | 15 minutes before start                                                                             | Business owner | open                          |
 | OQ-D4 | BRD OQ-1 (the auto-reject cutoff) is unresolved. If it lands on a value employees should see, a pending request ought to warn "auto-declines in 6 hours"                                                     | No countdown until BRD OQ-1 is answered; the row shows "Pending" only                                | Business owner | open (tracked as BRD OQ-1)    |
 | OQ-D5 | BRD OQ-2 (video platform) is unresolved, and it decides the Join button's wording                                                                                                                            | Platform-neutral "Join meeting"                                                                     | IT             | open (tracked as BRD OQ-2)    |
-| OQ-D6 | The greeting is time-based ("Good morning, Joy"). That is a tone choice, and it assumes a reliable local timezone                                                                                             | Time-based greeting, first name only                                                                | Designer       | open — your call at review    |
+| OQ-D6 | ~~The greeting is time-based ("Good morning, Joy"). That is a tone choice, and it assumes a reliable local timezone~~ | **Resolved 2026-08-28 — keep it.** Time-based greeting, first name only. The timezone caveat is accepted with the decision: a colleague travelling may read "Good evening" over breakfast, which is a cosmetic wrong rather than a functional one, and no requirement depends on the greeting being accurate | Designer | closed |
 
 ## Designer handoff
 

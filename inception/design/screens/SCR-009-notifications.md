@@ -120,7 +120,7 @@ title, a filter row, and the list grouped under time headings.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ SkillEx   Find a trainer  My skills  History   🔔3  (JJ)▾│
+│ SkillEx   [ main navigation ]                  🔔3  (JJ)▾│
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │   Notifications                     [ Mark all read ]    │
@@ -367,7 +367,7 @@ a piece of copy.
 | OQ-D5 | How long before a session should the reminder (N7) be raised? REQ-028 says "session reminders" without a time                                                                                        | One reminder, 1 hour before start — consistent with SCR-004's 15-minute "starting soon" promotion being a separate, later signal | Business owner | open                       |
 | OQ-D6 | BRD OQ-1 (the auto-reject cutoff) is unresolved. N5's sentence is written to work at any cutoff, but if the value is one employees should anticipate, a pending request may also need a warning notification | N5 announces the expiry after the fact only; no advance warning notification                                                  | Business owner | open (tracked as BRD OQ-1) |
 | OQ-D7 | Do notifications ever expire or get cleared out, or does the list grow for the life of the account?                                                                                                 | The list is kept indefinitely and paged. At POC scale nobody reaches a volume where this matters                              | BA (`/ba`)     | open                       |
-| OQ-D8 | The eight kinds' sentences are product copy — tone, whether colleagues are named, first name versus full name                                                                                        | First name plus surname initial, matching the rows on SCR-004 and SCR-007                                                    | Designer       | open — your call at review |
+| OQ-D8 | ~~The eight kinds' sentences are product copy — tone, whether colleagues are named, first name versus full name~~ | **Resolved 2026-08-28 — first name plus surname initial.** "Priya M. approved your request." Matches the rows on SCR-004 and SCR-007, so one colleague reads the same way everywhere in the portal, and two colleagues sharing a first name stay distinguishable | Designer | closed |
 
 ## Designer handoff
 

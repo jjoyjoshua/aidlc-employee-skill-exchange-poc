@@ -46,7 +46,7 @@ Requests come first for the same reason they outrank skills on the dashboard: th
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ SkillEx  Find a trainer  My teaching  My skills   🔔3 (JJ)▾│ ← app-header
+│ SkillEx   [ main navigation ]                  🔔3  (JJ)▾│ ← app-header
 ├──────────────────────────────────────────────────────────┤
 │                                                          │
 │   My teaching                                            │
@@ -403,7 +403,7 @@ Each has a working default, so none blocks drawing the frames — but each is so
 | OQ-T9 | BRD OQ-1 (the auto-reject cutoff) is unresolved, and it decides whether a pending request should warn the trainer that it is about to expire                        | No countdown until BRD OQ-1 is answered; a request reads "asked 2 hours ago" and nothing more            | Business owner | open (tracked as BRD OQ-1) |
 | OQ-T10 | May a trainer undo "mark complete"? By then REQ-024 has already produced the learner's certificate and REQ-023 has already prompted them, so an undo has to say what happens to both                          | No — irreversible, which is why ST-23 confirms first and names both consequences                         | BA (`/ba`)     | open                       |
 | OQ-T11 | Does the learner's written comment reach the trainer, and is it attributed by name? REQ-027 gives the trainer "rating received" and does not mention comments at all                                             | Shown, attributed — following SCR-008's working default. If the answer is "anonymous", ST-28 drops the name above the comment and nothing else changes   | BA (`/ba`)     | open — paired with OQ-L7   |
-| OQ-T12 | Should the trainer see their own average rating (REQ-025) on this screen? REQ-025 scopes the average to their profile and to search results; REQ-027 names four facts and an average is not one of them          | Not shown here. A trainer sees their own average on their profile (SCR-005), where every other viewer sees it too                                         | BA + Designer  | open                       |
+| OQ-T12 | ~~Should the trainer see their own average rating (REQ-025) on this screen? REQ-025 scopes the average to their profile and to search results; REQ-027 names four facts and an average is not one of them~~ | **Resolved 2026-08-28 — not shown here.** A trainer sees their own average on their profile (SCR-005, OQ-E8 closed the same day), where every other viewer sees it too. My teaching is where a colleague publishes times and answers requests; leading it with a score changes what the screen is for, and puts one number in two places to keep in step | BA + Designer | closed |
 | OQ-T13 | Is there a deadline after which a session can no longer be marked complete? The question only bites if C-2 is answered with an expiry                                                                             | No deadline; the row waits indefinitely                                                                  | BA (`/ba`)     | open — depends on C-2      |
 
 ## Designer handoff

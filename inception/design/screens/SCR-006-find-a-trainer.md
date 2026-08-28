@@ -35,7 +35,7 @@ One application shell (inherited unchanged from SCR-004), then a single constrai
 ```
 DESKTOP — ST-01
 ┌────────────────────────────────────────────────────────────────┐
-│ SkillEx   Find a trainer  My skills  History     🔔3   (JJ)▾   │  ← app-header
+│ SkillEx   [ main navigation ]                        🔔3  (JJ)▾│  ← app-header
 ├────────────────────────────────────────────────────────────────┤
 │                                                                │
 │   Find a trainer                                               │
@@ -293,10 +293,10 @@ Each has a working default, so none blocks drawing the frames — but each is so
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------- | -------------------------- |
 | OQ-S1 | Should an employee see themselves in trainer results?                                                                                                                            | No — excluded entirely                                                   | BA (`/ba`)    | open                       |
 | OQ-S2 | REQ-012 names skill, department, level and rating. Should the search box also match a colleague's **name**? In a company this size it is the obvious way to find a known person   | Skill names only, as REQ-012 states                                      | BA (`/ba`)    | open                       |
-| OQ-S3 | Should learners be able to change the result order (by rating, or by soonest availability)?                                                                                      | No sort control; alphabetical by name                                    | Designer + BA | open                       |
+| OQ-S3 | ~~Should learners be able to change the result order (by rating, or by soonest availability)?~~ | **Resolved 2026-08-28 — no sort control.** Alphabetical by name. At POC scale a search returns a handful of colleagues, where a sort control is furniture; and sorting by rating would mostly order colleagues who have no rating yet (REQ-013), which ranks people nobody has ranked. Revisit when the list is long enough for order to carry information | Designer + BA | closed |
 | OQ-S4 | A learner opens a trainer with no published times (ST-12). Should they be able to register interest, or is the dead end intended?                                                | Dead end — no requirement defines a second request path                  | BA (`/ba`)    | open                       |
 | OQ-S5 | REQ-023 lets a learner leave a written comment with their rating, but no requirement says where comments are read. Should the panel show recent ones?                            | Numeric average and rating count only; no comments on this screen        | BA (`/ba`)    | open                       |
-| OQ-S6 | The rating filter's thresholds                                                                                                                                                   | Any / 3★ and up / 4★ and up / 4.5★ and up                                | Designer      | open — your call at review |
+| OQ-S6 | ~~The rating filter's thresholds~~ | **Resolved 2026-08-28 — four steps.** Any / 3★ and up / 4★ and up / 4.5★ and up, with "Any" the default. 4.5 earns its place as the only way to ask for the very best without implying the portal can separate 3.9 from 4.1. **This settles the thresholds only** — whether unrated colleagues survive a threshold is C-1, and remains the BA's | Designer | closed |
 | OQ-S7 | Slot rows show a duration ("45 min"). No requirement says whether a slot has a fixed or a trainer-chosen length; this depends on how REQ-014 is specified                        | Duration is shown as the trainer published it; the screen does not constrain it | BA (`/ba`) | open                       |
 
 ## Designer handoff
