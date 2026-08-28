@@ -1,0 +1,343 @@
+<!-- @dsCard group="Booking" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Booking request row</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 560px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+  .group-label {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-text-secondary);
+    margin: var(--s-3) 0 var(--s-1);
+  }
+
+  /* ---- The row ----------------------------------------------------------- */
+  .req {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .req .lines { flex: 1 1 14rem; min-width: 0; }
+  .req .who { font-size: var(--t-sm); font-weight: var(--fw-semibold); line-height: var(--lh-tight); }
+  .req .meta { font-size: var(--t-xs); color: var(--c-text-secondary); margin-top: var(--s-1); }
+  .req .acts { display: flex; gap: var(--s-2); flex: none; }
+
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-surface-alt); }
+  .btn.is-primary {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+  .btn.is-primary:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn[disabled] {
+    color: var(--c-text-disabled);
+    background: var(--c-surface-alt);
+    border-color: var(--c-border);
+    cursor: default;
+  }
+  .btn.is-primary[disabled] { color: var(--c-on-primary); opacity: 0.7; }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /*
+   * Status is always an icon plus a written word. Rejected and Pending must be
+   * tellable apart with the colour removed, because on a dashboard they sit
+   * two rows from each other.
+   */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    border: 1px solid currentColor;
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.4rem;
+    flex: none;
+  }
+  .status.is-pending { color: var(--c-warning); }
+  .status.is-approved { color: var(--c-success); }
+  .status.is-rejected { color: var(--c-danger); }
+
+  /* ---- In-flight (SCR-004/ST-06) ---------------------------------------- */
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- Recorded (SCR-004/ST-07) ----------------------------------------- */
+  .decided {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    font-size: var(--t-sm);
+  }
+  .decided.is-approved { background: var(--c-success-bg); color: var(--c-success); }
+  .decided.is-rejected { background: var(--c-surface-alt); color: var(--c-text-secondary); }
+
+  /* ---- Failed (SCR-004/ST-08) ------------------------------------------- */
+  .row-error {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    margin-top: var(--s-2);
+    padding-left: var(--s-1);
+  }
+</style>
+</head>
+<body>
+  <h1>Booking request row</h1>
+
+  <p>
+    One pending booking request on the dashboard (SCR-004). REQ-006 does not say
+    whose pending requests the dashboard shows, so the section carries both —
+    the ones waiting on this employee, which are actionable, and the ones they
+    sent, which are not. The two groups are labelled, never merged.
+  </p>
+
+  <section class="example">
+    <h2>Waiting for you — the actionable case</h2>
+    <p class="group-label">Waiting for you</p>
+    <div class="req">
+      <div class="lines">
+        <div class="who">Priya M. wants to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 14:00 &middot; 45 min &middot; asked 2h ago</div>
+      </div>
+      <div class="acts">
+        <button class="btn is-primary" type="button">Approve</button>
+        <button class="btn" type="button">Reject</button>
+      </div>
+    </div>
+    <p class="note">
+      Approve carries the primary emphasis: it is the expected outcome, and the
+      one that unblocks the other person. Reject is available at equal reach but
+      lower weight — never hidden behind a menu.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Waiting for them — the employee's own request</h2>
+    <p class="group-label">Waiting for them</p>
+    <div class="req">
+      <div class="lines">
+        <div class="who">You asked <strong>Arun K.</strong> about Python</div>
+        <div class="meta">Fri 11:00 &middot; 60 min &middot; sent yesterday</div>
+      </div>
+      <span class="status is-pending"><span aria-hidden="true">⏳</span> Pending</span>
+    </div>
+    <p class="note">
+      No buttons — the decision is not this employee's to make. Once BRD OQ-1
+      fixes the auto-reject cutoff, this row is where a countdown would go.
+    </p>
+  </section>
+
+  <!--
+    ST-06. Only the clicked row locks. Disabling the whole dashboard because
+    one request is saving would punish everyone else on the page for it.
+  -->
+  <!-- @state SCR-004/ST-06 -->
+  <section class="example">
+    <h2>Responding — the call is in flight</h2>
+    <p class="group-label">Waiting for you</p>
+    <div class="req" aria-busy="true">
+      <div class="lines">
+        <div class="who">Priya M. wants to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 14:00 &middot; 45 min &middot; asked 2h ago</div>
+      </div>
+      <div class="acts">
+        <button class="btn is-primary" type="button" disabled>
+          <span class="spin" aria-hidden="true"></span> Approving&hellip;
+        </button>
+        <button class="btn" type="button" disabled>Reject</button>
+      </div>
+    </div>
+    <p class="note">
+      Both buttons disable, so the second decision cannot be fired while the
+      first is still saving. Every other row on the dashboard stays live.
+    </p>
+  </section>
+
+  <!--
+    ST-07. The confirmation replaces the row in place. A banner at the top of
+    the page would put the feedback somewhere the employee is not looking, and
+    off-screen entirely on a phone.
+  -->
+  <!-- @state SCR-004/ST-07 -->
+  <section class="example">
+    <h2>Recorded</h2>
+    <p class="group-label">Waiting for you</p>
+    <div class="decided is-approved" role="status" aria-live="polite">
+      <span aria-hidden="true">✓</span>
+      <span>Approved &mdash; Priya has been notified.</span>
+    </div>
+    <div class="decided is-rejected" role="status" aria-live="polite" style="margin-top: var(--s-2);">
+      <span aria-hidden="true">✕</span>
+      <span>Rejected &mdash; Priya has been notified.</span>
+    </div>
+    <p class="note">
+      Held for a few seconds, then the row leaves and the section count drops by
+      one. Announced politely, not assertively: the employee caused this and is
+      already looking at it. On approval the session appears under Upcoming
+      sessions. The fade out is suppressed under reduced-motion.
+    </p>
+  </section>
+
+  <!--
+    ST-08. The wording blames the save, not the request — "Couldn't save that"
+    rather than anything that reads as the booking itself being invalid.
+  -->
+  <!-- @state SCR-004/ST-08 -->
+  <section class="example">
+    <h2>Response failed</h2>
+    <p class="group-label">Waiting for you</p>
+    <div class="req">
+      <div class="lines">
+        <div class="who">Priya M. wants to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 14:00 &middot; 45 min &middot; asked 2h ago</div>
+      </div>
+      <div class="acts">
+        <button class="btn is-primary" type="button">Approve</button>
+        <button class="btn" type="button">Reject</button>
+      </div>
+    </div>
+    <p class="row-error" role="alert" aria-live="polite">
+      <span aria-hidden="true">⚠</span>
+      Couldn't save that. Please try again.
+    </p>
+    <p class="note">
+      Buttons come back enabled, so the retry is one click. The error sits under
+      the row it belongs to rather than at the top of the page.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>All three statuses, side by side</h2>
+    <div style="display: flex; gap: var(--s-2); flex-wrap: wrap;">
+      <span class="status is-pending"><span aria-hidden="true">⏳</span> Pending</span>
+      <span class="status is-approved"><span aria-hidden="true">✓</span> Approved</span>
+      <span class="status is-rejected"><span aria-hidden="true">✕</span> Rejected</span>
+    </div>
+    <p class="note">
+      Each carries a distinct icon and a written word. Desaturate this row and
+      all three are still tellable apart.
+    </p>
+  </section>
+</body>
+</html>

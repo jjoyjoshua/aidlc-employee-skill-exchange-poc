@@ -1,0 +1,221 @@
+<!-- @dsCard group="Feedback" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Empty state</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-xl: 1.25rem;
+    --t-2xl: 1.5rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --lh-relaxed: 1.75;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 620px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+
+  /* ---- The panel --------------------------------------------------------- */
+  .welcome {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: var(--s-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--s-8) var(--s-6);
+  }
+  .welcome .icon { font-size: var(--t-2xl); line-height: 1; }
+  .welcome h3 {
+    margin: 0;
+    font-size: var(--t-xl);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .welcome p {
+    margin: 0;
+    max-width: 34rem;
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+    line-height: var(--lh-normal);
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-3);
+    margin-top: var(--s-2);
+  }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-4);
+    cursor: pointer;
+    text-decoration: none;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-surface-alt); }
+  .btn.is-primary {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+  .btn.is-primary:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .hint {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    border-top: 1px solid var(--c-border);
+    padding-top: var(--s-3);
+    margin-top: var(--s-2);
+    width: 100%;
+  }
+
+  /* The narrow rendering, to show the actions stack rather than truncate. */
+  .phone { max-width: 22rem; }
+</style>
+</head>
+<body>
+  <h1>Empty state</h1>
+
+  <p>
+    Used when a whole screen has nothing to show, as opposed to one section
+    within it — that smaller case lives in the section card component. On
+    SCR-004 this panel replaces the five section cards on an employee's very
+    first visit.
+  </p>
+
+  <!--
+    ST-03. Five simultaneously empty cards is a wall of nothing. One panel
+    with a ranked first action is an onboarding moment, and it costs one
+    component rather than five pieces of apologetic copy.
+  -->
+  <!-- @state SCR-004/ST-03 -->
+  <section class="example">
+    <h2>Dashboard, first visit — nothing anywhere yet</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">👋</span>
+      <h3>Welcome to SkillEx, Joy</h3>
+      <p>
+        This is where colleagues teach each other what they know. Tell us one
+        thing you could teach, or go and find someone who can teach you
+        something.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#">Add a skill</a>
+        <a class="btn" href="#">Find a trainer</a>
+      </div>
+      <p class="hint">
+        Your sessions, requests and notifications will appear here once you get
+        going.
+      </p>
+    </div>
+    <p class="note">
+      Two actions, clearly ranked. "Add a skill" leads because it is the one
+      that makes this employee findable by everyone else — an employee who lists
+      a teachable skill enters trainer search straight away (BR-001.1). The hint
+      line explains what will fill the empty page, so the shape of the dashboard
+      is not a surprise on the second visit.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>The same panel at narrow width</h2>
+    <div class="welcome phone">
+      <span class="icon" aria-hidden="true">👋</span>
+      <h3>Welcome to SkillEx, Joy</h3>
+      <p>
+        This is where colleagues teach each other what they know. Tell us one
+        thing you could teach, or go and find someone who can teach you
+        something.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#">Add a skill</a>
+        <a class="btn" href="#">Find a trainer</a>
+      </div>
+    </div>
+    <p class="note">
+      Actions wrap and stack rather than shrink; the primary one stays first in
+      both reading order and tab order (NFR-004).
+    </p>
+  </section>
+</body>
+</html>
