@@ -97,7 +97,9 @@
     },
     "REQ-016": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-017": {
       "stories": [],
@@ -112,11 +114,15 @@
     },
     "REQ-019": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-020": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-021": {
       "stories": [],
@@ -130,11 +136,15 @@
     },
     "REQ-023": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-024": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-025": {
       "stories": [],
@@ -144,7 +154,9 @@
     },
     "REQ-026": {
       "stories": [],
-      "screens": []
+      "screens": [
+        "SCR-008"
+      ]
     },
     "REQ-027": {
       "stories": [],
@@ -175,7 +187,8 @@
         "SCR-004",
         "SCR-005",
         "SCR-006",
-        "SCR-007"
+        "SCR-007",
+        "SCR-008"
       ]
     },
     "NFR-005": {
@@ -422,6 +435,64 @@
         "card",
         "empty-state",
         "alert",
+        "app-header",
+        "skill-chip",
+        "button",
+        "spinner"
+      ]
+    },
+    "SCR-008": {
+      "artifact": "inception/design/screens/SCR-008-my-learning.md",
+      "requirements": [
+        "REQ-016",
+        "REQ-019",
+        "REQ-020",
+        "REQ-023",
+        "REQ-024",
+        "REQ-026",
+        "NFR-004"
+      ],
+      "stories": [],
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08",
+        "ST-09",
+        "ST-10",
+        "ST-11",
+        "ST-12",
+        "ST-13",
+        "ST-14",
+        "ST-15",
+        "ST-16",
+        "ST-17",
+        "ST-18",
+        "ST-19",
+        "ST-20",
+        "ST-21",
+        "ST-22",
+        "ST-23",
+        "ST-24",
+        "ST-25",
+        "ST-26",
+        "ST-27",
+        "ST-28"
+      ],
+      "components": [
+        "session-row",
+        "confirm-dialog",
+        "request-row",
+        "history-row",
+        "rating-form",
+        "card",
+        "empty-state",
+        "alert",
+        "rating-stars",
         "app-header",
         "skill-chip",
         "button",

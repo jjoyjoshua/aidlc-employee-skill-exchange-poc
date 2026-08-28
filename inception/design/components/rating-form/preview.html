@@ -1,0 +1,473 @@
+<!-- @dsCard group="Forms" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Rating form</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 560px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The expanded row -------------------------------------------------- */
+  .past {
+    padding: var(--s-3);
+    border: 1px solid var(--c-warning);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .past.is-settled { border-color: var(--c-border); }
+  .past .title {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .past .meta {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.25rem;
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+  }
+
+  .form {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--c-border);
+    display: grid;
+    gap: var(--s-3);
+  }
+
+  /* ---- The star control -------------------------------------------------- */
+  .starline {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .starfield {
+    display: inline-flex;
+    gap: var(--s-1);
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .starfield button {
+    font: inherit;
+    font-size: var(--t-lg);
+    line-height: 1;
+    background: none;
+    border: 0;
+    padding: var(--s-1);
+    cursor: pointer;
+    color: var(--c-text-disabled);
+    border-radius: var(--r-sm);
+  }
+  .starfield button.is-on { color: var(--c-warning); }
+  .starfield button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .starfield[aria-disabled='true'] button { cursor: default; opacity: 0.6; }
+  .chosen {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .chosen.is-empty {
+    font-weight: var(--fw-regular);
+    color: var(--c-text-secondary);
+  }
+
+  /* ---- The optional comment ---------------------------------------------- */
+  .field { display: grid; gap: var(--s-1); }
+  .field label {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+  }
+  .field textarea {
+    font: inherit;
+    font-size: var(--t-sm);
+    line-height: var(--lh-normal);
+    color: var(--c-text);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    min-height: 4.5rem;
+    resize: vertical;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .field textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .field textarea[disabled] { background: var(--c-surface-alt); color: var(--c-text-secondary); }
+
+  .foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  .btn.quiet {
+    background: transparent;
+    border-color: var(--c-border);
+    color: var(--c-text-secondary);
+  }
+  .btn.quiet:hover { background: var(--c-surface-alt); border-color: var(--c-text-secondary); }
+
+  .form-error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    background: var(--c-danger-bg);
+    border: 1px solid currentColor;
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    line-height: var(--lh-normal);
+  }
+
+  .saved {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-success);
+  }
+
+  .rating {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+  }
+  .rating .stars { color: var(--c-warning); letter-spacing: 0.05em; }
+  .rating .value {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--c-text);
+  }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>Rating form</h1>
+
+  <p>
+    The learner rating a trainer after a completed session (REQ-023). It expands
+    inside the <code>history-row</code> it belongs to rather than opening a
+    dialog: the rating is about the row you are already looking at, and it
+    carries one required field. The dialog weight is reserved for actions that
+    cost a colleague something — see <code>confirm-dialog</code>.
+  </p>
+
+  <!--
+    ST-22. Open. Submit enables as soon as a star is chosen, because REQ-023
+    makes only the star value required; the comment is explicitly optional and
+    its label says so.
+  -->
+  <!-- @state SCR-008/ST-22 -->
+  <section class="example">
+    <h2>The form</h2>
+    <div class="past">
+      <span class="title">SQL &middot; with Arun K.</span>
+      <span class="meta"><span class="chip">SQL</span><span>8 Aug</span></span>
+      <div class="form">
+        <div class="starline">
+          <span class="starfield" role="radiogroup" aria-label="Rate this session">
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="1 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="2 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="3 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="true" aria-label="4 out of 5">★</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="5 out of 5">☆</button>
+          </span>
+          <span class="chosen">4 out of 5</span>
+        </div>
+        <div class="field">
+          <label for="c1">Anything you&rsquo;d like to add? (optional)</label>
+          <textarea id="c1" rows="3" placeholder="What was useful, what could be better…"></textarea>
+        </div>
+        <div class="foot">
+          <button class="btn quiet" type="button">Cancel</button>
+          <button class="btn" type="button">Submit rating</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="past" style="margin-top: var(--s-3)">
+      <span class="title">Python &middot; with Meera S.</span>
+      <span class="meta"><span class="chip">Python</span><span>2 Aug</span></span>
+      <div class="form">
+        <div class="starline">
+          <span class="starfield" role="radiogroup" aria-label="Rate this session">
+            <button type="button" role="radio" aria-checked="false" aria-label="1 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="2 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="3 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="4 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="5 out of 5">☆</button>
+          </span>
+          <span class="chosen is-empty">Pick a rating</span>
+        </div>
+        <div class="foot">
+          <button class="btn quiet" type="button">Cancel</button>
+          <button class="btn" type="button" disabled>Submit rating</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The chosen value is always spelled out beside the glyphs, so reading the
+      rating never depends on counting filled shapes (NFR-003). The control is a
+      radio group of five, not five buttons: arrow keys move between values,
+      Space or Enter selects. Cancel discards what was typed and collapses the
+      row back to its invitation.
+    </p>
+  </section>
+
+  <!--
+    ST-23. In flight. Everything holds its entered value; only Submit changes,
+    to a spinner in place of its label.
+  -->
+  <!-- @state SCR-008/ST-23 -->
+  <section class="example">
+    <h2>Submitting</h2>
+    <div class="past">
+      <span class="title">SQL &middot; with Arun K.</span>
+      <span class="meta"><span class="chip">SQL</span><span>8 Aug</span></span>
+      <div class="form">
+        <div class="starline">
+          <span class="starfield" role="radiogroup" aria-label="Rate this session" aria-disabled="true">
+            <button type="button" class="is-on" disabled>★</button>
+            <button type="button" class="is-on" disabled>★</button>
+            <button type="button" class="is-on" disabled>★</button>
+            <button type="button" class="is-on" disabled>★</button>
+            <button type="button" disabled>☆</button>
+          </span>
+          <span class="chosen">4 out of 5</span>
+        </div>
+        <div class="field">
+          <label for="c2">Anything you&rsquo;d like to add? (optional)</label>
+          <textarea id="c2" rows="3" disabled>Very clear, and the pivot-table examples were exactly my data.</textarea>
+        </div>
+        <div class="foot">
+          <button class="btn quiet" type="button" disabled>Cancel</button>
+          <button class="btn" type="button" disabled>
+            <span class="spin" aria-hidden="true"></span><span>Submitting…</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    ST-24. Saved. Collapses to the rated row, with the confirmation beside it
+    briefly. No page-level banner — confirmation belongs where the change
+    landed, as on SCR-004, SCR-006 and SCR-007.
+  -->
+  <!-- @state SCR-008/ST-24 -->
+  <section class="example">
+    <h2>Saved</h2>
+    <div class="past is-settled">
+      <span class="title">SQL &middot; with Arun K.</span>
+      <span class="meta"><span class="chip">SQL</span><span>8 Aug</span></span>
+      <span class="meta">
+        <span class="rating">
+          <span class="stars" aria-hidden="true">★★★★☆</span>
+          <span class="value">4 out of 5</span>
+        </span>
+        <span class="saved" aria-live="polite"><span aria-hidden="true">✓</span> Thanks — your rating has been saved.</span>
+      </span>
+    </div>
+    <p class="note">
+      The &ldquo;waiting for your rating&rdquo; count in the section header
+      decrements and disappears at zero, and the row re-sorts into date order
+      among the rated sessions. Focus stays where it was. The trainer&rsquo;s
+      average (REQ-025) updates wherever it is displayed; this screen does not
+      display it.
+    </p>
+  </section>
+
+  <!--
+    ST-25. Failed. Star value and comment survive intact — the learner should
+    never have to retype an opinion because a request timed out.
+  -->
+  <!-- @state SCR-008/ST-25 -->
+  <section class="example">
+    <h2>It failed</h2>
+    <div class="past">
+      <span class="title">SQL &middot; with Arun K.</span>
+      <span class="meta"><span class="chip">SQL</span><span>8 Aug</span></span>
+      <div class="form">
+        <div class="starline">
+          <span class="starfield" role="radiogroup" aria-label="Rate this session">
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="1 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="2 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="false" aria-label="3 out of 5">★</button>
+            <button type="button" class="is-on" role="radio" aria-checked="true" aria-label="4 out of 5">★</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="5 out of 5">☆</button>
+          </span>
+          <span class="chosen">4 out of 5</span>
+        </div>
+        <div class="field">
+          <label for="c3">Anything you&rsquo;d like to add? (optional)</label>
+          <textarea id="c3" rows="3">Very clear, and the pivot-table examples were exactly my data.</textarea>
+        </div>
+        <div class="form-error" aria-live="polite">
+          <span aria-hidden="true">⚠</span>
+          <span>Couldn&rsquo;t save your rating. Please try again.</span>
+        </div>
+        <div class="foot">
+          <button class="btn quiet" type="button">Cancel</button>
+          <button class="btn" type="button">Submit rating</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The wording blames the saving, never the rating. Cancel still discards —
+      the learner may decide an optional thing is not worth a second attempt,
+      and REQ-023 lets them.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Desaturated</h2>
+    <div class="mono">
+      <div class="past">
+        <span class="title">SQL &middot; with Arun K.</span>
+        <div class="form">
+          <div class="starline">
+            <span class="starfield">
+              <button type="button" class="is-on">★</button>
+              <button type="button" class="is-on">★</button>
+              <button type="button" class="is-on">★</button>
+              <button type="button" class="is-on">★</button>
+              <button type="button">☆</button>
+            </span>
+            <span class="chosen">4 out of 5</span>
+          </div>
+          <div class="form-error"><span aria-hidden="true">⚠</span><span>Couldn&rsquo;t save your rating. Please try again.</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Colour gone: the value still reads as text, the filled and empty glyphs
+      still differ in shape, and the error still carries its icon and sentence.
+    </p>
+  </section>
+</body>
+</html>

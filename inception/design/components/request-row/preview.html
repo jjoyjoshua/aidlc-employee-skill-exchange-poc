@@ -211,6 +211,22 @@
   .req.is-expired .meta { color: var(--c-text-disabled); }
   .status.is-expired { color: var(--c-text-secondary); }
 
+  /* SCR-008: a resolved request the learner can still act on — by asking again. */
+  .link {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-primary);
+    background: none;
+    border: 0;
+    padding: 0;
+    margin-top: var(--s-1);
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+    display: inline-block;
+  }
+  .link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
   /* ---- Failed (SCR-004/ST-08, SCR-007/ST-18) ---------------------------- */
   .row-error {
     display: flex;
@@ -253,6 +269,12 @@
     </p>
   </section>
 
+  <!--
+    ST-17 on SCR-008 is this same row seen from the learner's own screen, where
+    it is the whole point of the section rather than the quiet half of the
+    dashboard's. Same component, same copy, no buttons either way.
+  -->
+  <!-- @state SCR-008/ST-17 -->
   <section class="example">
     <h2>Waiting for them — the employee's own request</h2>
     <p class="group-label">Waiting for them</p>
@@ -263,9 +285,64 @@
       </div>
       <span class="status is-pending"><span aria-hidden="true">⏳</span> Pending</span>
     </div>
+    <div class="req">
+      <div class="lines">
+        <div class="who">You asked <strong>Meera S.</strong> about SQL</div>
+        <div class="meta">Mon 8 Sep, 09:00 &middot; 45 min &middot; asked 2h ago</div>
+      </div>
+      <span class="status is-pending"><span aria-hidden="true">⏳</span> Pending</span>
+    </div>
     <p class="note">
-      No buttons — the decision is not this employee's to make. Once BRD OQ-1
-      fixes the auto-reject cutoff, this row is where a countdown would go.
+      No buttons — the decision is not this employee's to make, and no
+      requirement lets them un-ask (OQ-L1). Once BRD OQ-1 fixes the auto-reject
+      cutoff, this row is where a countdown would go (OQ-L9, paired with
+      SCR-007's OQ-T9).
+    </p>
+  </section>
+
+  <!--
+    ST-18, ST-19, ST-20 — the three ways a learner's request ends, on SCR-008.
+    Each gets its own sentence, because each has a different cause and a
+    different next step. "Rejected" never appears as a word: the status a
+    learner reads about themselves should name the outcome, not grade them.
+  -->
+  <!-- @state SCR-008/ST-18 -->
+  <!-- @state SCR-008/ST-19 -->
+  <!-- @state SCR-008/ST-20 -->
+  <section class="example">
+    <h2>My learning — how a request ends</h2>
+    <div class="req">
+      <div class="lines">
+        <div class="who">You asked <strong>Priya M.</strong> about Excel</div>
+        <div class="meta">Thu 4 Sep, 14:00 &middot; 45 min</div>
+        <button class="link" type="button">Approved — it&rsquo;s in Coming up</button>
+      </div>
+      <span class="status is-approved"><span aria-hidden="true">✓</span> Approved</span>
+    </div>
+    <div class="req">
+      <div class="lines">
+        <div class="who">You asked <strong>Dan R.</strong> about Figma</div>
+        <div class="meta">Wed 3 Sep, 15:00 &middot; 45 min</div>
+        <button class="link" type="button">Find another time with Dan</button>
+      </div>
+      <span class="status is-rejected"><span aria-hidden="true">✕</span> Not this time</span>
+    </div>
+    <div class="req is-expired">
+      <div class="lines">
+        <div class="who">You asked <strong>Meera S.</strong> about SQL</div>
+        <div class="meta">Mon 1 Sep, 09:00 &middot; 45 min</div>
+        <button class="link" type="button">Find another time with Meera</button>
+      </div>
+      <span class="status is-expired"><span aria-hidden="true">🕓</span> Ran out of time</span>
+    </div>
+    <p class="note">
+      Approved stays for the visit and links up to the session it became —
+      REQ-016 names Approved as a status the learner must be able to see, so
+      dropping it on success would satisfy the booking and quietly fail the
+      requirement. "Not this time" and "Ran out of time" are deliberately
+      different sentences: in one a colleague decided, in the other nobody did
+      (REQ-018). Neither shows a reason, because REQ-017 gives the trainer no
+      field in which to write one.
     </p>
   </section>
 

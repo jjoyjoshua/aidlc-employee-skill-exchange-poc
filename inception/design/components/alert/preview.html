@@ -323,5 +323,29 @@
     </p>
   </section>
 
+  <!--
+    SCR-008/ST-03. Same shape again, and again one panel for three sections,
+    because the learning page loads in a single request too. The reassurance
+    names what a learner would fear having lost: a booking and a certificate.
+  -->
+  <!-- @state SCR-008/ST-03 -->
+  <section class="example">
+    <h2>Panel — the learning page couldn't load</h2>
+    <div class="alert is-error is-panel" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">We couldn't load your learning page</span>
+      <span class="body">
+        Your sessions, requests and certificates are all safe.
+        <a href="#top">Try again</a>
+      </span>
+    </div>
+    <p class="note">
+      A learner who cannot see their sessions will wonder whether a booking
+      vanished, and one who cannot see Finished will wonder about a certificate
+      (REQ-024). Naming both costs a clause and answers the question they were
+      about to ask.
+    </p>
+  </section>
+
 </body>
 </html>
