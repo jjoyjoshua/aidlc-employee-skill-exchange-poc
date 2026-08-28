@@ -323,6 +323,7 @@
 
   <!-- @state SCR-004/ST-02 -->
   <!-- @state SCR-007/ST-02 -->
+  <!-- @state SCR-008/ST-02 -->
   <section class="example">
     <h2>Loading</h2>
     <section class="card" aria-labelledby="c3" aria-busy="true">
@@ -385,6 +386,51 @@
     <p class="note">
       The count reads 0 rather than being hidden, and the card holds its place
       so the trainer learns where requests appear before they ever get one.
+    </p>
+  </section>
+
+  <!--
+    SCR-008's three sections, each empty on its own. Different copy in each,
+    because "empty" means something different in each: nothing booked, nothing
+    asked, nothing finished. Only the middle one carries an action, since
+    finding a trainer is the only way to create a request.
+  -->
+  <!-- @state SCR-008/ST-05 -->
+  <!-- @state SCR-008/ST-06 -->
+  <!-- @state SCR-008/ST-07 -->
+  <section class="example">
+    <h2>My learning — each section empty</h2>
+    <section class="card" aria-labelledby="c8">
+      <header>
+        <h3 id="c8">Coming up</h3>
+      </header>
+      <div class="body">
+        <p class="empty">Nothing booked yet. One request is still waiting on a reply.</p>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="c9" style="margin-top: var(--s-4);">
+      <header>
+        <h3 id="c9">Requests you've sent</h3>
+      </header>
+      <div class="body">
+        <p class="empty">No requests open. <a href="#">Find a trainer</a></p>
+      </div>
+    </section>
+    <section class="card" aria-labelledby="c10" style="margin-top: var(--s-4);">
+      <header>
+        <h3 id="c10">Finished</h3>
+      </header>
+      <div class="body">
+        <p class="empty">Nothing finished yet. Your certificates will appear here.</p>
+      </div>
+    </section>
+    <p class="note">
+      "Coming up" names what the learner is actually waiting on rather than
+      offering an action, because the next step depends on which is true and
+      both are already on the screen below. "Finished" names what the section is
+      for (REQ-024, REQ-026) — an empty history is otherwise a fact with no
+      promise attached. Note that all three empty at once is a different state
+      entirely: ST-04, which replaces the whole stack with one panel.
     </p>
   </section>
 

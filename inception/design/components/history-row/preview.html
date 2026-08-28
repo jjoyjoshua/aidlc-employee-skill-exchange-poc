@@ -1,0 +1,493 @@
+<!-- @dsCard group="Data display" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — History row</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-full: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 560px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- Section header, with its exception announced ---------------------- */
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-2);
+  }
+  .sec-head .title {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .sec-head .waiting {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-warning);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+  }
+
+  /* ---- The row ----------------------------------------------------------- */
+  .past {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    padding: var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+  }
+  .past + .past { margin-top: var(--s-2); }
+  .past .what { flex: 1 1 15rem; min-width: 0; }
+  .past .title {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+  }
+  .past .meta {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin-top: var(--s-1);
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .past.is-unrated { border-color: var(--c-warning); }
+  .chip {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    padding: 0 var(--s-2);
+    line-height: 1.25rem;
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex: none;
+  }
+
+  /* ---- The rating, read-only — same division rating-stars makes ---------- */
+  .rating {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    line-height: var(--lh-tight);
+  }
+  .rating .stars {
+    color: var(--c-warning);
+    letter-spacing: 0.05em;
+  }
+  .rating .value {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    color: var(--c-text);
+  }
+  .comment {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    line-height: var(--lh-normal);
+    margin-top: var(--s-1);
+    font-style: italic;
+  }
+
+  /* ---- The invitation to rate — the stars ARE the control ---------------- */
+  .invite {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .invite .ask {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+  }
+  .starfield {
+    display: inline-flex;
+    gap: var(--s-1);
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .starfield button {
+    font: inherit;
+    font-size: var(--t-base);
+    line-height: 1;
+    background: none;
+    border: 0;
+    padding: var(--s-1);
+    cursor: pointer;
+    color: var(--c-text-disabled);
+    border-radius: var(--r-sm);
+  }
+  .starfield button:hover { color: var(--c-warning); }
+  .starfield button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-border);
+    background: transparent;
+    color: var(--c-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex: none;
+  }
+  .btn:hover { background: var(--c-surface-alt); border-color: var(--c-primary); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+
+  .cert-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    flex-wrap: wrap;
+    flex: none;
+  }
+  .link {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    color: var(--c-primary);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: inherit;
+  }
+  .link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- The certificate itself (ST-27) ------------------------------------ */
+  .cert {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    padding: var(--s-6) var(--s-4);
+    text-align: center;
+    display: grid;
+    gap: var(--s-2);
+  }
+  .cert .kicker {
+    font-size: var(--t-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-text-secondary);
+    font-weight: var(--fw-semibold);
+  }
+  .cert .name {
+    font-size: var(--t-base);
+    font-weight: var(--fw-semibold);
+  }
+  .cert .line { font-size: var(--t-sm); color: var(--c-text-secondary); }
+  .cert .rule {
+    height: 1px;
+    background: var(--c-border);
+    margin: var(--s-2) auto;
+    width: 60%;
+  }
+
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>History row</h1>
+
+  <p>
+    One completed session in the learner&rsquo;s Learning History on SCR-008 —
+    skill, trainer, date completed, certificate, and the feedback they left
+    (REQ-026). The certificate exists because completion generated it with no
+    manual step (REQ-024), and the rating is optional (REQ-023), so the two are
+    offered independently: neither gates the other.
+  </p>
+
+  <!--
+    ST-21. Not yet rated. Sorted above the rated rows because it is the only
+    row here carrying an action, and the section header announces that so the
+    sort does not look like a bug. The stars themselves are the control.
+  -->
+  <!-- @state SCR-008/ST-21 -->
+  <section class="example">
+    <h2>Finished, not yet rated</h2>
+    <div class="sec-head">
+      <span class="title">Finished (4)</span>
+      <span class="waiting"><span aria-hidden="true">☆</span> 1 waiting for your rating</span>
+    </div>
+    <div class="past is-unrated">
+      <span class="what">
+        <span class="title">SQL &middot; with Arun K.</span>
+        <span class="meta">
+          <span class="chip">SQL</span>
+          <span>8 Aug</span>
+        </span>
+        <span class="invite" style="margin-top: var(--s-2)">
+          <span class="ask">How did it go?</span>
+          <span class="starfield" role="radiogroup" aria-label="Rate this session">
+            <button type="button" role="radio" aria-checked="false" aria-label="1 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="2 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="3 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="4 out of 5">☆</button>
+            <button type="button" role="radio" aria-checked="false" aria-label="5 out of 5">☆</button>
+          </span>
+        </span>
+      </span>
+      <span class="actions">
+        <button class="btn" type="button">Certificate <span aria-hidden="true">↗</span></button>
+      </span>
+    </div>
+    <p class="note">
+      No Skip and no Dismiss. REQ-023 makes submitting optional, and an optional
+      thing does not need declining — leaving it alone is the decline. A
+      dismissal would also have to be remembered, which is state no requirement
+      defines. Certificate is available now, not after rating.
+    </p>
+  </section>
+
+  <!--
+    ST-26. Rated. The glyphs are decoration; the number is the information —
+    the same division rating-stars already makes for a trainer's average.
+  -->
+  <!-- @state SCR-008/ST-26 -->
+  <section class="example">
+    <h2>Finished and rated</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Excel &middot; with Priya M.</span>
+        <span class="meta">
+          <span class="chip">Excel</span>
+          <span>12 Aug</span>
+        </span>
+        <span class="meta">
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★☆</span>
+            <span class="value">4 out of 5</span>
+          </span>
+        </span>
+        <span class="comment">&ldquo;Very clear, and the pivot-table examples were exactly my data.&rdquo;</span>
+      </span>
+      <span class="actions">
+        <button class="btn" type="button">Certificate <span aria-hidden="true">↗</span></button>
+      </span>
+    </div>
+    <div class="past">
+      <span class="what">
+        <span class="title">Python &middot; with Arun K.</span>
+        <span class="meta">
+          <span class="chip">Python</span>
+          <span>29 Jul</span>
+        </span>
+        <span class="meta">
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="value">5 out of 5</span>
+          </span>
+        </span>
+      </span>
+      <span class="actions">
+        <button class="btn" type="button">Certificate <span aria-hidden="true">↗</span></button>
+      </span>
+    </div>
+    <p class="note">
+      Read-only — whether a rating can be changed after submitting is OQ-L6, and
+      until that is answered the design does not offer an edit it might have to
+      withdraw. The second row shows a rating left without a comment, which
+      REQ-023 explicitly permits.
+    </p>
+  </section>
+
+  <!--
+    ST-27. The certificate, opening in a new tab: the four things REQ-024
+    names, on the portal's own type and colour, printable as it stands.
+  -->
+  <!-- @state SCR-008/ST-27 -->
+  <section class="example">
+    <h2>The certificate</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Excel &middot; with Priya M.</span>
+        <span class="meta"><span class="chip">Excel</span><span>12 Aug</span></span>
+      </span>
+      <span class="actions">
+        <button class="btn" type="button" disabled>
+          <span class="spin" aria-hidden="true"></span><span>Opening…</span>
+        </button>
+      </span>
+    </div>
+    <div class="cert" style="margin-top: var(--s-3)">
+      <span class="kicker">Certificate of completion</span>
+      <span class="name">Joy Joshua</span>
+      <span class="line">has completed a session in</span>
+      <span class="name">Excel</span>
+      <span class="rule" aria-hidden="true"></span>
+      <span class="line">Taught by Priya M. &middot; 12 August 2026</span>
+    </div>
+    <p class="note">
+      Exactly REQ-024&rsquo;s four facts: learner, skill, trainer, date. The
+      medium — a printable page rather than a generated PDF or a shareable link
+      — is a working default; REQ-024 names the contents and says generation is
+      automatic, and names no format (OQ-L5).
+    </p>
+  </section>
+
+  <!--
+    ST-28. REQ-024 makes the certificate automatic, so its absence is a system
+    failure and not a missing user action. The copy blames the generation and
+    offers a retry; the rating beside it is unaffected.
+  -->
+  <!-- @state SCR-008/ST-28 -->
+  <section class="example">
+    <h2>The certificate isn&rsquo;t ready</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Excel &middot; with Priya M.</span>
+        <span class="meta">
+          <span class="chip">Excel</span>
+          <span>12 Aug</span>
+        </span>
+        <span class="meta">
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★☆</span>
+            <span class="value">4 out of 5</span>
+          </span>
+        </span>
+      </span>
+      <span class="cert-error" aria-live="polite">
+        <span aria-hidden="true">⚠</span>
+        <span>Certificate isn&rsquo;t ready yet.</span>
+        <button class="link" type="button">Try again</button>
+      </span>
+    </div>
+    <p class="note">
+      Never &ldquo;complete something to unlock this&rdquo; — the learner has
+      already done everything REQ-024 asks of them. The rest of the row is
+      untouched, because the rating and the certificate are independent.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Desaturated</h2>
+    <div class="mono">
+      <div class="past is-unrated">
+        <span class="what">
+          <span class="title">SQL &middot; with Arun K.</span>
+          <span class="invite"><span class="ask">How did it go?</span>
+            <span class="starfield"><button type="button">☆</button><button type="button">☆</button><button type="button">☆</button><button type="button">☆</button><button type="button">☆</button></span>
+          </span>
+        </span>
+      </div>
+      <div class="past">
+        <span class="what">
+          <span class="title">Excel &middot; with Priya M.</span>
+          <span class="rating"><span class="stars" aria-hidden="true">★★★★☆</span><span class="value">4 out of 5</span></span>
+        </span>
+      </div>
+    </div>
+    <p class="note">
+      Rated and unrated stay distinguishable with colour gone, because a
+      submitted rating always carries its value as text. Counting filled shapes
+      is never the only way to read it (NFR-003).
+    </p>
+  </section>
+</body>
+</html>

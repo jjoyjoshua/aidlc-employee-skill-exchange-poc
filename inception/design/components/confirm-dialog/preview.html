@@ -1,0 +1,381 @@
+<!-- @dsCard group="Overlay" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Confirm dialog</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 560px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The scrim + dialog ------------------------------------------------ */
+  .scrim {
+    background: var(--c-surface-alt);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    padding: var(--s-6) var(--s-4);
+    display: grid;
+    justify-items: center;
+  }
+  .dialog {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--s-4);
+    width: 100%;
+    max-width: 24rem;
+  }
+  .dialog h3 {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    line-height: var(--lh-tight);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .dialog p {
+    font-size: var(--t-sm);
+    line-height: var(--lh-normal);
+    margin: 0 0 var(--s-2) 0;
+    color: var(--c-text-secondary);
+  }
+  .dialog p.subject {
+    color: var(--c-text);
+    font-weight: var(--fw-medium);
+  }
+  .dialog .foot {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+    flex-wrap: wrap;
+  }
+
+  /* ---- Buttons ----------------------------------------------------------- */
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--c-primary);
+  }
+  .btn.secondary:hover { background: var(--c-surface-alt); border-color: var(--c-primary-hover); }
+  .btn.danger {
+    background: var(--c-danger);
+    border-color: var(--c-danger);
+    color: var(--c-on-primary);
+  }
+  /* The safe action holds focus on open — shown here as a persistent ring. */
+  .btn.is-focused { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .dialog-error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    background: var(--c-danger-bg);
+    border: 1px solid currentColor;
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    margin-top: var(--s-3);
+    line-height: var(--lh-normal);
+  }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- Phone sheet (ST-16) ----------------------------------------------- */
+  .phone {
+    width: 20rem;
+    height: 24rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    background: var(--c-surface-alt);
+    position: relative;
+    overflow: hidden;
+    margin-inline: auto;
+  }
+  .phone .sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--c-surface);
+    border-top: 1px solid var(--c-border);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    padding: var(--s-4);
+    box-shadow: var(--shadow-lg);
+  }
+  .phone .sheet .foot {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-4);
+  }
+  .grabber {
+    width: 2.5rem;
+    height: 0.25rem;
+    border-radius: var(--r-full);
+    background: var(--c-border);
+    margin: 0 auto var(--s-3) auto;
+  }
+
+  .mono { filter: grayscale(1); }
+</style>
+</head>
+<body>
+  <h1>Confirm dialog</h1>
+
+  <p>
+    The modal confirm for an action that costs somebody else something. On
+    SCR-008 it is cancelling a confirmed session (REQ-020): a time a colleague
+    committed to disappears, and they are notified (REQ-028). Actions that only
+    affect the person taking them confirm in the row instead — see
+    <code>availability-row</code>'s Remove on SCR-007. That line is the whole
+    reason this component exists.
+  </p>
+
+  <!--
+    ST-10. The safe action holds focus and sits first. The danger action spells
+    out its verb, so the emphasis is never the only signal (NFR-003).
+  -->
+  <!-- @state SCR-008/ST-10 -->
+  <section class="example">
+    <h2>The confirm step</h2>
+    <div class="scrim">
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="d1">
+        <h3 id="d1">Cancel this session?</h3>
+        <p class="subject">Excel with Priya M., today at 14:00.</p>
+        <p>Priya will be notified. This can&rsquo;t be undone.</p>
+        <div class="foot">
+          <button class="btn secondary is-focused" type="button">Keep the session</button>
+          <button class="btn danger" type="button">Cancel the session</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Two lines and no more: what is being cancelled, named exactly, and what
+      follows. Nothing is promised about what happens to Priya&rsquo;s 14:00
+      afterwards, because no requirement says — that is conflict C-1.
+    </p>
+  </section>
+
+  <!--
+    ST-11. A write is in flight. The dialog cannot be dismissed: closing it
+    would leave the learner unsure whether the session still exists.
+  -->
+  <!-- @state SCR-008/ST-11 -->
+  <section class="example">
+    <h2>In flight</h2>
+    <div class="scrim">
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="d2">
+        <h3 id="d2">Cancel this session?</h3>
+        <p class="subject">Excel with Priya M., today at 14:00.</p>
+        <p>Priya will be notified. This can&rsquo;t be undone.</p>
+        <div class="foot">
+          <button class="btn secondary" type="button" disabled>Keep the session</button>
+          <button class="btn danger" type="button" disabled>
+            <span class="spin" aria-hidden="true"></span><span>Cancelling…</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Escape does nothing here, and there is no close affordance. Both buttons
+      disabled; the pressed one carries the spinner in place of its label.
+    </p>
+  </section>
+
+  <!--
+    ST-13. The call failed. The wording blames the saving, never the session —
+    and the special case below is a different fact, so it gets a different
+    sentence and a single action rather than a retry that would fail again.
+  -->
+  <!-- @state SCR-008/ST-13 -->
+  <section class="example">
+    <h2>It failed</h2>
+    <div class="scrim">
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="d3">
+        <h3 id="d3">Cancel this session?</h3>
+        <p class="subject">Excel with Priya M., today at 14:00.</p>
+        <p>Priya will be notified. This can&rsquo;t be undone.</p>
+        <div class="dialog-error" aria-live="polite">
+          <span aria-hidden="true">⚠</span>
+          <span>Couldn&rsquo;t cancel that session. Please try again.</span>
+        </div>
+        <div class="foot">
+          <button class="btn secondary" type="button">Keep the session</button>
+          <button class="btn danger" type="button">Cancel the session</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scrim" style="margin-top: var(--s-3)">
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="d4">
+        <h3 id="d4">Cancel this session?</h3>
+        <p class="subject">Excel with Priya M., today at 14:00.</p>
+        <div class="dialog-error" aria-live="polite">
+          <span aria-hidden="true">⚠</span>
+          <span>Priya has already cancelled this session.</span>
+        </div>
+        <div class="foot">
+          <button class="btn secondary is-focused" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      The second dialog is the special case: the other party cancelled while
+      this one was open. One action, not two — a retry that will fail
+      identically is not an offer. Closing it leaves the row showing
+      &ldquo;Cancelled by Priya M.&rdquo; rather than restoring it.
+    </p>
+  </section>
+
+  <!--
+    ST-16. Phone width. Same copy, same order; the pair stacks and pins to the
+    bottom of a sheet, safe action on top so the thumb reaches it first.
+  -->
+  <!-- @state SCR-008/ST-16 -->
+  <section class="example">
+    <h2>Phone width — a sheet, not a centred dialog</h2>
+    <div class="phone">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="d5">
+        <div class="grabber" aria-hidden="true"></div>
+        <h3 id="d5">Cancel this session?</h3>
+        <p class="subject">Excel with Priya M., today at 14:00.</p>
+        <p>Priya will be notified. This can&rsquo;t be undone.</p>
+        <div class="foot">
+          <button class="btn secondary is-focused" type="button">Keep the session</button>
+          <button class="btn danger" type="button">Cancel the session</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Matches SCR-006&rsquo;s trainer panel and SCR-007&rsquo;s slot form at the
+      same breakpoint, so the portal has one way of showing an overlay on a
+      phone rather than three. The in-flight and failed steps use this same
+      sheet.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>Desaturated</h2>
+    <div class="mono">
+      <div class="scrim">
+        <div class="dialog">
+          <h3>Cancel this session?</h3>
+          <p class="subject">Excel with Priya M., today at 14:00.</p>
+          <p>Priya will be notified. This can&rsquo;t be undone.</p>
+          <div class="foot">
+            <button class="btn secondary" type="button">Keep the session</button>
+            <button class="btn danger" type="button">Cancel the session</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      With colour gone the destructive action is still identifiable, because it
+      says what it does. A red button reading &ldquo;Confirm&rdquo; would not
+      survive this test (NFR-003).
+    </p>
+  </section>
+</body>
+</html>

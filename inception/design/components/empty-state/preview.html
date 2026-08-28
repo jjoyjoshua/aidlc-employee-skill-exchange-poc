@@ -109,6 +109,12 @@
     color: var(--c-text-secondary);
     line-height: var(--lh-normal);
   }
+  /* A second suggestion that is deliberately not a second button. */
+  .welcome p.aside {
+    font-size: var(--t-xs);
+    color: var(--c-text-disabled);
+    margin-top: var(--s-1);
+  }
   .actions {
     display: flex;
     flex-wrap: wrap;
@@ -333,6 +339,36 @@
       "Colleagues can find you, but they can't book you" is the whole point:
       being in the search (REQ-013) and being bookable (REQ-014) are different
       things, and this is the only screen where that difference is visible.
+    </p>
+  </section>
+
+  <!--
+    SCR-008/ST-04. The learner's true first visit: no sessions, no requests, no
+    history. Three simultaneously empty cards is a wall of nothing, so the panel
+    replaces the whole stack — the same call SCR-004 makes about its five.
+  -->
+  <!-- @state SCR-008/ST-04 -->
+  <section class="example">
+    <h2>My learning — you haven't started yet</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">📚</span>
+      <h3>Find a colleague who can teach you</h3>
+      <p>
+        Search by the skill you want, ask for a time that suits you, and it will
+        show up here.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#top">Find a trainer</a>
+      </div>
+      <p class="aside">
+        Or add what you want to learn to your profile, so colleagues know.
+      </p>
+    </div>
+    <p class="note">
+      One ranked action, plus a quieter second: REQ-009 lets an employee list
+      skills they want to learn, and a learner who does is visible in a way an
+      empty profile is not. It is deliberately not a second button — there is
+      one obvious next step here and it is finding somebody.
     </p>
   </section>
 
