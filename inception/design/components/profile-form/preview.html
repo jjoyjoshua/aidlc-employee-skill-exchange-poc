@@ -1,0 +1,506 @@
+<!-- @dsCard group="Forms" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Profile form</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-xl: 1.25rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-8);
+    max-width: 680px;
+    line-height: var(--lh-normal);
+  }
+  h1 { font-size: var(--t-base); margin: 0; }
+  body > p.intro { margin: 0; color: var(--c-text-secondary); font-size: var(--t-sm); }
+  .example > h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+
+  /* ---- Card shell (matches the `card` component) ------------------------- */
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--s-6);
+  }
+
+  /* ---- Read-only identity block, above the divider ---------------------- */
+  .identity { display: flex; gap: var(--s-4); align-items: flex-start; }
+  .avatar {
+    flex: none;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--r-full);
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-border);
+    display: grid;
+    place-items: center;
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+  }
+  .identity .who { display: grid; gap: var(--s-1); }
+  .identity .name { font-size: var(--t-lg); font-weight: var(--fw-semibold); line-height: var(--lh-tight); }
+  .identity .email, .identity .rating {
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+  }
+  .photo-actions { display: flex; gap: var(--s-3); margin-top: var(--s-3); }
+  hr.divider {
+    border: 0;
+    border-top: 1px solid var(--c-border);
+    margin: var(--s-4) 0;
+  }
+
+  /* ---- Fields ------------------------------------------------------------ */
+  .field { display: grid; gap: var(--s-1); margin-bottom: var(--s-4); }
+  .field > label { font-size: var(--t-sm); font-weight: var(--fw-medium); }
+  .field input[type='text'], .field textarea, .field select {
+    font: inherit;
+    font-size: var(--t-base);
+    color: var(--c-text);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .field textarea { min-height: 5rem; resize: vertical; }
+  .field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+    border-color: var(--focus-ring);
+  }
+  .field input[readonly], .field textarea[readonly], .field select[disabled] {
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+  }
+  .counter { font-size: var(--t-xs); color: var(--c-text-secondary); justify-self: end; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+
+  /*
+   * An invalid field carries three signals, not one: the border tone, a
+   * leading icon, and a sentence that names the limit. Border colour alone is
+   * invisible to a colour-blind reader and silent to a screen reader.
+   */
+  .field.is-invalid input, .field.is-invalid textarea { border-color: var(--c-danger); }
+  .msg {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    font-size: var(--t-xs);
+    line-height: var(--lh-normal);
+  }
+  .msg.is-error { color: var(--c-danger); }
+  .msg.is-ok { color: var(--c-success); }
+  .counter.is-error { color: var(--c-danger); }
+
+  /* ---- Actions ----------------------------------------------------------- */
+  .actions { display: flex; align-items: center; gap: var(--s-3); }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-4);
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn-primary { background: var(--c-primary); color: var(--c-on-primary); }
+  .btn-primary:hover { background: var(--c-primary-hover); }
+  .btn-secondary { background: transparent; color: var(--c-text); border-color: var(--c-border); }
+  .btn-link { background: transparent; border: 0; color: var(--c-link); padding: 0; text-decoration: underline; }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] {
+    background: var(--c-surface-alt);
+    color: var(--c-text-disabled);
+    border-color: var(--c-border);
+    cursor: not-allowed;
+  }
+  .btn-link[disabled] { background: transparent; border: 0; }
+  .hint { font-size: var(--t-xs); color: var(--c-text-secondary); }
+  .hint.is-dirty { color: var(--c-warning); }
+
+  .spinner {
+    width: 0.85em;
+    height: 0.85em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: var(--r-full);
+    display: inline-block;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+
+  /* ---- Skeletons --------------------------------------------------------- */
+  .skel {
+    background: var(--c-surface-alt);
+    border-radius: var(--r-sm);
+    height: 1rem;
+  }
+  .skel.tall { height: 5rem; }
+  .skel.avatar { width: 56px; height: 56px; border-radius: var(--r-full); }
+  .skel.w-40 { width: 40%; }
+  .skel.w-60 { width: 60%; }
+  .skel.w-100 { width: 100%; }
+
+  /* ---- Page-level panels ------------------------------------------------- */
+  .panel {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-left: 3px solid var(--c-danger);
+    border-radius: var(--r-lg);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-3);
+    justify-items: start;
+  }
+  .panel .title { font-weight: var(--fw-semibold); display: flex; gap: var(--s-2); align-items: center; }
+  .inline-alert {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    background: var(--c-danger-bg);
+    color: var(--c-danger);
+    border: 1px solid var(--c-danger);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-sm);
+    margin-bottom: var(--s-3);
+  }
+  .summary {
+    font-size: var(--t-sm);
+    color: var(--c-danger);
+    display: flex;
+    gap: var(--s-2);
+    margin-bottom: var(--s-3);
+  }
+</style>
+</head>
+<body>
+  <h1>Profile form</h1>
+  <p class="intro">
+    The profile half of SCR-005 (REQ-007, REQ-008). One Save for all four
+    editable fields — the designer's call, 2026-08-28 — so this component owns
+    an unsaved-changes state and a multi-error state that per-field editing
+    would not have. The identity block above the divider is read-only: REQ-007
+    names exactly four editable fields and the name, email and rating are not
+    among them.
+  </p>
+
+  <!-- @state SCR-005/ST-01 -->
+  <section class="example">
+    <h2>ST-01 — Default: loaded, nothing touched</h2>
+    <div class="card">
+      <div class="identity">
+        <div class="avatar" aria-hidden="true">JJ</div>
+        <div class="who">
+          <span class="name">Joy Joshua</span>
+          <span class="email">joy_j@trigent.com</span>
+          <span class="rating">
+            <span aria-hidden="true">★</span> 4.6 average · 12 ratings
+          </span>
+        </div>
+      </div>
+      <div class="photo-actions">
+        <button type="button" class="btn btn-link">Change photo</button>
+        <button type="button" class="btn btn-link">Remove</button>
+      </div>
+      <hr class="divider" />
+      <div class="field">
+        <label for="d1">About you</label>
+        <textarea id="d1">I run the finance reporting team and enjoy teaching Excel to anyone who asks.</textarea>
+        <span class="counter">76 / 500</span>
+      </div>
+      <div class="pair">
+        <div class="field">
+          <label for="dept1">Department</label>
+          <select id="dept1">
+            <option>Finance</option>
+            <option>Engineering</option>
+            <option>People</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="des1">Designation</label>
+          <input id="des1" type="text" value="Senior Analyst" />
+        </div>
+      </div>
+      <hr class="divider" />
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled>Save changes</button>
+        <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+      </div>
+    </div>
+    <p class="note">
+      Save is disabled until something differs, so the button itself tells the
+      employee whether they have unsaved work. The rating carries its numeral
+      and its count — a bare row of stars would put the whole meaning in a
+      shape, and a 5.0 from one session would read as a track record.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-02 -->
+  <section class="example">
+    <h2>ST-02 — Loading</h2>
+    <div class="card" aria-busy="true">
+      <div class="identity">
+        <div class="skel avatar"></div>
+        <div class="who" style="flex: 1">
+          <div class="skel w-40" style="height: 1.25rem"></div>
+          <div class="skel w-60"></div>
+        </div>
+      </div>
+      <hr class="divider" />
+      <div class="field">
+        <label for="d2">About you</label>
+        <div class="skel tall w-100"></div>
+      </div>
+      <div class="pair">
+        <div class="field"><label for="dept2">Department</label><div class="skel w-100"></div></div>
+        <div class="field"><label for="des2">Designation</label><div class="skel w-100"></div></div>
+      </div>
+      <hr class="divider" />
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled>Save changes</button>
+        <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+      </div>
+    </div>
+    <p class="note">
+      Labels are real, values are skeletons: the label text is known before the
+      data arrives, so the form does not re-flow when values land. The region is
+      <code>aria-busy="true"</code>.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-05 -->
+  <section class="example">
+    <h2>ST-05 — Could not load (whole screen)</h2>
+    <div class="panel" role="alert" aria-live="assertive">
+      <span class="title"><span aria-hidden="true">⚠</span> We couldn't load your profile.</span>
+      <button type="button" class="btn btn-primary">Try again</button>
+    </div>
+    <p class="note">
+      One error for the screen, because the screen loads in one request. The app
+      header stays above this and stays usable — the employee is never trapped
+      on a page they cannot leave.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-06 -->
+  <section class="example">
+    <h2>ST-06 — Unsaved changes</h2>
+    <div class="card">
+      <div class="field">
+        <label for="d6">About you</label>
+        <textarea id="d6">I run the finance reporting team and enjoy teaching Excel to anyone who asks. Ask me about pivot tables.</textarea>
+        <span class="counter">104 / 500</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <span class="hint is-dirty"><span aria-hidden="true">●</span> Unsaved changes</span>
+      </div>
+    </div>
+    <p class="note">
+      Leaving the screen in this state asks for confirmation and names what is
+      at stake. Cancel reverts every field to its loaded value with no network
+      call, and is deliberately not confirm-guarded while Save is one click
+      away.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-07 -->
+  <section class="example">
+    <h2>ST-07 — Saving</h2>
+    <div class="card">
+      <div class="field">
+        <label for="d7">About you</label>
+        <textarea id="d7" readonly>I run the finance reporting team and enjoy teaching Excel to anyone who asks.</textarea>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled>
+          <span class="spinner" aria-hidden="true"></span> Saving…
+        </button>
+        <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+      </div>
+    </div>
+    <p class="note">
+      Fields go read-only so an edit made mid-flight cannot be silently
+      discarded. The skills cards below this one stay fully interactive — the two
+      save paths on this screen are independent.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-08 -->
+  <section class="example">
+    <h2>ST-08 — Saved</h2>
+    <div class="card">
+      <div class="field">
+        <label for="d8">About you</label>
+        <textarea id="d8">I run the finance reporting team and enjoy teaching Excel to anyone who asks.</textarea>
+        <span class="counter">76 / 500</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" disabled>Save changes</button>
+        <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+        <span class="msg is-ok" aria-live="polite"><span aria-hidden="true">✓</span> Saved</span>
+      </div>
+      <p class="hint" style="margin-top: var(--s-3)" aria-live="polite">
+        Colleagues filtering by department will now see you under Finance.
+      </p>
+    </div>
+    <p class="note">
+      Confirmation sits where the action happened, not in a page banner — the
+      same choice as SCR-004's ST-07, and the reason is the same: a banner at the
+      top of the page is off-screen on a phone. The department line appears only
+      when that field actually changed, because REQ-012's filter reads it.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-09 -->
+  <section class="example">
+    <h2>ST-09 — Something needs fixing before saving</h2>
+    <div class="card">
+      <div class="field is-invalid">
+        <label for="d9">About you</label>
+        <textarea id="d9" aria-invalid="true" aria-describedby="d9err">Long description that has run past the cap…</textarea>
+        <span class="counter is-error">540 / 500</span>
+        <span class="msg is-error" id="d9err">
+          <span aria-hidden="true">⚠</span> Keep this under 500 characters. You have 540.
+        </span>
+      </div>
+      <div class="field is-invalid">
+        <label for="des9">Designation</label>
+        <input id="des9" type="text" aria-invalid="true" aria-describedby="des9err"
+               value="Senior Analyst, Financial Planning &amp; Analysis, Reporting…" />
+        <span class="msg is-error" id="des9err">
+          <span aria-hidden="true">⚠</span> Keep this under 80 characters. You have 96.
+        </span>
+      </div>
+      <p class="summary" aria-live="assertive"><span aria-hidden="true">⚠</span> 2 fields need attention</p>
+      <div class="actions">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+    <p class="note">
+      The summary line exists only because one Save can produce more than one
+      error at once — the cost of the single-Save decision, shown rather than
+      hidden. Focus moves to the first offending field. Caps are OQ-E3 and are
+      the designer's to set.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-10 -->
+  <section class="example">
+    <h2>ST-10 — Save failed</h2>
+    <div class="card">
+      <div class="inline-alert" role="alert">
+        <span aria-hidden="true">⚠</span>
+        <span>Couldn't save your profile. Please try again.</span>
+      </div>
+      <div class="field">
+        <label for="d10">About you</label>
+        <textarea id="d10">I run the finance reporting team and enjoy teaching Excel to anyone who asks. Ask me about pivot tables.</textarea>
+        <span class="counter">104 / 500</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <span class="hint is-dirty"><span aria-hidden="true">●</span> Unsaved changes</span>
+      </div>
+    </div>
+    <p class="note">
+      Every value the employee typed is still here — nothing reverts, and the
+      screen stays in ST-06 so they can retry. The wording says the
+      <em>saving</em> failed, so nobody reads it as their input being rejected.
+    </p>
+  </section>
+</body>
+</html>

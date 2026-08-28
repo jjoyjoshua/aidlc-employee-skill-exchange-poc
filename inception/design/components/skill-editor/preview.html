@@ -1,0 +1,651 @@
+<!-- @dsCard group="Overlays" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Skill editor</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    }
+  }
+
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-8);
+    max-width: 640px;
+    line-height: var(--lh-normal);
+  }
+  h1 { font-size: var(--t-base); margin: 0; }
+  body > p.intro { margin: 0; color: var(--c-text-secondary); font-size: var(--t-sm); }
+  .example > h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+
+  /*
+   * The dialog is shown here in place rather than over a scrim, so all of its
+   * states can be read on one page. In the product it is a modal: focus moves
+   * in on open, is trapped while open, Escape closes it, and focus returns to
+   * the exact button that opened it.
+   */
+  .dialog {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--s-6);
+    max-width: 26rem;
+  }
+  .dialog-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-4);
+  }
+  .dialog-head h3 { font-size: var(--t-lg); font-weight: var(--fw-semibold); margin: 0; }
+  .close {
+    font: inherit;
+    background: transparent;
+    border: 0;
+    color: var(--c-text-secondary);
+    cursor: pointer;
+    padding: var(--s-1);
+    border-radius: var(--r-sm);
+  }
+  .close:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  .close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .close[disabled] { color: var(--c-text-disabled); cursor: not-allowed; }
+
+  fieldset { border: 0; padding: 0; margin: 0 0 var(--s-4) 0; }
+  legend, .field > label {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    padding: 0;
+    margin-bottom: var(--s-2);
+  }
+  .field { margin-bottom: var(--s-4); }
+
+  /* ---- Teach / learn choice --------------------------------------------- */
+  .choice { display: grid; gap: var(--s-2); }
+  .choice label {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-sm);
+    cursor: pointer;
+  }
+  .choice input { margin-top: 0.2rem; }
+  .choice label:has(input:checked) {
+    border-color: var(--c-primary);
+    background: var(--c-info-bg);
+  }
+  .choice label:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .choice .role-icon { flex: none; }
+  .choice .is-teach { color: var(--c-success); }
+  .choice .is-learn { color: var(--c-info); }
+
+  /* ---- Skill search ------------------------------------------------------ */
+  input[type='text'], input[type='search'] {
+    font: inherit;
+    font-size: var(--t-base);
+    color: var(--c-text);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; border-color: var(--focus-ring); }
+  input[disabled] { background: var(--c-surface-alt); color: var(--c-text-secondary); }
+  .results {
+    list-style: none;
+    margin: var(--s-1) 0 0 0;
+    padding: var(--s-1);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    max-height: 8rem;
+    overflow-y: auto;
+  }
+  .results li { margin: 0; }
+  .results button {
+    font: inherit;
+    font-size: var(--t-sm);
+    text-align: left;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-radius: var(--r-sm);
+    color: var(--c-text);
+    padding: var(--s-2);
+    cursor: pointer;
+  }
+  .results button:hover { background: var(--c-surface-alt); }
+  .results button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+  .results button[aria-selected='true'] { background: var(--c-info-bg); font-weight: var(--fw-medium); }
+  .fixed-skill {
+    display: flex;
+    gap: var(--s-2);
+    align-items: center;
+    background: var(--c-surface-alt);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-base);
+    font-weight: var(--fw-medium);
+  }
+
+  /* ---- Proficiency ------------------------------------------------------- */
+  .levels { display: flex; gap: var(--s-2); flex-wrap: wrap; }
+  .levels label {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    padding: var(--s-1) var(--s-3);
+    font-size: var(--t-sm);
+    cursor: pointer;
+    display: inline-flex;
+    gap: var(--s-2);
+    align-items: center;
+  }
+  .levels label:has(input:checked) { border-color: var(--c-primary); background: var(--c-info-bg); font-weight: var(--fw-medium); }
+  .levels label:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+
+  /* ---- Messages ---------------------------------------------------------- */
+  .msg { display: flex; gap: var(--s-2); align-items: flex-start; font-size: var(--t-xs); margin-top: var(--s-2); }
+  .msg.is-info { color: var(--c-text-secondary); }
+  .msg.is-warn { color: var(--c-warning); }
+  .msg.is-error { color: var(--c-danger); }
+  .consequence {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    background: var(--c-info-bg);
+    border: 1px solid var(--c-info);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-xs);
+    color: var(--c-text);
+    margin-top: var(--s-2);
+  }
+  .no-match {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    margin-top: var(--s-1);
+    display: grid;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+  }
+  .tbd {
+    font-size: var(--t-xs);
+    color: var(--c-warning);
+    background: var(--c-warning-bg);
+    border: 1px dashed var(--c-warning);
+    border-radius: var(--r-sm);
+    padding: var(--s-1) var(--s-2);
+  }
+  .dialog-error {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    background: var(--c-danger-bg);
+    color: var(--c-danger);
+    border: 1px solid var(--c-danger);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-sm);
+    margin-bottom: var(--s-4);
+  }
+
+  /* ---- Actions ----------------------------------------------------------- */
+  .dialog-actions {
+    display: flex;
+    gap: var(--s-3);
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: var(--s-6);
+  }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-4);
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn-primary { background: var(--c-primary); color: var(--c-on-primary); }
+  .btn-primary:hover { background: var(--c-primary-hover); }
+  .btn-danger { background: var(--c-danger); color: var(--c-on-primary); }
+  .btn-secondary { background: transparent; color: var(--c-text); border-color: var(--c-border); }
+  .btn-link { background: transparent; border: 0; color: var(--c-link); padding: 0; text-decoration: underline; font-size: var(--t-xs); cursor: pointer; }
+  .btn:focus-visible, .btn-link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] {
+    background: var(--c-surface-alt);
+    color: var(--c-text-disabled);
+    border-color: var(--c-border);
+    cursor: not-allowed;
+  }
+  .spinner {
+    width: 0.85em;
+    height: 0.85em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: var(--r-full);
+    display: inline-block;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spinner { animation-duration: 2.4s; } }
+</style>
+</head>
+<body>
+  <h1>Skill editor</h1>
+  <p class="intro">
+    The dialog behind Add a skill and Edit on SCR-005 (REQ-009, REQ-010,
+    REQ-011). A dialog rather than an inline form because adding a skill is
+    three coupled choices — which list, which catalog skill, which proficiency —
+    that are only valid together, and the catalog needs a search field. The same
+    dialog is reused for editing. On mobile it becomes a full-height sheet with
+    its actions pinned in view, so the primary button never sits behind the
+    keyboard.
+  </p>
+
+  <!-- @state SCR-005/ST-13 -->
+  <section class="example">
+    <h2>ST-13 — Add a skill</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t13">
+      <div class="dialog-head">
+        <h3 id="t13">Add a skill</h3>
+        <button type="button" class="close" aria-label="Close">✕</button>
+      </div>
+
+      <fieldset>
+        <legend>Is this something you teach, or something you want to learn?</legend>
+        <div class="choice">
+          <label>
+            <input type="radio" name="mode13" checked />
+            <span><span class="role-icon is-teach" aria-hidden="true">●</span> I can teach this</span>
+          </label>
+          <label>
+            <input type="radio" name="mode13" />
+            <span><span class="role-icon is-learn" aria-hidden="true">◆</span> I want to learn this</span>
+          </label>
+        </div>
+        <p class="consequence">
+          <span aria-hidden="true">ℹ</span>
+          <span>Colleagues will be able to find and book you for this straight away.</span>
+        </p>
+      </fieldset>
+
+      <div class="field">
+        <label for="s13">Skill</label>
+        <input id="s13" type="search" value="exc" aria-expanded="true" aria-describedby="s13hint" />
+        <ul class="results" role="listbox" aria-label="Matching skills">
+          <li><button type="button" role="option" aria-selected="true">Excel</button></li>
+          <li><button type="button" role="option" aria-selected="false">Excel — Power Query</button></li>
+          <li><button type="button" role="option" aria-selected="false">Exchange administration</button></li>
+        </ul>
+        <p class="msg is-info" id="s13hint">
+          <span aria-hidden="true">ℹ</span>
+          <span>Pick from the list. The skill catalog is maintained centrally.</span>
+        </p>
+      </div>
+
+      <fieldset>
+        <legend>Proficiency</legend>
+        <div class="levels">
+          <label><input type="radio" name="lvl13" /> Beginner</label>
+          <label><input type="radio" name="lvl13" /> Intermediate</label>
+          <label><input type="radio" name="lvl13" /> Expert</label>
+        </div>
+      </fieldset>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-primary" disabled>Add skill</button>
+      </div>
+    </div>
+    <p class="note">
+      Add skill stays disabled until both a catalog skill and a proficiency are
+      chosen — no proficiency is pre-selected, because a default here would be
+      the system guessing how good someone is at something. The consequence
+      panel appears only while "I can teach this" is selected: REQ-013 and
+      BR-001.1 make that choice public immediately, with no approval step, and
+      that is the most surprising thing this screen does. The employee meets it
+      before it happens rather than discovering it from a booking request. Levels
+      are spelled out, never dots or colours.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-14 -->
+  <section class="example">
+    <h2>ST-14 — That skill isn't in the catalog</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t14">
+      <div class="dialog-head">
+        <h3 id="t14">Add a skill</h3>
+        <button type="button" class="close" aria-label="Close">✕</button>
+      </div>
+      <div class="field">
+        <label for="s14">Skill</label>
+        <input id="s14" type="search" value="kubernetes" aria-describedby="s14msg" />
+        <div class="no-match" id="s14msg" role="status">
+          <span>No skill matches “kubernetes”.</span>
+          <span class="msg is-info" style="margin: 0">
+            <span aria-hidden="true">ℹ</span>
+            <span>The skill catalog is maintained centrally, so it can't be added from here.</span>
+          </span>
+          <span class="tbd">TBD (OQ-E5) — how an employee asks for a new catalog entry, and the exact wording, is not yet decided. Owner: BA + IT.</span>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-primary" disabled>Add skill</button>
+      </div>
+    </div>
+    <p class="note">
+      This state matters more than it looks. RISK-001 in the BRD is precisely
+      this moment — the point where an employee with a skill the organization
+      wants either gets a route or gives up. The BRD names a "lightweight
+      request-a-new-skill path to IT" as the mitigation, but no requirement
+      creates one and BRD §8 rules out an in-app editor. The dashed placeholder
+      stays on screen until someone owns the answer; free text is never accepted
+      as a skill, because trainer search matches on catalog entries.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-15 -->
+  <section class="example">
+    <h2>ST-15 — You've already listed that</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t15">
+      <div class="dialog-head">
+        <h3 id="t15">Add a skill</h3>
+        <button type="button" class="close" aria-label="Close">✕</button>
+      </div>
+      <div class="field">
+        <label for="s15">Skill</label>
+        <input id="s15" type="search" value="Excel" aria-describedby="s15msg" />
+        <p class="msg is-warn" id="s15msg" role="status">
+          <span aria-hidden="true">⚠</span>
+          <span>
+            You already teach Excel at Expert level.
+            <button type="button" class="btn-link">Edit it instead?</button>
+          </span>
+        </p>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-primary" disabled>Add skill</button>
+      </div>
+    </div>
+    <p class="note">
+      A dead end with a way out: the note offers the edit the employee probably
+      wanted. The same skill in the <em>other</em> list is not a duplicate and is
+      not blocked — REQ-009 says a skill may be listed "to teach and/or to
+      learn", so someone may teach Excel and be learning Excel at once. Whether
+      that literal reading is what was intended is OQ-E4, and it belongs to the
+      BA.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-16 -->
+  <section class="example">
+    <h2>ST-16 — Saving the skill</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t16">
+      <div class="dialog-head">
+        <h3 id="t16">Add a skill</h3>
+        <button type="button" class="close" aria-label="Close" disabled>✕</button>
+      </div>
+      <div class="field">
+        <label for="s16">Skill</label>
+        <span class="fixed-skill"><span aria-hidden="true">●</span> Excel</span>
+      </div>
+      <fieldset>
+        <legend>Proficiency</legend>
+        <div class="levels">
+          <label><input type="radio" name="lvl16" disabled /> Beginner</label>
+          <label><input type="radio" name="lvl16" disabled /> Intermediate</label>
+          <label><input type="radio" name="lvl16" checked disabled /> Expert</label>
+        </div>
+      </fieldset>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+        <button type="button" class="btn btn-primary" disabled>
+          <span class="spinner" aria-hidden="true"></span> Adding…
+        </button>
+      </div>
+    </div>
+    <p class="note">
+      The dialog is held open and everything in it is disabled, the close button
+      included. Escape is inert while the request is in flight, so a
+      half-committed change cannot be dismissed and leave the employee unsure
+      whether it saved.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-18 -->
+  <section class="example">
+    <h2>ST-18 — Couldn't save the skill</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t18">
+      <div class="dialog-head">
+        <h3 id="t18">Add a skill</h3>
+        <button type="button" class="close" aria-label="Close">✕</button>
+      </div>
+      <div class="dialog-error" role="alert">
+        <span aria-hidden="true">⚠</span>
+        <span>Couldn't add that skill. Please try again.</span>
+      </div>
+      <div class="field">
+        <label for="s18">Skill</label>
+        <span class="fixed-skill"><span aria-hidden="true">●</span> Excel</span>
+      </div>
+      <fieldset>
+        <legend>Proficiency</legend>
+        <div class="levels">
+          <label><input type="radio" name="lvl18" /> Beginner</label>
+          <label><input type="radio" name="lvl18" /> Intermediate</label>
+          <label><input type="radio" name="lvl18" checked /> Expert</label>
+        </div>
+      </fieldset>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-primary">Add skill</button>
+      </div>
+    </div>
+    <p class="note">
+      Every choice the employee made survives, so retrying is one click rather
+      than three. Nothing is added to the card behind the dialog — the list never
+      shows a chip that isn't saved.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-19 -->
+  <section class="example">
+    <h2>ST-19 — Editing a listed skill</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t19">
+      <div class="dialog-head">
+        <h3 id="t19">Edit skill</h3>
+        <button type="button" class="close" aria-label="Close">✕</button>
+      </div>
+      <div class="field">
+        <label for="s19">Skill</label>
+        <span class="fixed-skill" id="s19"><span aria-hidden="true">●</span> Excel</span>
+        <p class="msg is-info">
+          <span aria-hidden="true">ℹ</span>
+          <span>To list a different skill, remove this one and add the other.</span>
+        </p>
+      </div>
+      <fieldset>
+        <legend>Is this something you teach, or something you want to learn?</legend>
+        <div class="choice">
+          <label>
+            <input type="radio" name="mode19" checked />
+            <span><span class="role-icon is-teach" aria-hidden="true">●</span> I can teach this</span>
+          </label>
+          <label>
+            <input type="radio" name="mode19" />
+            <span><span class="role-icon is-learn" aria-hidden="true">◆</span> I want to learn this</span>
+          </label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Proficiency</legend>
+        <div class="levels">
+          <label><input type="radio" name="lvl19" /> Beginner</label>
+          <label><input type="radio" name="lvl19" /> Intermediate</label>
+          <label><input type="radio" name="lvl19" checked /> Expert</label>
+        </div>
+      </fieldset>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-primary" disabled>Save changes</button>
+      </div>
+    </div>
+    <p class="note">
+      The skill itself is fixed text, not a search field: changing which skill it
+      is would be removing one and adding another, not an edit. Save changes is
+      disabled until something actually differs, the same rule the profile form
+      uses. Switching teach ↔ learn here moves the chip between cards on save; if
+      that would collide with an entry already in the target list, ST-15's note
+      applies.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-20 -->
+  <section class="example">
+    <h2>ST-20 — Removing a skill</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t20">
+      <div class="dialog-head">
+        <h3 id="t20">Remove Excel from the skills you teach?</h3>
+      </div>
+      <p class="msg is-warn" style="margin-top: 0">
+        <span aria-hidden="true">⚠</span>
+        <span>Colleagues will no longer find you for this skill.</span>
+      </p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Cancel</button>
+        <button type="button" class="btn btn-danger">Remove</button>
+      </div>
+    </div>
+    <p class="note">
+      Focus starts on Cancel, not Remove, so a stray Enter cannot delete a skill.
+      Removal is confirmed and a proficiency change is not, because removal
+      cannot be undone from this screen and, for a teachable skill, changes who
+      can reach the employee. While removing, both buttons disable and Remove
+      shows a spinner.
+    </p>
+  </section>
+
+  <section class="example">
+    <h2>ST-20 — Removal refused (conflict C-1's working default)</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="t20b">
+      <div class="dialog-head">
+        <h3 id="t20b">Excel can't be removed yet</h3>
+      </div>
+      <div class="dialog-error" role="alert">
+        <span aria-hidden="true">⚠</span>
+        <span>You have 1 upcoming session and 2 pending requests for Excel. Cancel or complete these before removing the skill.</span>
+      </div>
+      <span class="tbd">
+        Placeholder — conflict C-1. REQ-011 lets an employee remove a listed skill
+        unconditionally; REQ-015, REQ-017 and REQ-021 let requests and confirmed
+        sessions exist against it. Nothing says which wins. This draws the
+        conservative reading so the frames can be built; the decision is the BA's.
+      </span>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary">Close</button>
+        <button type="button" class="btn btn-primary">View my sessions</button>
+      </div>
+    </div>
+    <p class="note">
+      Shown so the reviewer can see the shape of the conservative default, not
+      because it is settled. If the BA rules the other way, this becomes an
+      ordinary confirm carrying a warning about the sessions it will affect —
+      same dialog, different copy and a different primary action.
+    </p>
+  </section>
+</body>
+</html>
