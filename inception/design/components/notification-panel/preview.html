@@ -1,0 +1,849 @@
+<!-- @dsCard group="Overlays" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Notification panel and page</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-warning: #d97706;
+    --c-warning-bg: #fffbeb;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-xl: 1.25rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-warning: #fbbf24;
+      --c-warning-bg: rgba(251, 191, 36, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 640px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+  .caption {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2);
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The panel --------------------------------------------------------
+   * Header and footer are fixed; only the list scrolls, so "Mark all read"
+   * and "See all" never have to be hunted for.
+   */
+  .panel {
+    width: 22rem;
+    max-width: 100%;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding: var(--s-3);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .panel-head h3 {
+    margin: 0;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .panel-body > * + * { border-top: 1px solid var(--c-border); }
+  .panel-foot {
+    padding: var(--s-3);
+    border-top: 1px solid var(--c-border);
+    text-align: center;
+  }
+  .panel-foot a { color: var(--c-link); font-size: var(--t-sm); font-weight: var(--fw-medium); }
+
+  /* ---- Rows (the notification-row component, rendered here in context) --- */
+  .n {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--s-3);
+    row-gap: var(--s-1);
+    align-items: start;
+    padding: var(--s-3);
+    text-decoration: none;
+    color: inherit;
+    background: var(--c-surface);
+  }
+  a.n:hover { background: var(--c-surface-alt); }
+  a.n:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+  .n .lead { display: flex; align-items: center; gap: var(--s-2); grid-row: 1 / span 3; }
+  .n .dot { width: 0.5rem; height: 0.5rem; border-radius: var(--r-full); background: var(--c-primary); flex: none; }
+  .n .icon { font-size: var(--t-base); line-height: 1; width: 1.25rem; text-align: center; flex: none; }
+  .n .kind {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-text-secondary);
+  }
+  .n .sentence { font-size: var(--t-sm); line-height: var(--lh-normal); }
+  .n .when { font-size: var(--t-xs); color: var(--c-text-secondary); }
+  .n.is-unread { background: var(--c-info-bg); }
+  .n.is-unread:hover { background: var(--c-surface-alt); }
+  .n.is-unread .sentence { font-weight: var(--fw-semibold); }
+  .n.is-read .dot { background: transparent; }
+  .icon.is-info { color: var(--c-info); }
+  .icon.is-success { color: var(--c-success); }
+  .icon.is-danger { color: var(--c-danger); }
+  .icon.is-warning { color: var(--c-warning); }
+  .icon.is-muted { color: var(--c-text-secondary); }
+  .n.is-new { animation: fadein 0.25s ease-out; }
+  @keyframes fadein { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .n.is-new { animation: none; } }
+
+  /* ---- Controls ---------------------------------------------------------- */
+  .link-btn {
+    font: inherit;
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    background: none;
+    border: none;
+    padding: var(--s-1) var(--s-2);
+    border-radius: var(--r-sm);
+    color: var(--c-link);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .link-btn:hover { background: var(--c-surface-alt); }
+  .link-btn[disabled] { color: var(--c-text-disabled); cursor: default; background: none; }
+  .link-btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    cursor: pointer;
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-surface-alt); }
+  .btn[disabled] { color: var(--c-text-disabled); background: var(--c-surface-alt); cursor: default; }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- Skeletons --------------------------------------------------------- */
+  .skel-row { display: grid; grid-template-columns: auto 1fr; column-gap: var(--s-3); padding: var(--s-3); }
+  .skel {
+    background: var(--c-surface-alt);
+    border-radius: var(--r-sm);
+    height: 0.7rem;
+  }
+  .skel.circle { width: 1.25rem; height: 1.25rem; border-radius: var(--r-full); }
+  .skel.line-a { width: 35%; margin-bottom: var(--s-2); }
+  .skel.line-b { width: 85%; margin-bottom: var(--s-2); }
+  .skel.line-c { width: 45%; }
+
+  /* ---- In-panel messages -------------------------------------------------- */
+  .msg {
+    padding: var(--s-6) var(--s-4);
+    text-align: center;
+    display: grid;
+    gap: var(--s-2);
+    justify-items: center;
+  }
+  .msg .glyph { font-size: var(--t-xl); color: var(--c-text-secondary); }
+  .msg .headline { font-size: var(--t-sm); font-weight: var(--fw-semibold); }
+  .msg .sub { font-size: var(--t-xs); color: var(--c-text-secondary); line-height: var(--lh-normal); max-width: 22rem; }
+  .msg.is-error .glyph, .msg.is-error .headline { color: var(--c-danger); }
+
+  .inline-err {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    padding: 0 var(--s-3) var(--s-3);
+  }
+
+  /* ---- The bell (badge cap lives here) ----------------------------------- */
+  .bellbar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding: var(--s-3);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+  }
+  .bell {
+    position: relative;
+    font: inherit;
+    font-size: var(--t-lg);
+    background: none;
+    border: none;
+    color: var(--c-text-secondary);
+    padding: var(--s-2);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    line-height: 1;
+  }
+  .bell:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  .bell:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .bell .count {
+    position: absolute;
+    top: 0;
+    inset-inline-start: 60%;
+    background: var(--c-danger);
+    color: var(--c-on-primary);
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    line-height: 1;
+    padding: 0.15rem 0.3rem;
+    border-radius: var(--r-full);
+    min-width: 1rem;
+    text-align: center;
+  }
+
+  /* ---- The page ---------------------------------------------------------- */
+  .page {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    padding: var(--s-4);
+  }
+  .page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    margin-bottom: var(--s-3);
+  }
+  .page-head h3 { margin: 0; font-size: var(--t-lg); font-weight: var(--fw-semibold); }
+  .filters { display: flex; gap: var(--s-2); flex-wrap: nowrap; overflow-x: auto; margin-bottom: var(--s-4); }
+  .filter {
+    font: inherit;
+    font-size: var(--t-xs);
+    font-weight: var(--fw-medium);
+    border: 1px solid var(--c-border);
+    background: var(--c-surface);
+    color: var(--c-text-secondary);
+    border-radius: var(--r-full);
+    padding: var(--s-1) var(--s-3);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .filter:hover { background: var(--c-surface-alt); }
+  .filter[aria-pressed='true'] {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+  .filter:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .timehead {
+    font-size: var(--t-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--c-text-secondary);
+    margin: var(--s-4) 0 var(--s-2);
+  }
+  .timehead:first-of-type { margin-top: 0; }
+  .cards { display: grid; gap: var(--s-2); }
+  .cards .n {
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+  }
+  .pager { text-align: center; margin-top: var(--s-4); }
+  .end {
+    text-align: center;
+    margin-top: var(--s-4);
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+  }
+
+  /* ---- Narrow-width sheet (SCR-009/ST-06) -------------------------------- */
+  .phone {
+    width: 20rem;
+    max-width: 100%;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    background: var(--c-surface);
+  }
+  .sheet-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--s-3);
+    border-bottom: 1px solid var(--c-border);
+  }
+  .sheet-head h3 { margin: 0; font-size: var(--t-base); font-weight: var(--fw-semibold); }
+  .sheet-sub { padding: var(--s-2) var(--s-3); border-bottom: 1px solid var(--c-border); }
+  .close {
+    font: inherit;
+    font-size: var(--t-lg);
+    line-height: 1;
+    background: none;
+    border: none;
+    color: var(--c-text-secondary);
+    cursor: pointer;
+    padding: var(--s-1) var(--s-2);
+    border-radius: var(--r-sm);
+  }
+  .close:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  .close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<h1>Notification panel and page — SCR-009</h1>
+<p class="caption">
+  One list, two presentations. The panel drops from the bell on any
+  authenticated screen and holds the 5 most recent; the page at
+  <code>/notifications</code> holds the lot, filtered and paged. Rows come from
+  the <code>notification-row</code> component and are rendered here in context.
+</p>
+
+<!--
+  ST-02. The panel opens at full width before the data lands, so it does not
+  resize under the cursor. "Mark all read" is absent rather than disabled —
+  there is nothing yet to mark.
+-->
+<!-- @state SCR-009/ST-02 -->
+<section class="example">
+  <h2>Panel — loading</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head"><h3>Notifications</h3></div>
+    <div class="panel-body" aria-busy="true">
+      <div class="skel-row"><span class="skel circle"></span><span><span class="skel line-a" style="display:block"></span><span class="skel line-b" style="display:block"></span><span class="skel line-c" style="display:block"></span></span></div>
+      <div class="skel-row"><span class="skel circle"></span><span><span class="skel line-a" style="display:block"></span><span class="skel line-b" style="display:block"></span><span class="skel line-c" style="display:block"></span></span></div>
+      <div class="skel-row"><span class="skel circle"></span><span><span class="skel line-a" style="display:block"></span><span class="skel line-b" style="display:block"></span><span class="skel line-c" style="display:block"></span></span></div>
+    </div>
+  </div>
+  <p class="note">
+    Three skeleton rows at the height a real row occupies. The panel is sized
+    before the data arrives, so nothing jumps when it lands and the pointer is
+    still over what it was over.
+  </p>
+</section>
+
+<!--
+  ST-03. Never received one. No "See all" footer — a page of nothing is not
+  worth a click.
+-->
+<!-- @state SCR-009/ST-03 -->
+<section class="example">
+  <h2>Panel — nothing yet</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head"><h3>Notifications</h3></div>
+    <div class="msg">
+      <span class="glyph" aria-hidden="true">🔔</span>
+      <span class="headline">No notifications yet.</span>
+      <span class="sub">We'll tell you here when someone books, approves, or cancels a session.</span>
+    </div>
+  </div>
+  <p class="note">
+    States what will bring them here rather than only stating absence. The
+    footer link is gone: sending someone to a page that is also empty is a
+    wasted click.
+  </p>
+</section>
+
+<!--
+  ST-04. The panel's own request failed. The page behind is untouched.
+-->
+<!-- @state SCR-009/ST-04 -->
+<section class="example">
+  <h2>Panel — could not load</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head"><h3>Notifications</h3></div>
+    <div class="msg is-error" aria-live="assertive">
+      <span class="glyph" aria-hidden="true">⚠</span>
+      <span class="headline">Couldn't load notifications.</span>
+      <button class="btn" type="button">Try again</button>
+    </div>
+  </div>
+  <p class="note">
+    The failure is contained in the panel. Whatever screen the employee was on
+    stays fully usable behind it — the bell is never a way to break the page you
+    were working on.
+  </p>
+</section>
+
+<!--
+  ST-17 / ST-18 / ST-19. Mark all read, all three outcomes. Rows change on
+  success, not on click: this control clears the whole list, and a mistaken
+  optimistic clear is expensive to undo.
+-->
+<!-- @state SCR-009/ST-17 -->
+<section class="example">
+  <h2>Panel — marking all read</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head">
+      <h3>Notifications</h3>
+      <button class="link-btn" type="button" disabled><span class="spin" aria-hidden="true"></span> Marking…</button>
+    </div>
+    <div class="panel-body">
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">2h ago</span>
+      </a>
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-success" aria-hidden="true">✓</span></span>
+        <span class="kind">Approved</span>
+        <span class="sentence">Priya M. approved your Excel session</span>
+        <span class="when">3h ago</span>
+      </a>
+    </div>
+    <div class="panel-foot"><a href="#">See all →</a></div>
+  </div>
+  <p class="note">
+    Dots are still there. Rows are still openable — one slow bookkeeping call
+    should not freeze the list it is bookkeeping.
+  </p>
+</section>
+
+<!-- @state SCR-009/ST-18 -->
+<section class="example">
+  <h2>Panel — marked all read</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head"><h3 tabindex="-1">Notifications</h3></div>
+    <div class="panel-body">
+      <a class="n is-read" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">2h ago</span>
+      </a>
+      <a class="n is-read" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-success" aria-hidden="true">✓</span></span>
+        <span class="kind">Approved</span>
+        <span class="sentence">Priya M. approved your Excel session</span>
+        <span class="when">3h ago</span>
+      </a>
+    </div>
+    <div class="panel-foot"><a href="#">See all →</a></div>
+  </div>
+  <p class="visually-hidden" aria-live="polite">All notifications marked as read.</p>
+  <p class="note">
+    Every dot and tint goes at once, the badge disappears, and the control
+    removes itself — so focus moves to the panel heading rather than being
+    dropped on <code>&lt;body&gt;</code>. The surface is now ST-05.
+  </p>
+</section>
+
+<!-- @state SCR-009/ST-19 -->
+<section class="example">
+  <h2>Panel — marking all read failed</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head">
+      <h3>Notifications</h3>
+      <button class="link-btn" type="button">Mark all read</button>
+    </div>
+    <div class="inline-err" aria-live="polite">
+      <span aria-hidden="true">⚠</span> Couldn't mark those as read.
+    </div>
+    <div class="panel-body">
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">2h ago</span>
+      </a>
+    </div>
+    <div class="panel-foot"><a href="#">See all →</a></div>
+  </div>
+  <p class="note">
+    Dots and badge untouched, so what the employee sees still matches the truth.
+    The control comes back enabled; reading rows one at a time still works.
+  </p>
+</section>
+
+<!--
+  ST-20. Something arrives while the surface is open.
+-->
+<!-- @state SCR-009/ST-20 -->
+<section class="example">
+  <h2>Panel — a notification arrives while it is open</h2>
+  <div class="panel" role="dialog" aria-label="Notifications">
+    <div class="panel-head">
+      <h3>Notifications</h3>
+      <button class="link-btn" type="button">Mark all read</button>
+    </div>
+    <div class="panel-body">
+      <a class="n is-unread is-new" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-danger" aria-hidden="true">⊘</span></span>
+        <span class="kind">Cancelled</span>
+        <span class="sentence">Arun K. cancelled your Python session</span>
+        <span class="when">just now</span>
+      </a>
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">2h ago</span>
+      </a>
+    </div>
+    <div class="panel-foot"><a href="#">See all →</a></div>
+  </div>
+  <p class="visually-hidden" aria-live="polite">1 new notification.</p>
+  <p class="note">
+    The row fades in at the top and the panel drops its oldest to stay at five.
+    The announcement gives the count, never the sentence — an employee mid-task
+    should not have a colleague's cancellation read at them. Nothing scrolls and
+    focus does not move. Whether arrivals happen without a reload at all is
+    OQ-D4, an architecture question; if they do not, this state simply never
+    occurs and nothing else changes.
+  </p>
+</section>
+
+<!--
+  ST-06. Below the breakpoint the dropdown becomes a full-screen sheet. A 320px
+  dropdown anchored to a bell at the screen edge is unreadable and hard to
+  dismiss (NFR-004).
+-->
+<!-- @state SCR-009/ST-06 -->
+<section class="example">
+  <h2>Narrow width — the panel is a sheet, not a dropdown</h2>
+  <div class="phone" role="dialog" aria-label="Notifications">
+    <div class="sheet-head">
+      <h3>Notifications</h3>
+      <button class="close" type="button" aria-label="Close notifications">×</button>
+    </div>
+    <div class="sheet-sub"><button class="link-btn" type="button">Mark all read</button></div>
+    <div class="panel-body">
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">Thu 14:00 &middot; 2h ago</span>
+      </a>
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-success" aria-hidden="true">✓</span></span>
+        <span class="kind">Approved</span>
+        <span class="sentence">Priya M. approved your Excel session</span>
+        <span class="when">Thu 14:00 &middot; 3h ago</span>
+      </a>
+    </div>
+    <div class="panel-foot"><a href="#">See all →</a></div>
+  </div>
+  <p class="note">
+    Presentation only — every other panel state renders inside this sheet at
+    this width. The × is at the trailing edge and Escape still works; closing
+    returns focus to the bell either way.
+  </p>
+</section>
+
+<!--
+  ST-07. The badge caps at 9+ so it stops changing width and shoving the header
+  around. The true figure stays in the accessible name.
+-->
+<!-- @state SCR-009/ST-07 -->
+<section class="example">
+  <h2>Bell — unread count at the cap</h2>
+  <div class="bellbar">
+    <button class="bell" type="button" aria-label="Notifications, 3 unread" aria-expanded="false">
+      <span aria-hidden="true">🔔</span><span class="count" aria-hidden="true">3</span>
+    </button>
+    <button class="bell" type="button" aria-label="Notifications, 12 unread" aria-expanded="false">
+      <span aria-hidden="true">🔔</span><span class="count" aria-hidden="true">9+</span>
+    </button>
+    <button class="bell" type="button" aria-label="Notifications, none unread" aria-expanded="false">
+      <span aria-hidden="true">🔔</span>
+    </button>
+  </div>
+  <p class="note">
+    Below the cap the numeral shows (already specified by <code>app-header</code>);
+    at ten or more it reads 9+ while the accessible name still says "12 unread".
+    A numeral is deliberate rather than a bare dot — "something happened" and
+    "eleven things happened" are different facts.
+  </p>
+</section>
+
+<!--
+  ST-09. The page's own load. The shell renders in full; the filter row appears
+  but inert and without counts, because the count is not known yet.
+-->
+<!-- @state SCR-009/ST-09 -->
+<section class="example">
+  <h2>Page — loading</h2>
+  <div class="page">
+    <div class="page-head"><h3>Notifications</h3></div>
+    <div class="filters">
+      <button class="filter" type="button" disabled>All</button>
+      <button class="filter" type="button" disabled>Unread</button>
+      <button class="filter" type="button" disabled>Bookings</button>
+      <button class="filter" type="button" disabled>Sessions</button>
+    </div>
+    <div aria-busy="true">
+      <p class="timehead"><span class="skel" style="display:inline-block;width:4rem"></span></p>
+      <div class="cards">
+        <div class="skel-row" style="border:1px solid var(--c-border);border-radius:var(--r-md)"><span class="skel circle"></span><span><span class="skel line-a" style="display:block"></span><span class="skel line-b" style="display:block"></span><span class="skel line-c" style="display:block"></span></span></div>
+        <div class="skel-row" style="border:1px solid var(--c-border);border-radius:var(--r-md)"><span class="skel circle"></span><span><span class="skel line-a" style="display:block"></span><span class="skel line-b" style="display:block"></span><span class="skel line-c" style="display:block"></span></span></div>
+      </div>
+    </div>
+  </div>
+  <p class="note">
+    The page loads independently of the panel — opening it after the panel is a
+    second request that can fail on its own, which is why both presentations
+    carry the full loading / empty / error floor.
+  </p>
+</section>
+
+<!--
+  ST-10. Never received one, at page scale. No filter row: nothing to filter.
+-->
+<!-- @state SCR-009/ST-10 -->
+<section class="example">
+  <h2>Page — nothing yet</h2>
+  <div class="page">
+    <div class="page-head"><h3>Notifications</h3></div>
+    <div class="msg">
+      <span class="glyph" aria-hidden="true">🔔</span>
+      <span class="headline">No notifications yet.</span>
+      <span class="sub">We'll tell you here when someone books, approves, or cancels a session.</span>
+      <a href="#">Find a trainer</a>
+    </div>
+  </div>
+  <p class="note">
+    The one difference from the panel's empty: a page has room to propose the
+    thing that would eventually produce a notification.
+  </p>
+</section>
+
+<!-- @state SCR-009/ST-11 -->
+<section class="example">
+  <h2>Page — could not load</h2>
+  <div class="page">
+    <div class="page-head"><h3>Notifications</h3></div>
+    <div class="msg is-error" aria-live="assertive">
+      <span class="glyph" aria-hidden="true">⚠</span>
+      <span class="headline">We couldn't load your notifications.</span>
+      <button class="btn" type="button">Try again</button>
+    </div>
+  </div>
+  <p class="note">
+    The application shell above stays as it is, so the employee is never
+    trapped: they can navigate away or log out from a failed page.
+  </p>
+</section>
+
+<!--
+  ST-12. A filter with results. Selection is a fill AND aria-pressed, never
+  colour alone. Empty time headings are not rendered.
+-->
+<!-- @state SCR-009/ST-12 -->
+<section class="example">
+  <h2>Page — filtered, with results</h2>
+  <div class="page">
+    <div class="page-head">
+      <h3>Notifications</h3>
+      <button class="link-btn" type="button">Mark all read</button>
+    </div>
+    <div class="filters">
+      <button class="filter" type="button" aria-pressed="false">All</button>
+      <button class="filter" type="button" aria-pressed="true">Unread 2</button>
+      <button class="filter" type="button" aria-pressed="false">Bookings</button>
+      <button class="filter" type="button" aria-pressed="false">Sessions</button>
+    </div>
+    <p class="timehead">Today</p>
+    <div class="cards">
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">✉</span></span>
+        <span class="kind">Request received</span>
+        <span class="sentence">Arun K. requested a Python session</span>
+        <span class="when">Thu 14:00 &middot; 2h ago</span>
+      </a>
+      <a class="n is-unread" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-success" aria-hidden="true">✓</span></span>
+        <span class="kind">Approved</span>
+        <span class="sentence">Priya M. approved your Excel session</span>
+        <span class="when">Thu 14:00 &middot; 3h ago</span>
+      </a>
+    </div>
+  </div>
+  <p class="visually-hidden" aria-live="polite">2 notifications.</p>
+  <p class="note">
+    Four filters, not one per kind — eight would be a filter row longer than
+    most lists behind it. Bookings covers N1–N5, Sessions covers N6–N8. The
+    selection is not remembered between visits: coming back to a page still
+    filtered from last week and reading "Nothing here" looks like a broken
+    product, not like a filter.
+  </p>
+</section>
+
+<!--
+  ST-13. Filter matches nothing. Deliberately not the same as ST-10: "you have
+  nothing" and "nothing matches this filter" are different facts.
+-->
+<!-- @state SCR-009/ST-13 -->
+<section class="example">
+  <h2>Page — filtered, nothing matches</h2>
+  <div class="page">
+    <div class="page-head"><h3>Notifications</h3></div>
+    <div class="filters">
+      <button class="filter" type="button" aria-pressed="false">All</button>
+      <button class="filter" type="button" aria-pressed="true">Unread</button>
+      <button class="filter" type="button" aria-pressed="false">Bookings</button>
+      <button class="filter" type="button" aria-pressed="false">Sessions</button>
+    </div>
+    <div class="msg">
+      <span class="headline">Nothing here.</span>
+      <span class="sub">No unread notifications.</span>
+      <a href="#">Show all</a>
+    </div>
+  </div>
+  <p class="note">
+    The filter row stays intact with the selection still visible, so the reason
+    the list is empty is on screen. Offering "Find a trainer" here would be
+    answering a question nobody asked.
+  </p>
+</section>
+
+<!--
+  ST-14. Show older, in flight. Everything already on the page stays live.
+-->
+<!-- @state SCR-009/ST-14 -->
+<section class="example">
+  <h2>Page — loading older</h2>
+  <div class="page">
+    <p class="timehead">Earlier</p>
+    <div class="cards">
+      <a class="n is-read" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-muted" aria-hidden="true">⏰</span></span>
+        <span class="kind">Reminder</span>
+        <span class="sentence">Your Excel session with Priya M. starts in 1 hour</span>
+        <span class="when">last Tuesday</span>
+      </a>
+    </div>
+    <div class="pager">
+      <button class="btn" type="button" disabled><span class="spin" aria-hidden="true"></span> Loading…</button>
+    </div>
+  </div>
+  <p class="note">
+    Pages of 20 with a real button, not infinite scroll — the footer of the page
+    stays reachable and a keyboard user gets something to land on. If the next
+    page fails, the button comes back with an inline "Couldn't load older
+    notifications. Try again."; rows already on screen are never removed because
+    a later page failed.
+  </p>
+</section>
+
+<!-- @state SCR-009/ST-15 -->
+<section class="example">
+  <h2>Page — end of the list</h2>
+  <div class="page">
+    <p class="timehead">Earlier</p>
+    <div class="cards">
+      <a class="n is-read" href="#">
+        <span class="lead"><span class="dot" aria-hidden="true"></span><span class="icon is-info" aria-hidden="true">★</span></span>
+        <span class="kind">Feedback</span>
+        <span class="sentence">How was your SQL session with Meera S.?</span>
+        <span class="when">3 weeks ago</span>
+      </a>
+    </div>
+    <p class="end">That's everything.</p>
+  </div>
+  <p class="note">
+    The button is gone rather than disabled. A control that yields nothing is
+    worse than no control — one closing line answers "is that all?" without
+    inviting a click that does nothing.
+  </p>
+</section>
+
+</body>
+</html>
