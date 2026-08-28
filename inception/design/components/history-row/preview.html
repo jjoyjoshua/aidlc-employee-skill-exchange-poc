@@ -288,11 +288,81 @@
     width: 60%;
   }
 
+  /* ---- The trainer's side: SCR-007's "Sessions you've taught" ------------ */
+  .past.is-awaiting { border-color: var(--c-warning); }
+  .await {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-warning);
+  }
+  .no-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    color: var(--c-text-secondary);
+  }
+  .btn-primary {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+    color: var(--c-on-primary);
+  }
+  .btn-primary:hover {
+    background: var(--c-primary-hover);
+    border-color: var(--c-primary-hover);
+  }
+  .btn-primary[disabled]:hover {
+    background: var(--c-primary);
+    border-color: var(--c-primary);
+  }
+  .confirm {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+    flex: 1 1 100%;
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--c-border);
+    font-size: var(--t-sm);
+  }
+  .confirm .ask { flex: 1 1 14rem; line-height: var(--lh-normal); }
+  .done {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-success);
+    line-height: var(--lh-normal);
+  }
+  .row-error {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    flex: 1 1 100%;
+    margin-top: var(--s-2);
+  }
+
   .mono { filter: grayscale(1); }
 </style>
 </head>
 <body>
   <h1>History row</h1>
+
+  <p>
+    One finished session, read from whichever side you were on. The learner sees
+    it in Finished on SCR-008; the trainer sees the same session in Sessions
+    you&rsquo;ve taught on SCR-007. Same shape, same date, same rating — a
+    different name opposite yours, and a different set of actions, because only
+    one of you can confirm that it happened and only one of you gets the
+    certificate.
+  </p>
 
   <p>
     One completed session in the learner&rsquo;s Learning History on SCR-008 —
@@ -465,6 +535,222 @@
     </p>
   </section>
 
+  <hr style="border: 0; border-top: 1px solid var(--c-border); width: 100%" />
+
+  <h1>The trainer&rsquo;s side — SCR-007</h1>
+
+  <p>
+    The same row in <em>Sessions you&rsquo;ve taught</em>. It carries the four
+    facts REQ-027 names — learner, skill taught, session date, rating received —
+    and, before any of that is true, the one action REQ-022 gives the trainer.
+    No certificate action anywhere here: REQ-024 generates that for the learner.
+  </p>
+
+  <!--
+    SCR-007/ST-22. The trainer's side of the moment SCR-008/ST-15 shows the
+    learner as "Waiting for Priya to confirm this happened." The learner has no
+    action there, so this row is the only place the state can be resolved — and
+    it sorts to the top for the same reason an unrated row does on SCR-008: it
+    is the only row in the card carrying an action. The header announces the
+    sort so it does not read as a bug.
+  -->
+  <!-- @state SCR-007/ST-22 -->
+  <section class="example">
+    <h2>Waiting for you to confirm</h2>
+    <div class="sec-head">
+      <span class="title">Sessions you&rsquo;ve taught (4)</span>
+      <span class="waiting"><span aria-hidden="true">⏱</span> 1 waiting for you to confirm</span>
+    </div>
+    <div class="past is-awaiting">
+      <span class="what">
+        <span class="title">Priya M. &middot; Excel</span>
+        <span class="meta">
+          <span class="chip">Excel</span>
+          <span>Thu 4 Sep</span>
+        </span>
+        <span class="meta">
+          <span class="await"><span aria-hidden="true">⏱</span> Did this happen?</span>
+        </span>
+      </span>
+      <span class="actions">
+        <button class="btn btn-primary" type="button">Mark as complete</button>
+      </span>
+    </div>
+    <p class="note">
+      The action appears only once the start time has passed — REQ-022 says
+      &ldquo;after it has occurred&rdquo;, and BR-005.1 would issue a real
+      certificate for a session certified early. What the trainer does when the
+      session did <em>not</em> happen is conflict C-2: there is no second
+      action, because no requirement defines one.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-23, ST-24, ST-26. Confirm in the row, not in a modal: the action
+    gives a colleague a certificate and a rating prompt rather than taking
+    anything away, so the weight a modal implies is wrong. But it is
+    irreversible (OQ-T10), so the copy names both consequences before the click.
+  -->
+  <!-- @state SCR-007/ST-23 -->
+  <!-- @state SCR-007/ST-24 -->
+  <!-- @state SCR-007/ST-26 -->
+  <section class="example">
+    <h2>Confirming — the confirm step, in flight, and failed</h2>
+    <div class="past is-awaiting">
+      <span class="what">
+        <span class="title">Priya M. &middot; Excel</span>
+        <span class="meta"><span class="chip">Excel</span><span>Thu 4 Sep</span></span>
+      </span>
+      <span class="confirm">
+        <span class="ask">Mark this as complete? Priya gets her certificate and a chance to rate the session.</span>
+        <button class="btn" type="button">Not yet</button>
+        <button class="btn btn-primary" type="button">Yes, it happened</button>
+      </span>
+    </div>
+    <div class="past is-awaiting">
+      <span class="what">
+        <span class="title">Priya M. &middot; Excel</span>
+        <span class="meta"><span class="chip">Excel</span><span>Thu 4 Sep</span></span>
+      </span>
+      <span class="confirm">
+        <span class="ask">Mark this as complete? Priya gets her certificate and a chance to rate the session.</span>
+        <button class="btn" type="button" disabled>Not yet</button>
+        <button class="btn btn-primary" type="button" disabled>
+          <span class="spin" aria-hidden="true"></span><span>Saving&hellip;</span>
+        </button>
+      </span>
+    </div>
+    <div class="past is-awaiting">
+      <span class="what">
+        <span class="title">Priya M. &middot; Excel</span>
+        <span class="meta"><span class="chip">Excel</span><span>Thu 4 Sep</span></span>
+      </span>
+      <span class="confirm">
+        <span class="ask">Mark this as complete? Priya gets her certificate and a chance to rate the session.</span>
+        <button class="btn" type="button">Not yet</button>
+        <button class="btn btn-primary" type="button">Yes, it happened</button>
+      </span>
+      <span class="row-error" aria-live="polite">
+        <span aria-hidden="true">⚠</span>
+        <span>Couldn&rsquo;t save that. Please try again.</span>
+      </span>
+    </div>
+    <p class="note">
+      The error blames the <em>saving</em>, never the session — nobody should
+      read a failed write as &ldquo;this session wasn&rsquo;t eligible&rdquo;.
+      The safe action sits first in both visual and tab order, and at phone
+      width the pair goes full width beneath the text with <strong>Not
+      yet</strong> on top.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-25. Confirmation belongs where the change landed — no page-level
+    banner, consistent with ST-10, ST-17 and SCR-008/ST-24. The line names both
+    things that just happened to somebody else (REQ-024, REQ-023, REQ-028).
+  -->
+  <!-- @state SCR-007/ST-25 -->
+  <section class="example">
+    <h2>Marked complete</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Priya M. &middot; Excel</span>
+        <span class="meta"><span class="chip">Excel</span><span>Thu 4 Sep</span></span>
+        <span class="meta">
+          <span class="done" aria-live="polite">
+            <span aria-hidden="true">✓</span>
+            Marked complete &mdash; Priya has her certificate and can rate the session.
+          </span>
+        </span>
+      </span>
+    </div>
+    <p class="note">
+      Held for a few seconds, then the row settles into its no-rating-yet form
+      below and re-sorts into date order. The header&rsquo;s &ldquo;waiting for
+      you to confirm&rdquo; count decrements and disappears at zero. Focus stays
+      on the row, which survives the action and changes meaning rather than
+      leaving the list.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-27. Words, not five empty stars. On the learner's screen empty
+    stars ARE the control; here they would be a control that does nothing, and
+    an empty star row reads as a score of zero the learner never gave.
+    BR-004.1 makes silence a legitimate answer, so the copy states it flatly.
+  -->
+  <!-- @state SCR-007/ST-27 -->
+  <section class="example">
+    <h2>Taught, no rating left</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Meera S. &middot; Python</span>
+        <span class="meta">
+          <span class="chip">Python</span>
+          <span>29 Jul</span>
+        </span>
+        <span class="meta">
+          <span class="no-rating"><span aria-hidden="true">&mdash;</span> No rating left</span>
+        </span>
+      </span>
+    </div>
+    <p class="note">
+      No nudge and no prompt: there is nothing the trainer could click that
+      would produce a rating, and asking a colleague to rate you is not
+      something this portal does. REQ-023 makes submitting optional, so this is
+      an answer, not an omission.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-28. REQ-027's "rating received", read-only: no reply, no dispute,
+    no acknowledgement. The glyphs are decoration and the number is the
+    information — the same division the learner's rated row makes.
+  -->
+  <!-- @state SCR-007/ST-28 -->
+  <section class="example">
+    <h2>Taught and rated</h2>
+    <div class="past">
+      <span class="what">
+        <span class="title">Arun K. &middot; SQL</span>
+        <span class="meta">
+          <span class="chip">SQL</span>
+          <span>8 Aug</span>
+        </span>
+        <span class="meta">
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★☆</span>
+            <span class="value">4 out of 5</span>
+          </span>
+        </span>
+        <span class="comment">&ldquo;Very clear, and the pivot-table examples were exactly my data.&rdquo;</span>
+      </span>
+    </div>
+    <div class="past">
+      <span class="what">
+        <span class="title">Dan R. &middot; Figma</span>
+        <span class="meta">
+          <span class="chip">Figma</span>
+          <span>21 Jul</span>
+        </span>
+        <span class="meta">
+          <span class="rating">
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="value">5 out of 5</span>
+          </span>
+        </span>
+      </span>
+    </div>
+    <p class="note">
+      Whether the written comment reaches the trainer at all, and whether it
+      carries the learner&rsquo;s name, is OQ-T11 — SCR-008 raised the same gap
+      as OQ-L7. Rendered here on that working default, not on a decision anyone
+      has made: if the answer is &ldquo;anonymous&rdquo;, the name above the
+      comment goes and nothing else changes. The second row is a rating left
+      without a comment, which REQ-023 permits.
+    </p>
+  </section>
+
   <section class="example">
     <h2>Desaturated</h2>
     <div class="mono">
@@ -482,11 +768,27 @@
           <span class="rating"><span class="stars" aria-hidden="true">★★★★☆</span><span class="value">4 out of 5</span></span>
         </span>
       </div>
+      <div class="past is-awaiting">
+        <span class="what">
+          <span class="title">Priya M. &middot; Excel</span>
+          <span class="await"><span aria-hidden="true">⏱</span> Did this happen?</span>
+        </span>
+        <span class="actions"><button class="btn btn-primary" type="button">Mark as complete</button></span>
+      </div>
+      <div class="past">
+        <span class="what">
+          <span class="title">Meera S. &middot; Python</span>
+          <span class="no-rating"><span aria-hidden="true">&mdash;</span> No rating left</span>
+        </span>
+      </div>
     </div>
     <p class="note">
       Rated and unrated stay distinguishable with colour gone, because a
       submitted rating always carries its value as text. Counting filled shapes
-      is never the only way to read it (NFR-003).
+      is never the only way to read it (NFR-003). The trainer&rsquo;s three
+      shapes survive the same test: &ldquo;Did this happen?&rdquo;, &ldquo;No
+      rating left&rdquo; and a rating with its value are each a sentence before
+      they are a colour.
     </p>
   </section>
 </body>
