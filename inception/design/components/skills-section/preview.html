@@ -1,0 +1,449 @@
+<!-- @dsCard group="Data display" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Skills section</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-link: #2563eb;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-success-bg: #f0fdf4;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --c-info: #0284c7;
+    --c-info-bg: #f0f9ff;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --t-xl: 1.25rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-link: #3b82f6;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-success-bg: rgba(74, 222, 128, 0.12);
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --c-info: #38bdf8;
+      --c-info-bg: rgba(56, 189, 248, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-8);
+    max-width: 680px;
+    line-height: var(--lh-normal);
+  }
+  h1 { font-size: var(--t-base); margin: 0; }
+  body > p.intro { margin: 0; color: var(--c-text-secondary); font-size: var(--t-sm); }
+  .example > h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+  }
+  .stack { display: grid; gap: var(--s-4); }
+
+  .card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--s-4) var(--s-6) var(--s-6);
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--s-3);
+  }
+  .card-head h3 { font-size: var(--t-base); font-weight: var(--fw-semibold); margin: 0; }
+
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-4);
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn-primary { background: var(--c-primary); color: var(--c-on-primary); }
+  .btn-primary:hover { background: var(--c-primary-hover); }
+  .btn-secondary { background: transparent; color: var(--c-text); border-color: var(--c-border); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] {
+    background: var(--c-surface-alt);
+    color: var(--c-text-disabled);
+    border-color: var(--c-border);
+    cursor: not-allowed;
+  }
+
+  /* ---- Chips: the `skill-chip` component, in its removable form ---------- */
+  .strip { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-full);
+    padding: var(--s-1) var(--s-3);
+    font-size: var(--t-sm);
+    line-height: var(--lh-tight);
+    max-width: 100%;
+  }
+  .chip .name { font-weight: var(--fw-medium); }
+  /*
+   * Proficiency is spelled out, always. A coloured dot or a count of pips puts
+   * the whole meaning into something a colour-blind reader and a screen-reader
+   * user both miss.
+   */
+  .chip .level {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    border-left: 1px solid var(--c-border);
+    padding-left: var(--s-2);
+    white-space: nowrap;
+  }
+  /* Teach and learn differ by icon SHAPE as well as tone — circle vs diamond. */
+  .chip .role { font-size: var(--t-xs); flex: none; }
+  .chip.is-teach .role { color: var(--c-success); }
+  .chip.is-learn .role { color: var(--c-info); }
+  .chip .acts {
+    display: inline-flex;
+    gap: var(--s-1);
+    border-left: 1px solid var(--c-border);
+    padding-left: var(--s-2);
+    margin-left: var(--s-1);
+  }
+  .chip .acts button {
+    font: inherit;
+    font-size: var(--t-xs);
+    line-height: 1;
+    background: transparent;
+    border: 0;
+    border-radius: var(--r-full);
+    color: var(--c-text-secondary);
+    cursor: pointer;
+    padding: var(--s-1);
+  }
+  .chip .acts button:hover { background: var(--c-surface-alt); color: var(--c-text); }
+  .chip .acts button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .chip.is-new { background: var(--c-success-bg); border-color: var(--c-success); }
+
+  .standing {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-3) 0 0 0;
+  }
+  .empty { font-size: var(--t-sm); color: var(--c-text-secondary); margin: 0; }
+  .card-error {
+    display: flex;
+    gap: var(--s-2);
+    align-items: flex-start;
+    background: var(--c-danger-bg);
+    color: var(--c-danger);
+    border: 1px solid var(--c-danger);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-3);
+    font-size: var(--t-sm);
+    margin: var(--s-3) 0 0 0;
+  }
+
+  /* ---- First-visit setup panel (the `empty-state` shape) ---------------- */
+  .setup {
+    background: var(--c-info-bg);
+    border: 1px solid var(--c-info);
+    border-radius: var(--r-lg);
+    padding: var(--s-4) var(--s-6);
+    display: grid;
+    gap: var(--s-1);
+  }
+  .setup .title { font-weight: var(--fw-semibold); }
+  .setup p { margin: 0; font-size: var(--t-sm); color: var(--c-text-secondary); }
+  .page-title { font-size: var(--t-xl); font-weight: var(--fw-semibold); margin: 0; }
+</style>
+</head>
+<body>
+  <h1>Skills section</h1>
+  <p class="intro">
+    The skills half of SCR-005 — two cards, one per list (REQ-009, REQ-010,
+    REQ-011). Two cards rather than one list with a Teach/Learn toggle, because
+    the two carry different consequences: listing something to teach makes the
+    employee findable and bookable with no approval step (REQ-013, BR-001.1),
+    and listing something to learn does not. Chips are the existing
+    <code>skill-chip</code> in its removable form.
+  </p>
+
+  <!-- @state SCR-005/ST-01 -->
+  <section class="example">
+    <h2>ST-01 — Default: both lists populated</h2>
+    <div class="stack">
+      <section class="card" aria-labelledby="teach1">
+        <div class="card-head">
+          <h3 id="teach1">Skills I teach (3)</h3>
+          <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <div class="strip">
+          <span class="chip is-teach">
+            <span class="role" aria-hidden="true">●</span>
+            <span class="name">Excel</span>
+            <span class="level">Expert</span>
+            <span class="acts">
+              <button type="button" aria-label="Edit Excel, a skill you teach">Edit</button>
+              <button type="button" aria-label="Remove Excel from the skills you teach">✕</button>
+            </span>
+          </span>
+          <span class="chip is-teach">
+            <span class="role" aria-hidden="true">●</span>
+            <span class="name">Power BI</span>
+            <span class="level">Intermediate</span>
+            <span class="acts">
+              <button type="button" aria-label="Edit Power BI, a skill you teach">Edit</button>
+              <button type="button" aria-label="Remove Power BI from the skills you teach">✕</button>
+            </span>
+          </span>
+          <span class="chip is-teach">
+            <span class="role" aria-hidden="true">●</span>
+            <span class="name">Financial modelling for non-finance managers</span>
+            <span class="level">Beginner</span>
+            <span class="acts">
+              <button type="button" aria-label="Edit Financial modelling for non-finance managers, a skill you teach">Edit</button>
+              <button type="button" aria-label="Remove Financial modelling for non-finance managers from the skills you teach">✕</button>
+            </span>
+          </span>
+        </div>
+        <p class="standing">Listed here, colleagues can find and book you.</p>
+      </section>
+
+      <section class="card" aria-labelledby="learn1">
+        <div class="card-head">
+          <h3 id="learn1">Skills I'm learning (1)</h3>
+          <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <div class="strip">
+          <span class="chip is-learn">
+            <span class="role" aria-hidden="true">◆</span>
+            <span class="name">Python</span>
+            <span class="level">Beginner</span>
+            <span class="acts">
+              <button type="button" aria-label="Edit Python, a skill you are learning">Edit</button>
+              <button type="button" aria-label="Remove Python from the skills you are learning">✕</button>
+            </span>
+          </span>
+        </div>
+      </section>
+    </div>
+    <p class="note">
+      Edit and Remove are real buttons on every chip, not hover affordances, so
+      both are reachable by keyboard and on a touch screen. Each has an
+      accessible name that includes the skill and the list — "Remove" alone tells
+      a screen-reader user nothing about which of six chips they are on. Long
+      catalog names wrap instead of truncating; the catalog is IT-maintained, so
+      the length is not ours to control. The standing line under the teach card
+      is there whenever that list has an entry, because that is what makes the
+      employee publicly findable.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-04 -->
+  <section class="example">
+    <h2>ST-04 — A list with nothing in it</h2>
+    <div class="stack">
+      <section class="card" aria-labelledby="teach4">
+        <div class="card-head">
+          <h3 id="teach4">Skills I teach</h3>
+          <button type="button" class="btn btn-primary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <p class="empty">Nothing listed yet. Add a skill and colleagues can start booking you.</p>
+      </section>
+
+      <section class="card" aria-labelledby="learn4">
+        <div class="card-head">
+          <h3 id="learn4">Skills I'm learning (1)</h3>
+          <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <div class="strip">
+          <span class="chip is-learn">
+            <span class="role" aria-hidden="true">◆</span>
+            <span class="name">Python</span>
+            <span class="level">Beginner</span>
+            <span class="acts">
+              <button type="button" aria-label="Edit Python, a skill you are learning">Edit</button>
+              <button type="button" aria-label="Remove Python from the skills you are learning">✕</button>
+            </span>
+          </span>
+        </div>
+      </section>
+    </div>
+    <p class="note">
+      The card keeps its heading and its Add button — removing it would change
+      the screen's shape between visits, so an employee could never learn where
+      things are. The count is dropped rather than shown as "(0)". Add a skill
+      takes primary emphasis in the empty card, because there it is the only
+      thing to do.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-03 -->
+  <section class="example">
+    <h2>ST-03 — First visit: nothing set up at all</h2>
+    <div class="stack">
+      <h2 class="page-title">My profile</h2>
+      <div class="setup">
+        <span class="title">Let's get you set up</span>
+        <p>Colleagues find you by your skills and your department. Nothing here is required — add what you like now and come back for the rest.</p>
+      </div>
+      <section class="card" aria-labelledby="teach3">
+        <div class="card-head">
+          <h3 id="teach3">Skills I teach</h3>
+          <button type="button" class="btn btn-primary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <p class="empty">Nothing listed yet. Add a skill and colleagues can start booking you.</p>
+      </section>
+      <section class="card" aria-labelledby="learn3">
+        <div class="card-head">
+          <h3 id="learn3">Skills I'm learning</h3>
+          <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+        </div>
+        <p class="empty">Nothing listed yet. Add what you'd like to learn.</p>
+      </section>
+    </div>
+    <p class="note">
+      A panel, not a wizard. There are four optional fields and one list, and a
+      wizard would imply a required order and a finish line that no requirement
+      establishes. The profile card sits between the panel and these two cards
+      with all four fields empty — see the <code>profile-form</code> preview.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-17 -->
+  <section class="example">
+    <h2>ST-17 — Skill added: the dialog has closed, the chip has landed</h2>
+    <section class="card" aria-labelledby="teach17">
+      <div class="card-head">
+        <h3 id="teach17">Skills I teach (1)</h3>
+        <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+      </div>
+      <div class="strip">
+        <span class="chip is-teach is-new">
+          <span class="role" aria-hidden="true">●</span>
+          <span class="name">Excel</span>
+          <span class="level">Expert</span>
+          <span class="acts">
+            <button type="button" aria-label="Edit Excel, a skill you teach">Edit</button>
+            <button type="button" aria-label="Remove Excel from the skills you teach">✕</button>
+          </span>
+        </span>
+      </div>
+      <p class="standing" aria-live="polite">
+        <span aria-hidden="true">✓</span> Excel added — colleagues can now find and book you for this.
+      </p>
+    </section>
+    <p class="note">
+      The highlight fades out and is suppressed under
+      <code>prefers-reduced-motion</code>. The confirmation names the
+      consequence, not the action, and only for the teach list — that difference
+      is the whole point of separating the two cards.
+    </p>
+  </section>
+
+  <!-- @state SCR-005/ST-21 -->
+  <section class="example">
+    <h2>ST-21 — Couldn't remove the skill</h2>
+    <section class="card" aria-labelledby="teach21">
+      <div class="card-head">
+        <h3 id="teach21">Skills I teach (2)</h3>
+        <button type="button" class="btn btn-secondary"><span aria-hidden="true">+</span> Add a skill</button>
+      </div>
+      <div class="strip">
+        <span class="chip is-teach">
+          <span class="role" aria-hidden="true">●</span>
+          <span class="name">Excel</span>
+          <span class="level">Expert</span>
+          <span class="acts">
+            <button type="button" aria-label="Edit Excel, a skill you teach">Edit</button>
+            <button type="button" aria-label="Remove Excel from the skills you teach">✕</button>
+          </span>
+        </span>
+        <span class="chip is-teach">
+          <span class="role" aria-hidden="true">●</span>
+          <span class="name">Power BI</span>
+          <span class="level">Intermediate</span>
+          <span class="acts">
+            <button type="button" aria-label="Edit Power BI, a skill you teach">Edit</button>
+            <button type="button" aria-label="Remove Power BI from the skills you teach">✕</button>
+          </span>
+        </span>
+      </div>
+      <p class="card-error" role="alert">
+        <span aria-hidden="true">⚠</span> Couldn't remove Excel. Please try again.
+      </p>
+    </section>
+    <p class="note">
+      The chip is still there and still interactive, and the count still says 2.
+      A removal is never optimistic here: the failure that matters is an employee
+      believing they have stopped being bookable for a skill when they have not,
+      and an optimistic removal with a silent rollback is wrong in exactly that
+      case.
+    </p>
+  </section>
+</body>
+</html>
