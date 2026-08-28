@@ -281,5 +281,60 @@
       colleagues are never silently excluded, and the reveal is one click.
     </p>
   </section>
+  <!--
+    SCR-007/ST-04. A trainer with no teachable skill cannot publish a time and
+    cannot receive a request — both sections are structurally empty, not
+    incidentally empty. So the whole screen becomes one panel, and there is no
+    Add a time button anywhere: it would open a form whose first field has
+    nothing in it.
+  -->
+  <!-- @state SCR-007/ST-04 -->
+  <section class="example">
+    <h2>My teaching — you don't teach anything yet</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">🎓</span>
+      <h3>Start by saying what you can teach</h3>
+      <p>
+        Publishing times begins with a skill. List one and you are in the
+        trainer search straight away &mdash; no approval, no waiting.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#top">Add a skill you can teach</a>
+      </div>
+    </div>
+    <p class="note">
+      One action, and it is the only thing standing between this employee and a
+      request arriving (REQ-013). The panel replaces both section cards rather
+      than sitting inside one, because neither section can do anything yet.
+    </p>
+  </section>
+
+  <!--
+    SCR-007/ST-06. A narrower emptiness: the trainer teaches something, so the
+    card keeps its Add a time button and the panel stays inside it. The copy
+    names the consequence, because "no times" is otherwise a fact without a
+    stake.
+  -->
+  <!-- @state SCR-007/ST-06 -->
+  <section class="example">
+    <h2>My teaching — no times published yet</h2>
+    <div class="welcome">
+      <span class="icon" aria-hidden="true">📅</span>
+      <h3>You haven't published any times yet</h3>
+      <p>
+        Colleagues can find you, but they can't book you until you offer a
+        time.
+      </p>
+      <div class="actions">
+        <a class="btn is-primary" href="#top">Add a time</a>
+      </div>
+    </div>
+    <p class="note">
+      "Colleagues can find you, but they can't book you" is the whole point:
+      being in the search (REQ-013) and being bookable (REQ-014) are different
+      things, and this is the only screen where that difference is visible.
+    </p>
+  </section>
+
 </body>
 </html>

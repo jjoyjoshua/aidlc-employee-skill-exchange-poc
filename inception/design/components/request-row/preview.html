@@ -190,7 +190,28 @@
   .decided.is-approved { background: var(--c-success-bg); color: var(--c-success); }
   .decided.is-rejected { background: var(--c-surface-alt); color: var(--c-text-secondary); }
 
-  /* ---- Failed (SCR-004/ST-08) ------------------------------------------- */
+  /* ---- Competing requests for one time (SCR-007/ST-19) ------------------- */
+  .contest {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    line-height: var(--lh-normal);
+    color: var(--c-warning);
+    background: var(--c-warning-bg);
+    border: 1px solid var(--c-warning);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    margin-bottom: var(--s-2);
+  }
+
+  /* ---- Expired (SCR-007/ST-20) ------------------------------------------- */
+  .req.is-expired { background: var(--c-surface-alt); }
+  .req.is-expired .who { color: var(--c-text-disabled); }
+  .req.is-expired .meta { color: var(--c-text-disabled); }
+  .status.is-expired { color: var(--c-text-secondary); }
+
+  /* ---- Failed (SCR-004/ST-08, SCR-007/ST-18) ---------------------------- */
   .row-error {
     display: flex;
     align-items: center;
@@ -253,6 +274,7 @@
     one request is saving would punish everyone else on the page for it.
   -->
   <!-- @state SCR-004/ST-06 -->
+  <!-- @state SCR-007/ST-16 -->
   <section class="example">
     <h2>Responding — the call is in flight</h2>
     <p class="group-label">Waiting for you</p>
@@ -280,6 +302,7 @@
     off-screen entirely on a phone.
   -->
   <!-- @state SCR-004/ST-07 -->
+  <!-- @state SCR-007/ST-17 -->
   <section class="example">
     <h2>Recorded</h2>
     <p class="group-label">Waiting for you</p>
@@ -304,6 +327,7 @@
     rather than anything that reads as the booking itself being invalid.
   -->
   <!-- @state SCR-004/ST-08 -->
+  <!-- @state SCR-007/ST-18 -->
   <section class="example">
     <h2>Response failed</h2>
     <p class="group-label">Waiting for you</p>
@@ -324,6 +348,84 @@
     <p class="note">
       Buttons come back enabled, so the retry is one click. The error sits under
       the row it belongs to rather than at the top of the page.
+    </p>
+  </section>
+
+  <!--
+    ST-19. SCR-006 lets any learner request any unbooked slot; REQ-021 allows
+    exactly one booking. Nothing states what happens to the losers — that is
+    conflict C-1 on SCR-007, the BA's to settle. Until it is settled the
+    trainer is at least warned before they choose.
+  -->
+  <!-- @state SCR-007/ST-19 -->
+  <section class="example">
+    <h2>Two people asked for the same time</h2>
+    <p class="group-label">Waiting for you</p>
+    <p class="contest" role="alert">
+      <span aria-hidden="true">⚠</span>
+      <span>2 people asked for Thu 4 Sep, 14:00. Approving one declines the other.</span>
+    </p>
+    <div class="req">
+      <div class="lines">
+        <div class="who">Priya M. wants to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 4 Sep 14:00 &middot; 45 min &middot; asked 2h ago</div>
+      </div>
+      <div class="acts">
+        <button class="btn is-primary" type="button">Approve</button>
+        <button class="btn" type="button">Reject</button>
+      </div>
+    </div>
+    <div class="req" style="margin-top: var(--s-2);">
+      <div class="lines">
+        <div class="who">Arun K. wants to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 4 Sep 14:00 &middot; 45 min &middot; asked 20m ago</div>
+      </div>
+      <div class="acts">
+        <button class="btn is-primary" type="button">Approve</button>
+        <button class="btn" type="button">Reject</button>
+      </div>
+    </div>
+    <div class="decided is-rejected" role="status" aria-live="polite" style="margin-top: var(--s-2);">
+      <span aria-hidden="true">✕</span>
+      <span>Declined &mdash; the time was given to Priya. Arun has been notified.</span>
+    </div>
+    <p class="note">
+      Competing requests are pulled adjacent regardless of ask-order, under one
+      shared notice. The third row is what the sibling becomes once the first is
+      approved: replaced with the reason, not silently removed. A trainer who
+      approves the second of two without knowing the first existed has made a
+      decision they did not know they were making.
+    </p>
+  </section>
+
+  <!--
+    ST-20. REQ-018 auto-rejects a request the trainer never answered. The row is
+    shown rather than dropped on sight: a row vanishing between reading and
+    clicking is the confusing case, and the trainer should know the colleague
+    has already been told.
+  -->
+  <!-- @state SCR-007/ST-20 -->
+  <section class="example">
+    <h2>Expired before it was answered</h2>
+    <p class="group-label">Waiting for you</p>
+    <div class="req is-expired">
+      <div class="lines">
+        <div class="who">Priya M. wanted to learn <strong>Excel</strong></div>
+        <div class="meta">Thu 4 Sep 14:00 &middot; 45 min &middot; asked 3 days ago</div>
+      </div>
+      <span class="status is-expired"><span aria-hidden="true">⏱</span> Expired</span>
+    </div>
+    <p class="row-error" role="alert" aria-live="polite">
+      <span aria-hidden="true">⚠</span>
+      This request expired while you were looking at it.
+    </p>
+    <p class="note">
+      Approve and Reject are removed, not disabled — there is no longer a
+      decision to make. The full sentence in the row reads "Expired &mdash; Priya
+      was told you didn't get to this in time."; the second line appears only
+      when the request expired mid-click, replacing the ordinary save error.
+      When BRD OQ-1 fixes the cutoff, a countdown belongs on the pending row
+      above, not here.
     </p>
   </section>
 

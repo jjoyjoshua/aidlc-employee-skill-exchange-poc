@@ -300,5 +300,28 @@
       guess that the portal has locked them out.
     </p>
   </section>
+  <!--
+    SCR-007/ST-03. One panel, not two, because the screen loads in a single
+    request — exactly one thing can fail. Two failure panels would design a
+    behaviour the system cannot produce.
+  -->
+  <!-- @state SCR-007/ST-03 -->
+  <section class="example">
+    <h2>Panel — the teaching page couldn't load</h2>
+    <div class="alert is-error is-panel" role="alert" aria-live="assertive">
+      <span class="icon" aria-hidden="true">⚠</span>
+      <span class="title">We couldn't load your teaching page</span>
+      <span class="body">
+        Your published times and any requests waiting on you are safe.
+        <a href="#top">Try again</a>
+      </span>
+    </div>
+    <p class="note">
+      The reassurance is specific: a trainer who cannot see their requests will
+      wonder whether someone's request was lost. Saying nothing was is worth a
+      line. The header above stays usable, so nobody is trapped.
+    </p>
+  </section>
+
 </body>
 </html>

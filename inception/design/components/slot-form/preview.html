@@ -1,0 +1,473 @@
+<!-- @dsCard group="Booking" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component preview — Add a time form</title>
+<style>
+  :root {
+    --c-primary: #2563eb;
+    --c-primary-hover: #1d4ed8;
+    --c-on-primary: #ffffff;
+    --c-bg: #f9fafb;
+    --c-surface: #ffffff;
+    --c-surface-alt: #f3f4f6;
+    --c-border: #e5e7eb;
+    --c-text: #111827;
+    --c-text-secondary: #4b5563;
+    --c-text-disabled: #9ca3af;
+    --c-success: #16a34a;
+    --c-danger: #dc2626;
+    --c-danger-bg: #fef2f2;
+    --focus-ring: #2563eb;
+    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --t-xs: 0.75rem;
+    --t-sm: 0.875rem;
+    --t-base: 1rem;
+    --t-lg: 1.125rem;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --lh-tight: 1.25;
+    --lh-normal: 1.5;
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-6: 1.5rem;
+    --r-sm: 4px;
+    --r-md: 6px;
+    --r-lg: 10px;
+    --r-full: 999px;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --c-primary: #3b82f6;
+      --c-primary-hover: #60a5fa;
+      --c-bg: #0f172a;
+      --c-surface: #1e293b;
+      --c-surface-alt: #334155;
+      --c-border: #475569;
+      --c-text: #f8fafc;
+      --c-text-secondary: #cbd5e1;
+      --c-text-disabled: #64748b;
+      --c-success: #4ade80;
+      --c-danger: #f87171;
+      --c-danger-bg: rgba(248, 113, 113, 0.12);
+      --focus-ring: #60a5fa;
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    }
+  }
+  body {
+    font-family: var(--f-base);
+    background: var(--c-bg);
+    color: var(--c-text);
+    padding: var(--s-6);
+    display: grid;
+    gap: var(--s-6);
+    max-width: 640px;
+  }
+  h1 { font-size: var(--t-base); }
+  .example h2 {
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    color: var(--c-text-secondary);
+    margin: 0 0 var(--s-2) 0;
+  }
+  .example p.note {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-2) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /* ---- The dialog -------------------------------------------------------- */
+  .dialog {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--s-6);
+    max-width: 24rem;
+  }
+  .dialog h3 {
+    font-size: var(--t-lg);
+    font-weight: var(--fw-semibold);
+    margin: 0 0 var(--s-4) 0;
+    line-height: var(--lh-tight);
+  }
+  .field { margin-bottom: var(--s-4); }
+  .field label {
+    display: block;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    margin-bottom: var(--s-1);
+  }
+  .field input,
+  .field select {
+    font: inherit;
+    font-size: var(--t-sm);
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--s-2) var(--s-3);
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    color: var(--c-text);
+  }
+  .field input:focus-visible,
+  .field select:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 1px;
+  }
+  .field input[disabled],
+  .field select[disabled] {
+    background: var(--c-surface-alt);
+    color: var(--c-text-secondary);
+  }
+  .field .hint {
+    font-size: var(--t-xs);
+    color: var(--c-text-secondary);
+    margin: var(--s-1) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  /*
+   * An invalid field is marked by an icon and a sentence, never by a border
+   * colour on its own — desaturate the page and the error must still read.
+   */
+  .field.is-invalid input,
+  .field.is-invalid select { border-color: var(--c-danger); border-width: 2px; }
+  .field .err {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-1);
+    font-size: var(--t-xs);
+    color: var(--c-danger);
+    margin: var(--s-1) 0 0 0;
+    line-height: var(--lh-normal);
+  }
+
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--s-2);
+    margin-top: var(--s-6);
+  }
+  .btn {
+    font: inherit;
+    font-size: var(--t-sm);
+    font-weight: var(--fw-medium);
+    border-radius: var(--r-md);
+    padding: var(--s-2) var(--s-4);
+    cursor: pointer;
+    border: 1px solid var(--c-primary);
+    background: var(--c-primary);
+    color: var(--c-on-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
+  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn[disabled] { opacity: 0.6; cursor: default; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--c-text-secondary);
+    border-color: var(--c-border);
+  }
+  .btn.secondary:hover { background: var(--c-surface-alt); border-color: var(--c-text-secondary); }
+
+  .form-error {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    font-size: var(--t-sm);
+    color: var(--c-danger);
+    background: var(--c-danger-bg);
+    border: 1px solid var(--c-danger);
+    border-radius: var(--r-md);
+    padding: var(--s-3);
+    margin-top: var(--s-4);
+    line-height: var(--lh-normal);
+  }
+
+  .spin {
+    width: 0.85rem;
+    height: 0.85rem;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: var(--r-full);
+    animation: spin 0.7s linear infinite;
+    flex: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .spin { animation-duration: 2.4s; } }
+
+  /* ---- The phone sheet (SCR-007/ST-12) ----------------------------------- */
+  .phone {
+    width: 20rem;
+    height: 30rem;
+    border: 1px solid var(--c-border);
+    border-radius: var(--r-lg);
+    background: var(--c-bg);
+    position: relative;
+    overflow: hidden;
+  }
+  .phone .behind {
+    padding: var(--s-4);
+    font-size: var(--t-sm);
+    color: var(--c-text-disabled);
+  }
+  .phone .scrim {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .phone .sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: var(--s-6);
+    background: var(--c-surface);
+    border-radius: var(--r-lg) var(--r-lg) 0 0;
+    padding: var(--s-4);
+    display: flex;
+    flex-direction: column;
+  }
+  .phone .sheet h3 { margin: 0 0 var(--s-4) 0; font-size: var(--t-base); }
+  .phone .sheet .body { flex: 1 1 auto; overflow-y: auto; }
+  .phone .sheet .actions {
+    margin-top: var(--s-3);
+    padding-top: var(--s-3);
+    border-top: 1px solid var(--c-border);
+    flex: none;
+  }
+  .phone .sheet .actions .btn { flex: 1 1 0; justify-content: center; }
+  .grip {
+    width: 2.5rem;
+    height: 4px;
+    border-radius: var(--r-full);
+    background: var(--c-border);
+    margin: 0 auto var(--s-3) auto;
+  }
+</style>
+</head>
+<body>
+  <h1>Add a time form</h1>
+
+  <p>
+    How a trainer publishes a bookable time on SCR-007 (REQ-014). Four fields
+    and nothing else: the skill, the day, the hour, the length. A dialog rather
+    than an inline row, because it carries a validation story of its own and
+    would otherwise push the whole availability list down every time it opened.
+  </p>
+
+  <!--
+    ST-07. Skill lists only what this employee has declared teachable — a time
+    to teach something you have not listed could never be found by the search
+    that would surface it (REQ-012, REQ-013). Length defaults to 45 minutes;
+    whether the portal fixes it at all is OQ-T2.
+  -->
+  <!-- @state SCR-007/ST-07 -->
+  <section class="example">
+    <h2>The form</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Add a time">
+      <h3>Add a time</h3>
+      <div class="field">
+        <label for="f-skill">Skill</label>
+        <select id="f-skill">
+          <option>Excel</option>
+          <option>Python</option>
+        </select>
+        <p class="hint">Only skills you've listed as teachable appear here.</p>
+      </div>
+      <div class="field">
+        <label for="f-date">Date</label>
+        <input id="f-date" type="date" value="2026-09-04" />
+      </div>
+      <div class="field">
+        <label for="f-start">Start time</label>
+        <input id="f-start" type="time" value="14:00" />
+      </div>
+      <div class="field">
+        <label for="f-len">Length</label>
+        <select id="f-len">
+          <option>30 minutes</option>
+          <option selected>45 minutes</option>
+          <option>60 minutes</option>
+          <option>90 minutes</option>
+        </select>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" type="button">Cancel</button>
+        <button class="btn" type="button">Publish</button>
+      </div>
+    </div>
+    <p class="note">
+      Focus lands on Skill and is trapped in the dialog until it closes; Escape
+      cancels without saving and returns focus to the Add a time button. Publish
+      enables only when all four fields hold a value.
+    </p>
+  </section>
+
+  <!--
+    ST-08. Three things the form can reject without asking the server. Each is
+    an icon and a sentence beneath the field it belongs to — the thicker border
+    is reinforcement, never the signal.
+  -->
+  <!-- @state SCR-007/ST-08 -->
+  <section class="example">
+    <h2>The form won't accept it</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Add a time">
+      <h3>Add a time</h3>
+      <div class="field is-invalid">
+        <label for="e-date">Date</label>
+        <input id="e-date" type="date" value="2026-08-01" aria-invalid="true" aria-describedby="e-date-msg" />
+        <p class="err" id="e-date-msg">⚠ Pick today or a later date.</p>
+      </div>
+      <div class="field is-invalid">
+        <label for="e-start">Start time</label>
+        <input id="e-start" type="time" value="08:00" aria-invalid="true" aria-describedby="e-start-msg" />
+        <p class="err" id="e-start-msg">⚠ That time has already passed today.</p>
+      </div>
+      <div class="field is-invalid">
+        <label for="e-overlap">Start time</label>
+        <input id="e-overlap" type="time" value="14:15" aria-invalid="true" aria-describedby="e-overlap-msg" />
+        <p class="err" id="e-overlap-msg">
+          ⚠ You already have a time at 14:00 that day. A session is
+          one-on-one, so times can't overlap.
+        </p>
+      </div>
+    </div>
+    <p class="note">
+      The overlap message names the time already published, so the trainer knows
+      which one to look at. Whether overlaps should be blocked at all is a rule
+      nobody has stated — raised as OQ-T4, with blocking as the working default.
+      Everything typed stays put; nothing is cleared by a rejection.
+    </p>
+  </section>
+
+  <!--
+    ST-09. The dialog cannot be dismissed while a write is in flight — closing
+    it would leave the trainer unsure whether the time exists. Escape does
+    nothing here, and only here.
+  -->
+  <!-- @state SCR-007/ST-09 -->
+  <section class="example">
+    <h2>Publishing</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Add a time">
+      <h3>Add a time</h3>
+      <div class="field">
+        <label for="p-skill">Skill</label>
+        <select id="p-skill" disabled><option>Excel</option></select>
+      </div>
+      <div class="field">
+        <label for="p-date">Date</label>
+        <input id="p-date" type="date" value="2026-09-04" disabled />
+      </div>
+      <div class="field">
+        <label for="p-start">Start time</label>
+        <input id="p-start" type="time" value="14:00" disabled />
+      </div>
+      <div class="field">
+        <label for="p-len">Length</label>
+        <select id="p-len" disabled><option>45 minutes</option></select>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" type="button" disabled>Cancel</button>
+        <button class="btn" type="button" disabled>
+          <span class="spin" aria-hidden="true"></span>Publishing&hellip;
+        </button>
+      </div>
+    </div>
+    <p class="note">
+      Values stay visible while disabled, so the trainer can still read what is
+      being saved.
+    </p>
+  </section>
+
+  <!--
+    ST-11. The wording blames the saving, never the time — nobody should read a
+    network failure as a refusal. The special case (the same time already
+    exists) offers Close rather than a retry that will fail identically.
+  -->
+  <!-- @state SCR-007/ST-11 -->
+  <section class="example">
+    <h2>Couldn't publish</h2>
+    <div class="dialog" role="dialog" aria-modal="true" aria-label="Add a time">
+      <h3>Add a time</h3>
+      <div class="field">
+        <label for="x-start">Start time</label>
+        <input id="x-start" type="time" value="14:00" />
+      </div>
+      <p class="form-error" role="alert">
+        ⚠ Couldn't publish that time. Please try again.
+      </p>
+      <div class="actions">
+        <button class="btn secondary" type="button">Cancel</button>
+        <button class="btn" type="button">Publish</button>
+      </div>
+    </div>
+    <div class="dialog" style="margin-top: var(--s-4)" role="dialog" aria-modal="true" aria-label="Add a time">
+      <h3>Add a time</h3>
+      <p class="form-error" role="alert">
+        ⚠ You already have a time at 14:00 that day.
+      </p>
+      <div class="actions">
+        <button class="btn" type="button">Close</button>
+      </div>
+    </div>
+    <p class="note">
+      Two failures, two sentences. A retry that cannot succeed is not offered.
+    </p>
+  </section>
+
+  <!--
+    ST-12. The same form below the desktop breakpoint (NFR-004): a full-height
+    sheet, not a centred dialog, matching SCR-006's trainer panel so the portal
+    has one way of showing an overlay on a phone rather than two.
+  -->
+  <!-- @state SCR-007/ST-12 -->
+  <section class="example">
+    <h2>At phone width</h2>
+    <div class="phone">
+      <div class="behind">My teaching &mdash; the page beneath, inert</div>
+      <div class="scrim"></div>
+      <div class="sheet" role="dialog" aria-modal="true" aria-label="Add a time">
+        <div class="grip" aria-hidden="true"></div>
+        <h3>Add a time</h3>
+        <div class="body">
+          <div class="field">
+            <label for="m-skill">Skill</label>
+            <select id="m-skill"><option>Excel</option></select>
+          </div>
+          <div class="field">
+            <label for="m-date">Date</label>
+            <input id="m-date" type="date" value="2026-09-04" />
+          </div>
+          <div class="field">
+            <label for="m-start">Start time</label>
+            <input id="m-start" type="time" value="14:00" />
+          </div>
+          <div class="field">
+            <label for="m-len">Length</label>
+            <select id="m-len"><option>45 minutes</option></select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" type="button">Cancel</button>
+          <button class="btn" type="button">Publish</button>
+        </div>
+      </div>
+    </div>
+    <p class="note">
+      Publish and Cancel are pinned to the bottom of the sheet, reachable
+      without scrolling past the fields. The fields themselves scroll if the
+      keyboard takes half the screen.
+    </p>
+  </section>
+</body>
+</html>
