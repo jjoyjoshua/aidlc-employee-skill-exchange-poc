@@ -6,20 +6,21 @@
 <title>Component preview — App header</title>
 <style>
   :root {
-    --c-primary: #2563eb;
-    --c-primary-hover: #1d4ed8;
+    --c-primary: #0f766e;
+    --c-primary-hover: #115e59;
     --c-on-primary: #ffffff;
-    --c-link: #2563eb;
-    --c-bg: #f9fafb;
+    --c-link: #0f766e;
+    --c-bg: #faf9f7;
     --c-surface: #ffffff;
-    --c-surface-alt: #f3f4f6;
-    --c-border: #e5e7eb;
-    --c-text: #111827;
-    --c-text-secondary: #4b5563;
-    --c-text-disabled: #9ca3af;
-    --c-danger: #dc2626;
-    --focus-ring: #2563eb;
-    --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --c-surface-alt: #f5f3f0;
+    --c-border: #e7e2db;
+    --c-border-strong: #8b847d;
+    --c-text: #1c1917;
+    --c-text-secondary: #57534e;
+    --c-text-disabled: #857f7a;
+    --c-danger: #b91c1c;
+    --focus-ring: #0f766e;
+    --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-xs: 0.75rem;
     --t-sm: 0.875rem;
     --t-base: 1rem;
@@ -27,7 +28,7 @@
     --fw-regular: 400;
     --fw-medium: 500;
     --fw-semibold: 600;
-    --lh-normal: 1.5;
+    --lh-normal: 1.6;
     --s-1: 0.25rem;
     --s-2: 0.5rem;
     --s-3: 0.75rem;
@@ -37,25 +38,26 @@
     --r-md: 6px;
     --r-lg: 10px;
     --r-full: 999px;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.05);
+    --shadow-md: 0 6px 16px -6px rgba(28, 25, 23, 0.12), 0 2px 4px -2px rgba(28, 25, 23, 0.05);
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --c-primary: #3b82f6;
-      --c-primary-hover: #60a5fa;
-      --c-link: #3b82f6;
-      --c-bg: #0f172a;
-      --c-surface: #1e293b;
-      --c-surface-alt: #334155;
-      --c-border: #475569;
-      --c-text: #f8fafc;
-      --c-text-secondary: #cbd5e1;
-      --c-text-disabled: #64748b;
-      --c-danger: #f87171;
-      --focus-ring: #60a5fa;
+      --c-primary: #2dd4bf;
+      --c-primary-hover: #5eead4;
+      --c-link: #5eead4;
+      --c-bg: #1c1917;
+      --c-surface: #292524;
+      --c-surface-alt: #37322e;
+      --c-border: #4a443f;
+      --c-border-strong: #7a736c;
+      --c-text: #fafaf9;
+      --c-text-secondary: #d6d3d1;
+      --c-text-disabled: #a8a29e;
+      --c-danger: #fca5a5;
+      --focus-ring: #5eead4;
       --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
     }
   }
   body {

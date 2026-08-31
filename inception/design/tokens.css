@@ -5,40 +5,75 @@
  * inception/design/tokens.json (W3C DTCG) from this file for import into
  * Figma (Tokens Studio), Penpot, etc. Never hand-edit tokens.json.
  *
- * Light values live in :root; the @media block below holds ONLY the tokens
- * the dark theme overrides — both themes are first-class, but the dark set
- * is deliberately partial, exactly like the palette it re-colors.
+ * Light values live in :root; the dark-scheme block at the foot holds ONLY
+ * the tokens the dark theme overrides — both themes are first-class, but the
+ * dark set is deliberately partial, exactly like the palette it re-colors.
+ *
+ * Do not write the at-media keyword in prose above the first real one. The
+ * generator splits light from dark on the FIRST literal occurrence in the
+ * file, so a mention of it in a comment silently truncates the light palette
+ * to nothing and the export ships with an empty light set. That is a bug in
+ * tools/aidlc-check.mjs (owner: DEV) rather than a rule of the design system;
+ * until it is fixed, avoiding the word here is what keeps the export honest.
+ *
+ * The palette is "warm teal": a warm neutral ground rather than a cool grey
+ * one, with a deep teal carrying every action. Chosen in the styling pass
+ * over a corporate blue and an editorial ink alternative — this product is
+ * colleagues teaching colleagues, not a system processing requests.
+ *
+ * Every pairing that carries text or outlines a control is measured against
+ * WCAG AA — 4.5:1 for text, 3:1 for the boundary of something you click.
+ * The ratios are recorded inline; a change that breaks one is meant to be
+ * obvious in the diff rather than discovered by a user.
  */
 
 :root {
-  /* ---- Color: brand + action ------------------------------------------ */
-  --c-primary: #2563eb;
-  --c-primary-hover: #1d4ed8;
-  --c-primary-active: #1e40af;
+  /* ---- Color: brand + action -------------------------------------------
+   * Teal 700. 5.5:1 on --c-surface, so it is legible as link text and safe
+   * behind white button text, which a lighter teal would not be.
+   */
+  --c-primary: #0f766e;
+  --c-primary-hover: #115e59;
+  --c-primary-active: #134e4a;
   --c-on-primary: #ffffff;
   --c-link: var(--c-primary);
 
-  /* ---- Color: surfaces + text ------------------------------------------ */
-  --c-bg: #f9fafb;
+  /* ---- Color: surfaces + text ------------------------------------------
+   * Warm neutrals (stone) rather than cool ones (slate). The ground is
+   * off-white paper, not grey screen.
+   */
+  --c-bg: #faf9f7;
   --c-surface: #ffffff;
-  --c-surface-alt: #f3f4f6;
-  --c-border: #e5e7eb;
-  --c-text: #111827;
-  --c-text-secondary: #4b5563;
-  --c-text-disabled: #9ca3af;
+  --c-surface-alt: #f5f3f0;
+  --c-text: #1c1917; /* 17:1 on --c-surface */
+  --c-text-secondary: #57534e; /* 7.5:1 — department, date, helper text */
+  --c-text-disabled: #857f7a; /* 3.9:1 — reads inactive, still legible */
 
-  /* ---- Color: status (icon/text tone + a matching subtle background) -- */
-  --c-success: #16a34a;
-  --c-success-bg: #f0fdf4;
-  --c-warning: #d97706;
-  --c-warning-bg: #fffbeb;
-  --c-danger: #dc2626;
+  /* ---- Color: borders ---------------------------------------------------
+   * Two, not one, and the split is a WCAG requirement rather than a
+   * refinement: the boundary of a control you must find and click needs
+   * 3:1, which a divider-weight line cannot reach without looking like a
+   * heavy rule everywhere. --c-border draws dividers and card edges;
+   * --c-border-strong outlines inputs, selects and secondary buttons.
+   */
+  --c-border: #e7e2db; /* decorative — dividers, card edges */
+  --c-border-strong: #8b847d; /* 3.8:1 — inputs, selects, secondary buttons */
+
+  /* ---- Color: status (icon/text tone + a matching subtle background) ----
+   * Tone is always paired with a glyph and a word in the component, never
+   * used alone (NFR-003). Each tone clears 4.5:1 on its own tint.
+   */
+  --c-success: #15803d; /* 4.8:1 on --c-success-bg */
+  --c-success-bg: #f1fdf4;
+  --c-warning: #b45309; /* 4.8:1 on --c-warning-bg */
+  --c-warning-bg: #fefbeb;
+  --c-danger: #b91c1c; /* 6.2:1 on --c-danger-bg */
   --c-danger-bg: #fef2f2;
-  --c-info: #0284c7;
-  --c-info-bg: #f0f9ff;
+  --c-info: #0e7490; /* 5.2:1 on --c-info-bg */
+  --c-info-bg: #ecfeff;
 
   /* ---- Color: accessibility --------------------------------------------- */
-  --focus-ring: #2563eb;
+  --focus-ring: #0f766e;
 
   /* ---- Color: paper (print) ---------------------------------------------
    * Deliberately absent from the dark block below. Paper is paper: a page
@@ -48,12 +83,17 @@
    * rather than a screen.
    */
   --c-paper: #ffffff;
-  --c-paper-text: #111827;
-  --c-paper-text-secondary: #4b5563;
-  --c-paper-border: #d1d5db;
+  --c-paper-text: #1c1917;
+  --c-paper-text-secondary: #57534e;
+  --c-paper-border: #d6d3d1;
 
-  /* ---- Type -------------------------------------------------------------- */
-  --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+  /* ---- Type --------------------------------------------------------------
+   * Inter first, the platform stack behind it. A downloaded face keeps the
+   * certificate — a document people keep — identical on every machine.
+   * Component previews carry no <link>, so they open with no network and
+   * render the fallback; that is intended, not an oversight.
+   */
+  --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;
 
   --t-xs: 0.75rem;
@@ -69,8 +109,11 @@
   --fw-semibold: 600;
   --fw-bold: 700;
 
+  /* 1.6, up from 1.5. This one value carries most of the extra breathing
+   * room the palette was chosen for — cheaper and more honest than
+   * inflating a 4px spacing scale until its names stop being true. */
   --lh-tight: 1.25;
-  --lh-normal: 1.5;
+  --lh-normal: 1.6;
   --lh-relaxed: 1.75;
 
   /* ---- Spacing (4px base scale) ----------------------------------------- */
@@ -78,6 +121,7 @@
   --s-2: 0.5rem;
   --s-3: 0.75rem;
   --s-4: 1rem;
+  --s-5: 1.25rem; /* card padding where s-4 is tight and s-6 is loose */
   --s-6: 1.5rem;
   --s-8: 2rem;
 
@@ -87,40 +131,50 @@
   --r-lg: 10px;
   --r-full: 999px;
 
-  /* ---- Elevation ---------------------------------------------------------- */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  /* ---- Elevation ----------------------------------------------------------
+   * Warm-tinted rather than neutral black, so a shadow on off-white paper
+   * does not read as grey haze.
+   */
+  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.05);
+  --shadow-md: 0 6px 16px -6px rgba(28, 25, 23, 0.12), 0 2px 4px -2px rgba(28, 25, 23, 0.05);
+  --shadow-lg: 0 16px 32px -12px rgba(28, 25, 23, 0.16), 0 4px 8px -4px rgba(28, 25, 23, 0.06);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --c-primary: #3b82f6;
-    --c-primary-hover: #60a5fa;
-    --c-primary-active: #93c5fd;
-    --c-link: var(--c-primary);
+    /* Teal 400 with dark text on it. The light theme's teal 700 would be a
+     * button nobody presses on a dark ground, so the roles invert rather
+     * than the hue shifting. 9.4:1 either way round. */
+    --c-primary: #2dd4bf;
+    --c-primary-hover: #5eead4;
+    --c-primary-active: #99f6e4;
+    --c-on-primary: #1c1917;
+    --c-link: #5eead4;
 
-    --c-bg: #0f172a;
-    --c-surface: #1e293b;
-    --c-surface-alt: #334155;
-    --c-border: #475569;
-    --c-text: #f8fafc;
-    --c-text-secondary: #cbd5e1;
-    --c-text-disabled: #64748b;
+    /* Warm dark, matching the warm light ground. */
+    --c-bg: #1c1917;
+    --c-surface: #292524;
+    --c-surface-alt: #37322e;
+    --c-text: #fafaf9; /* 15:1 on --c-surface */
+    --c-text-secondary: #d6d3d1; /* 10:1 */
+    --c-text-disabled: #a8a29e; /* 6:1 */
+
+    --c-border: #4a443f;
+    --c-border-strong: #7a736c; /* 3.3:1 on --c-surface */
 
     --c-success: #4ade80;
     --c-success-bg: rgba(74, 222, 128, 0.12);
     --c-warning: #fbbf24;
     --c-warning-bg: rgba(251, 191, 36, 0.12);
-    --c-danger: #f87171;
-    --c-danger-bg: rgba(248, 113, 113, 0.12);
-    --c-info: #38bdf8;
-    --c-info-bg: rgba(56, 189, 248, 0.12);
+    --c-danger: #fca5a5;
+    --c-danger-bg: rgba(252, 165, 165, 0.12);
+    --c-info: #67e8f9;
+    --c-info-bg: rgba(103, 232, 249, 0.1);
 
-    --focus-ring: #60a5fa;
+    --focus-ring: #5eead4;
 
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 20px 40px -14px rgba(0, 0, 0, 0.7);
   }
 }
