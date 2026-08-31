@@ -8,6 +8,7 @@ What lives here, and what deliberately does not.
 | `components/`              | One preview per component, each rendering the states it claims               |
 | `tokens.css`               | The design system's single source — colors, type, spacing, radius, elevation |
 | `tokens.json`              | **Generated** from `tokens.css` by `aidlc-check --write` — never hand-edited |
+| `HANDOFF-figma.md`         | How the palette gets into Figma, the 156 frames to draw, known export gaps  |
 
 **Not here: the visual design files.** Frames stay in Figma, Penpot, or whatever
 the designer uses. The tool imports `tokens.json`, so the design file and this

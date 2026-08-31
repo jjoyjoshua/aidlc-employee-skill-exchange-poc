@@ -22,7 +22,7 @@
     --c-warning: #b45309;
     --c-danger: #b91c1c;
     --c-danger-bg: #fef2f2;
-    --focus-ring: #0f766e;
+    --c-focus-ring: #0f766e;
     --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-xs: 0.75rem;
     --t-sm: 0.875rem;
@@ -59,7 +59,7 @@
       --c-warning: #fbbf24;
       --c-danger: #fca5a5;
       --c-danger-bg: rgba(252, 165, 165, 0.12);
-      --focus-ring: #5eead4;
+      --c-focus-ring: #5eead4;
     }
   }
   body {
@@ -152,7 +152,7 @@
     border-radius: var(--r-sm);
   }
   .starfield button.is-on { color: var(--c-warning); }
-  .starfield button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .starfield button:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .starfield[aria-disabled='true'] button { cursor: default; opacity: 0.6; }
   .chosen {
     font-size: var(--t-sm);
@@ -184,7 +184,7 @@
     width: 100%;
     box-sizing: border-box;
   }
-  .field textarea:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .field textarea:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 1px; }
   .field textarea[disabled] { background: var(--c-surface-alt); color: var(--c-text-secondary); }
 
   .foot {
@@ -210,7 +210,7 @@
     gap: var(--s-2);
   }
   .btn:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); }
-  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .btn[disabled] { opacity: 0.6; cursor: default; }
   .btn.quiet {
     background: transparent;
