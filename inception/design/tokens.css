@@ -40,6 +40,18 @@
   /* ---- Color: accessibility --------------------------------------------- */
   --focus-ring: #2563eb;
 
+  /* ---- Color: paper (print) ---------------------------------------------
+   * Deliberately absent from the dark block below. Paper is paper: a page
+   * printed from dark mode must not arrive as a black rectangle, and the
+   * reader only discovers that after it has printed. Added for SCR-010,
+   * whose ST-03 is the first state in this portal that renders onto a sheet
+   * rather than a screen.
+   */
+  --c-paper: #ffffff;
+  --c-paper-text: #111827;
+  --c-paper-text-secondary: #4b5563;
+  --c-paper-border: #d1d5db;
+
   /* ---- Type -------------------------------------------------------------- */
   --f-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     'Helvetica Neue', Arial, sans-serif;

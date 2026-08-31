@@ -147,7 +147,8 @@
     "REQ-024": {
       "stories": [],
       "screens": [
-        "SCR-008"
+        "SCR-008",
+        "SCR-010"
       ]
     },
     "REQ-025": {
@@ -159,7 +160,8 @@
     "REQ-026": {
       "stories": [],
       "screens": [
-        "SCR-008"
+        "SCR-008",
+        "SCR-010"
       ]
     },
     "REQ-027": {
@@ -197,7 +199,8 @@
         "SCR-006",
         "SCR-007",
         "SCR-008",
-        "SCR-009"
+        "SCR-009",
+        "SCR-010"
       ]
     },
     "NFR-005": {
@@ -558,6 +561,31 @@
         "empty-state",
         "alert",
         "button",
+        "spinner"
+      ]
+    },
+    "SCR-010": {
+      "artifact": "inception/design/screens/SCR-010-certificate.md",
+      "requirements": [
+        "REQ-024",
+        "REQ-026",
+        "NFR-004"
+      ],
+      "stories": [],
+      "states": [
+        "ST-01",
+        "ST-02",
+        "ST-03",
+        "ST-04",
+        "ST-05",
+        "ST-06",
+        "ST-07",
+        "ST-08"
+      ],
+      "components": [
+        "certificate",
+        "button",
+        "alert",
         "spinner"
       ]
     }
