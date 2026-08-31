@@ -26,7 +26,7 @@
     --c-danger-bg: #fef2f2;
     --c-info: #0e7490;
     --c-info-bg: #ecfeff;
-    --focus-ring: #0f766e;
+    --c-focus-ring: #0f766e;
     --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-xs: 0.75rem;
     --t-sm: 0.875rem;
@@ -70,7 +70,7 @@
       --c-danger-bg: rgba(252, 165, 165, 0.12);
       --c-info: #67e8f9;
       --c-info-bg: rgba(103, 232, 249, 0.1);
-      --focus-ring: #5eead4;
+      --c-focus-ring: #5eead4;
       --shadow-lg: 0 20px 40px -14px rgba(0, 0, 0, 0.7);
     }
   }
@@ -131,7 +131,7 @@
     border-radius: var(--r-sm);
   }
   .close:hover { background: var(--c-surface-alt); color: var(--c-text); }
-  .close:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .close:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .close[disabled] { color: var(--c-text-disabled); cursor: not-allowed; }
 
   fieldset { border: 0; padding: 0; margin: 0 0 var(--s-4) 0; }
@@ -160,7 +160,7 @@
     border-color: var(--c-primary);
     background: var(--c-info-bg);
   }
-  .choice label:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .choice label:focus-within { outline: 2px solid var(--c-focus-ring); outline-offset: 1px; }
   .choice .role-icon { flex: none; }
   .choice .is-teach { color: var(--c-success); }
   .choice .is-learn { color: var(--c-info); }
@@ -177,7 +177,7 @@
     width: 100%;
     box-sizing: border-box;
   }
-  input:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; border-color: var(--focus-ring); }
+  input:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 1px; border-color: var(--c-focus-ring); }
   input[disabled] { background: var(--c-surface-alt); color: var(--c-text-secondary); }
   .results {
     list-style: none;
@@ -203,7 +203,7 @@
     cursor: pointer;
   }
   .results button:hover { background: var(--c-surface-alt); }
-  .results button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+  .results button:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: -2px; }
   .results button[aria-selected='true'] { background: var(--c-info-bg); font-weight: var(--fw-medium); }
   .fixed-skill {
     display: flex;
@@ -230,7 +230,7 @@
     align-items: center;
   }
   .levels label:has(input:checked) { border-color: var(--c-primary); background: var(--c-info-bg); font-weight: var(--fw-medium); }
-  .levels label:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .levels label:focus-within { outline: 2px solid var(--c-focus-ring); outline-offset: 1px; }
 
   /* ---- Messages ---------------------------------------------------------- */
   .msg { display: flex; gap: var(--s-2); align-items: flex-start; font-size: var(--t-xs); margin-top: var(--s-2); }
@@ -304,7 +304,7 @@
   .btn-danger { background: var(--c-danger); color: var(--c-on-primary); }
   .btn-secondary { background: transparent; color: var(--c-text); border-color: var(--c-border-strong); }
   .btn-link { background: transparent; border: 0; color: var(--c-link); padding: 0; text-decoration: underline; font-size: var(--t-xs); cursor: pointer; }
-  .btn:focus-visible, .btn-link:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn:focus-visible, .btn-link:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .btn[disabled] {
     background: var(--c-surface-alt);
     color: var(--c-text-disabled);

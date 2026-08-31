@@ -20,7 +20,7 @@
     --c-text-disabled: #857f7a;
     --c-info: #0e7490;
     --c-info-bg: #ecfeff;
-    --focus-ring: #0f766e;
+    --c-focus-ring: #0f766e;
     --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-xs: 0.75rem;
     --t-sm: 0.875rem;
@@ -55,7 +55,7 @@
       --c-text-disabled: #a8a29e;
       --c-info: #67e8f9;
       --c-info-bg: rgba(103, 232, 249, 0.1);
-      --focus-ring: #5eead4;
+      --c-focus-ring: #5eead4;
       --shadow-md: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
     }
   }
@@ -92,7 +92,7 @@
     background: var(--c-surface);
     padding: var(--s-2) var(--s-3);
   }
-  .search:focus-within { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+  .search:focus-within { outline: 2px solid var(--c-focus-ring); outline-offset: 1px; }
   .search input {
     font: inherit;
     font-size: var(--t-sm);
@@ -134,7 +134,7 @@
     flex: none;
   }
   .fbtn:hover { background: var(--c-surface-alt); }
-  .fbtn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .fbtn:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .fbtn[disabled] { color: var(--c-text-disabled); background: var(--c-surface-alt); cursor: default; }
 
   /*
@@ -165,7 +165,7 @@
     flex: none;
     white-space: nowrap;
   }
-  .clear:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .clear:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
 
   /* ---- The open menu (SCR-006/ST-07) ------------------------------------- */
   .menu {

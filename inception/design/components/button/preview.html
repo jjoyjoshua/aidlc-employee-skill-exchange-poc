@@ -18,7 +18,7 @@
     --c-text: #1c1917;
     --c-text-secondary: #57534e;
     --c-text-disabled: #857f7a;
-    --focus-ring: #0f766e;
+    --c-focus-ring: #0f766e;
     --f-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     --t-sm: 0.875rem;
     --t-base: 1rem;
@@ -44,7 +44,7 @@
       --c-text: #fafaf9;
       --c-text-secondary: #d6d3d1;
       --c-text-disabled: #a8a29e;
-      --focus-ring: #5eead4;
+      --c-focus-ring: #5eead4;
     }
   }
   body {
@@ -79,7 +79,7 @@
     padding: var(--s-3) var(--s-4);
     cursor: pointer;
   }
-  .btn:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .btn:focus-visible { outline: 2px solid var(--c-focus-ring); outline-offset: 2px; }
   .btn.is-hover { background: var(--c-primary-hover); }
   .btn.is-active { background: var(--c-primary-active); }
   .btn.is-loading { background: var(--c-primary-hover); cursor: default; }

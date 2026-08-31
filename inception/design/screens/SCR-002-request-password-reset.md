@@ -88,7 +88,7 @@ Components are declared in `knowledge/traceability/manifest.json` under this scr
 ## Interaction and accessibility
 
 - **Keyboard:** tab order is email → "Send reset link" → "Back to sign in". Enter, pressed in the email field, submits. In ST-04 the order is "send it again" → "Back to sign in".
-- **Focus:** every interactive element shows the `--focus-ring` outline on keyboard focus. On entering ST-04 focus moves to the confirmation heading, so a screen-reader user is not left on a button that no longer exists. On entering ST-02 focus moves to the email field.
+- **Focus:** every interactive element shows the `--c-focus-ring` outline on keyboard focus. On entering ST-04 focus moves to the confirmation heading, so a screen-reader user is not left on a button that no longer exists. On entering ST-02 focus moves to the email field.
 - **Non-colour signalling:** ST-02, ST-04, ST-05 and ST-06 each pair an icon with text. Border and background colour are never the only cue.
 - **Announcements:** the ST-04 confirmation and the ST-05 banner are inserted with `aria-live="assertive"`. ST-06's "Sent again" note uses `aria-live="polite"` — it confirms a repeat of something already announced and should not interrupt. The ST-02 message is linked to the input via `aria-describedby`.
 - **Autocomplete:** the email field carries `autocomplete="username"` so a password manager fills it, matching SCR-001.

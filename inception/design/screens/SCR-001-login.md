@@ -90,7 +90,7 @@ Components are declared in `knowledge/traceability/manifest.json` under this scr
 ## Interaction and accessibility
 
 - **Keyboard:** tab order is email → password → show/hide password toggle → "Forgot password?" → "Log in". Enter, pressed in either field, submits the form.
-- **Focus:** every interactive element (fields, toggle, link, button) shows the `--focus-ring` outline on keyboard focus.
+- **Focus:** every interactive element (fields, toggle, link, button) shows the `--c-focus-ring` outline on keyboard focus.
 - **Non-colour signalling:** ST-02/ST-04/ST-05 all pair a warning icon with text — the field/banner border colour is never the only cue that something is wrong.
 - **Announcements:** the ST-04/ST-05 banner is inserted with `aria-live="assertive"` so a screen reader announces it the moment it appears. Each field-level message in ST-02 is linked to its input via `aria-describedby`.
 
